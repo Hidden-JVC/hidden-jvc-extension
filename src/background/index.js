@@ -1,0 +1,52 @@
+import './messages.js';
+
+import browser from 'webextension-polyfill';
+import { setState, getState } from '../helpers/storage.js';
+
+async function listener(details) {
+    const index = details.url.indexOf('?');
+    if (index > -1) {
+        const query = new URLSearchParams(details.url.substring(index + 1));
+        const state = await getState();
+
+        if (query.has('hidden')) {
+            state.hidden.enabled = query.get('hidden') === '1';
+        }
+
+        if (query.has('view') && ['list', 'topic'].includes(query.get('view'))) {
+            state.hidden.view = query.get('view');
+        }
+
+        if (query.has('listPage')) {
+            state.hidden.list.page = isNaN(query.get('listPage')) ? 1 : parseInt(query.get('listPage'));
+        }
+
+        if (query.has('topicPage')) {
+            state.hidden.topic.page = isNaN(query.get('topicPage')) ? 1 : parseInt(query.get('topicPage'));
+        }
+
+        if (query.has('topicId')) {
+            state.hidden.topic.id = isNaN(query.get('topicId')) ? 1 : parseInt(query.get('topicId'));
+        }
+
+        await setState(state);
+
+        if (state.hidden.enabled && state.hidden.view === 'topic') {
+            console.log('topic');
+            return {
+                redirectUrl: 'http://www.jeuxvideo.com/forums/42-3000172-38160921-1-0-1-0-presentation-et-regles-du-forum.htm'
+            };
+        } else {
+            console.log('else');
+            return {
+                redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
+            };
+        }
+    }
+}
+
+browser.webRequest.onBeforeRequest.addListener(
+    listener,
+    { urls: ['http://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
+    ['blocking']
+);

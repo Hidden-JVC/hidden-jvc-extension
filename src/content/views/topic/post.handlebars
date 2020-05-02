@@ -1,0 +1,39 @@
+<div class="bloc-message-forum " data-id="1036520623">
+    <div class="conteneur-message">
+        <div class="bloc-avatar-msg">
+            <div class="back-img-msg">
+                <div>
+                    <a href="http://www.jeuxvideo.com/profil/stormbound?mode=infos" target="_blank" class="xXx ">
+                        <img src="http://image.jeuxvideo.com/avatar-sm/s/t/stormbound-1587121938-a4cfc4d4c1917e4cbc6eba3ddcae485e.jpg"
+                            class="user-avatar-msg" alt="Stormbound">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="inner-head-content">
+            <div class="bloc-header">
+                <a href="http://www.jeuxvideo.com/profil/stormbound?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user">
+                    {{ User.Name }}
+                </a>
+                <div class="bloc-mp-pseudo">
+                    <a href="//www.jeuxvideo.com/messages-prives/nouveau.php?all_dest=Stormbound" target="_blank"
+                        class="xXx ">
+                        <span class="picto-msg-lettre" title="Envoyer un message privé"><span>MP</span></span>
+                    </a>
+                </div>
+                <div class="bloc-options-msg"></div>
+                <div class="bloc-date-msg">
+                    <a href="/stormbound/forums/message/1036520623" target="_blank" class="xXx lien-jv">
+                        {{ [../helpers/dateFormat] Post.CreationDate }}
+                    </a>
+                </div>
+            </div>
+            <div class="bloc-contenu">
+                <div class="txt-msg  text-enrichi-forum ">
+                    {{{ Post.Content }}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

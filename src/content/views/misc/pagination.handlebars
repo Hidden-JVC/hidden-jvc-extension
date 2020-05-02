@@ -1,0 +1,47 @@
+<div class="bloc-pagi-default">
+    <div class="pagi-before">
+        {{#if ([../helpers/pagination/begin] page)}}
+        <span>
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?topicPage=1" class="xXx pagi-debut-actif">
+                <span> Début </span>
+            </a>
+        </span>
+        {{/if}}
+        {{#if ([../helpers/pagination/previous] page)}}
+        <span>
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?topicPage={{ [../helpers/pagination/previous] page }}" class="xXx pagi-precedent-actif">
+                <span> Page précedente </span>
+            </a>
+        </span>
+        {{/if}}
+    </div>
+
+    <div class="bloc-liste-num-page">
+        {{#each paginationData}}
+            {{#if active}}
+                <span class="page-active"> {{ page }} </span>
+            {{else}}
+                {{#if page}}
+                    <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?topicPage={{ page }}" class="lien-jv"> {{ page }} </a>
+                {{else}}
+                    ...
+                {{/if}}
+            {{/if}}
+        {{/each}}
+    </div>
+
+    <div class="pagi-after">
+        {{#if ([../helpers/pagination/next] page lastPage)}}
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?topicPage={{ [../helpers/pagination/next] page lastPage}}" class="xXx pagi-suivant-actif">
+                <span> Page suivante </span>
+            </a>
+        {{/if}}
+        {{#if ([../helpers/pagination/next] page lastPage)}}
+        <span>
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?topicPage={{ [../helpers/pagination/last] page lastPage}}" class="xXx pagi-fin-actif">
+                <span> Fin </span>
+            </a>
+        </span>
+        {{/if}}
+    </div>
+</div>

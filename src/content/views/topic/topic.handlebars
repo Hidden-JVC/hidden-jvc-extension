@@ -1,0 +1,57 @@
+<div class="titre-head-bloc">
+    <h2 class="titre-bloc titre-bloc-forum">
+        <span> Sujet : </span>
+        <span id="bloc-title-forum"> {{ topic.Topic.Title }} </span>
+    </h2>
+</div>
+
+<div class="bloc-pre-pagi-forum bloc-outils-top">
+    <div class="bloc-pre-left">
+        <div class="group-one">
+            <a href="#bloc-formulaire-forum">
+                <span class="btn btn-repondre-msg"> Répondre </span>
+            </a>
+        </div>
+        <div class="group-two">
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm#bloc-formulaire-forum">
+                <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
+            </a>
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&page=1">
+                <span id="list-topics" class="btn btn-actu-new-list-forum"> Liste des sujets </span>
+            </a>
+        </div>
+    </div>
+    <div class="bloc-pre-right">
+        <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
+    </div>
+</div>
+
+<div class="conteneur-messages-pagi">
+    {{> ../misc/pagination }}
+
+    {{#each topic.Posts}}
+    {{> post . }}
+    {{/each}}
+
+    {{> ../misc/pagination }}
+
+    <div class="bloc-pre-pagi-forum bloc-outils-bottom">
+        <div class="bloc-pre-left">
+            <div class="group-two">
+                <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm#bloc-formulaire-forum">
+                    <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
+                </a>
+                <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm">
+                    <span class="btn btn-actu-new-list-forum"> Liste des sujets </span>
+                </a>
+            </div>
+        </div>
+        <div class="bloc-pre-right">
+            <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
+        </div>
+    </div>
+
+    <div id="bloc-formulaire-forum-placeholder">
+
+    </div>
+</div>

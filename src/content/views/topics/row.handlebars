@@ -1,0 +1,24 @@
+<li>
+    <span class="topic-subject">
+        <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
+        <a class="lien-jv topic-title"
+            href="http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=topic&topicId={{ Topic.Id }}&topicPage=1"
+            title="{{ Topic.Title }}">
+            {{ Topic.Title }}
+        </a>
+    </span>
+
+    <a class="xXx text-user topic-author">
+        {{ Author.Name }}
+    </a>
+
+    <span class="topic-count">
+        {{ Topic.PostCount }}
+    </span>
+
+    <span class="topic-date">
+        <a href="{{ lastPageUrl }}" class="xXx lien-jv">
+            {{ [../helpers/dateFormat] LastPost.CreationDate }}
+        </a>
+    </span>
+</li>

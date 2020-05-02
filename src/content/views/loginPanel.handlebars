@@ -1,0 +1,50 @@
+<div class="panel panel-jv-forum" style="padding-bottom: 0rem;">
+    <div class="panel-heading">
+        Hidden JVC
+        <span class="nb-connect-fofo">
+            1 connecté(s)
+        </span>
+    </div>
+    <div class="panel-body">
+        <div class="scrollable">
+            <div class="scrollable-wrapper">
+                {{#if user.jwt}}
+                <div class="scrollable-content bloc-info-forum">
+                    <p>
+                        Connecté en tant que: {{ user.name }}
+                    </p>
+
+                    <div class="form-post-topic" style="margin-bottom: 0rem;">
+                        <button id="hidden-logout" type="button" class="btn btn-actu-new-list-forum">
+                            Deconnexion
+                        </button>
+                    </div>
+                </div>
+                {{/if}}
+
+                {{#unless user.jwt}}
+                <div class="scrollable-content bloc-info-forum">
+                    <h4 class="titre-info-fofo"> Connexion </h4>
+
+                    <div class="form-post-topic" style="margin-bottom: 0rem;">
+                        <input id="hidden-name" type="text" class="form-control" placeholder="Pseudo"
+                            style="margin-bottom: 1rem;">
+
+                        <input id="hidden-password" type="password" class="form-control" placeholder="Mot de passe"
+                            style="margin-bottom: 1rem;">
+
+                        <button id="hidden-login" type="button" class="btn btn-actu-new-list-forum"
+                            style="background-color: #c85025;">
+                            Se connecter
+                        </button>
+                        <button id="hidden-register" type="button" class="btn btn-actu-new-list-forum"
+                            style="float:right">
+                            S'inscrire
+                        </button>
+                    </div>
+                </div>
+                {{/unless}}
+            </div>
+        </div>
+    </div>
+</div>
