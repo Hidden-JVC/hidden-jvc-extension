@@ -7,7 +7,7 @@ class HiddenToggler {
     async init() {
         const state = await getState();
 
-        const html = loginTemplate({ user: state.user });
+        const html = loginTemplate({ state });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
         if (state.user.jwt === null) {

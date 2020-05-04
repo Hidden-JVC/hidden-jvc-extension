@@ -37,8 +37,9 @@ class HiddenList {
         button.addEventListener('click', async () => {
             try {
                 const title = document.querySelector('input#titre_topic').value;
-                const content = document.querySelector('.previsu-editor.text-enrichi-forum').innerHTML;
-                const postData = { title, content };
+                const rawContent = document.querySelector('textarea#message_topic').value;
+                const compiledContent = document.querySelector('.previsu-editor.text-enrichi-forum').innerHTML;
+                const postData = { title, rawContent, compiledContent };
 
                 const state = await getState();
                 if (!state.user.jwt) {

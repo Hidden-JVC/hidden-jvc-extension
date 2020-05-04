@@ -8,10 +8,25 @@
     <div class="panel-body">
         <div class="scrollable">
             <div class="scrollable-wrapper">
-                {{#if user.jwt}}
+                <div class="scrollable-content bloc-info-forum">
+                    <h4 class="titre-info-fofo"> Etat </h4>
+
+                    {{#if state.hidden.enabled}}
+                    <button type="button" class="btn btn-actu-new-list-forum"
+                        style="background-color: #c85025;">
+                        Activé
+                    </button>
+                    {{else}}
+                    <button type="button" class="btn btn-actu-new-list-forum">
+                        Désactivé
+                    </button>
+                    {{/if}}
+                </div>
+
+                {{#if state.user.jwt}}
                 <div class="scrollable-content bloc-info-forum">
                     <p>
-                        Connecté en tant que: {{ user.name }}
+                        Connecté en tant que: {{ state.user.name }}
                     </p>
 
                     <div class="form-post-topic" style="margin-bottom: 0rem;">
@@ -22,7 +37,7 @@
                 </div>
                 {{/if}}
 
-                {{#unless user.jwt}}
+                {{#unless state.user.jwt}}
                 <div class="scrollable-content bloc-info-forum">
                     <h4 class="titre-info-fofo"> Connexion </h4>
 
@@ -40,6 +55,18 @@
                         <button id="hidden-register" type="button" class="btn btn-actu-new-list-forum"
                             style="float:right">
                             S'inscrire
+                        </button>
+                    </div>
+                </div>
+
+                <div class="scrollable-content bloc-info-forum">
+                    <h4 class="titre-info-fofo"> Nom anonyme </h4>
+                    <div class="form-post-topic" style="margin-bottom: 0rem;">
+                        <input id="hidden-name" type="text" class="form-control" placeholder="Pseudo anonyme"
+                            style="margin-bottom: 1rem;" value="{{ state.user.name }}">
+
+                        <button id="hidden-save-name" type="button" class="btn btn-actu-new-list-forum">
+                            Sauvegarder
                         </button>
                     </div>
                 </div>
