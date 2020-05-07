@@ -31,17 +31,9 @@ async function listener(details) {
 
         await setState(state);
 
-        if (state.hidden.enabled && state.hidden.view === 'topic') {
-            console.log('topic');
-            return {
-                redirectUrl: 'http://www.jeuxvideo.com/forums/42-3000172-38160921-1-0-1-0-presentation-et-regles-du-forum.htm'
-            };
-        } else {
-            console.log('else');
-            return {
-                redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
-            };
-        }
+        return {
+            redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
+        };
     }
 }
 

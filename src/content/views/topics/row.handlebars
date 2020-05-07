@@ -1,6 +1,23 @@
 <li>
     <span class="topic-subject">
-        <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
+        {{#if Topic.Pinned}}
+            {{#if Topic.Locked}}
+                <img src="/img/forums/topic-marque-off.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
+            {{else}}
+                <img src="/img/forums/topic-marque-on.png" alt="Topic épinglé" title="Topic épinglé" class="topic-img">
+            {{/if}}            
+        {{else}}
+            {{#if Topic.Locked}}
+                <img src="/img/forums/topic-lock.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
+            {{else}}
+                {{#if ([../helpers/hotTopic] PostsCount)}}
+                    <img src="/img/forums/topic-dossier2.png" alt="Topic hot" title="Topic hot" class="topic-img">        
+                {{else}}
+                    <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
+                {{/if}}
+            {{/if}}
+        {{/if}}
+
         <a class="lien-jv topic-title"
             href="http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=topic&topicId={{ Topic.Id }}&topicPage=1"
             title="{{ Topic.Title }}">
@@ -8,17 +25,23 @@
         </a>
     </span>
 
-    <a class="xXx text-user topic-author">
+    {{#if Author}}
+    <a class="xXx text-user topic-author" style="color: #20bbdf">
         {{ Author.Name }}
     </a>
+    {{else}}
+    <a class="xXx text-user topic-author">
+        {{ Topic.Username }}
+    </a>
+    {{/if}}
 
     <span class="topic-count">
-        {{ Topic.PostCount }}
+        {{ PostsCount }}
     </span>
 
     <span class="topic-date">
         <a href="{{ lastPageUrl }}" class="xXx lien-jv">
-            {{ [../helpers/dateFormat] LastPost.CreationDate }}
+            {{ [../helpers/dateFormat] LastPostDate }}
         </a>
     </span>
 </li>

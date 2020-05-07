@@ -1,5 +1,4 @@
 import { jvc } from '../constants';
-import { getState } from '../../helpers/storage.js';
 
 class PageInfo {
     constructor() {
@@ -17,10 +16,9 @@ class PageInfo {
         };
     }
 
-    async init() {
+    async init(state) {
         this.currentPage = jvc.pages.OTHER;
 
-        const state = await getState();
         if (state.hidden.enabled) {
             if (state.hidden.view === 'list') {
                 this.currentPage = jvc.pages.HIDDEN_LIST;

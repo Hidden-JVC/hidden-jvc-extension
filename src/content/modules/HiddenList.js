@@ -1,18 +1,18 @@
+import { parse } from 'open-jvcode';
 import pageInfo from './PageInfo.js';
 import { jvc, hidden } from '../constants';
 import { getState } from '../../helpers/storage';
-import { getRequest, postRequest } from '../helpers/network.js';
 import topicsTemplate from '../views/topics/topics.handlebars';
+import { getRequest, postRequest } from '../helpers/network.js';
 
 class HiddenList {
-    async init() {
+    async init(state) {
         if (pageInfo.currentPage !== jvc.pages.HIDDEN_LIST) {
             return;
         }
 
         const form = document.querySelector('#bloc-formulaire-forum');
 
-        const state = await getState();
         const { topics, count } = await getRequest(hidden.API_TOPICS, { page: state.hidden.list.page });
 
         this.render(topics, count, state.hidden.list.page);
@@ -27,6 +27,16 @@ class HiddenList {
     setupForm(form) {
         form.querySelector('.btn.btn-poster-msg.js-post-topic').replaceWith(this.createPostButton());
         document.querySelector('#bloc-formulaire-forum-placeholder').replaceWith(form);
+
+        const preview = document.querySelector('.previsu-editor.text-enrichi-forum');
+        const clone = preview.cloneNode();
+        preview.insertAdjacentElement('afterend', clone);
+
+        const textarea = document.querySelector('textarea#message_topic');
+        textarea.addEventListener('keyup', () => {
+            const output = parse(textarea.value);
+            clone.innerHTML = output;
+        });
     }
 
     createPostButton() {
@@ -37,9 +47,8 @@ class HiddenList {
         button.addEventListener('click', async () => {
             try {
                 const title = document.querySelector('input#titre_topic').value;
-                const rawContent = document.querySelector('textarea#message_topic').value;
-                const compiledContent = document.querySelector('.previsu-editor.text-enrichi-forum').innerHTML;
-                const postData = { title, rawContent, compiledContent };
+                const content = document.querySelector('textarea#message_topic').value;
+                const postData = { title, content };
 
                 const state = await getState();
                 if (!state.user.jwt) {

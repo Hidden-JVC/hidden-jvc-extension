@@ -1,12 +1,10 @@
-import { API_LOGIN, API_REGISTER } from '../constants/hidden';
 import { postRequest } from '../helpers/network.js';
 import loginTemplate from '../views/loginPanel.handlebars';
 import { getState, setState } from '../../helpers/storage.js';
+import { API_LOGIN, API_REGISTER } from '../constants/hidden';
 
 class HiddenToggler {
-    async init() {
-        const state = await getState();
-
+    async init(state) {
         const html = loginTemplate({ state });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
@@ -19,7 +17,8 @@ class HiddenToggler {
 
     initLogin() {
         const loginBtn = document.querySelector('#hidden-login');
-        const register = document.querySelector('#hidden-register');
+        const registerBtn = document.querySelector('#hidden-register');
+        const saveNameBtn = document.querySelector('#hidden-save-name');
 
         loginBtn.addEventListener('click', async () => {
             const name = document.querySelector('input#hidden-name').value;
@@ -35,7 +34,7 @@ class HiddenToggler {
             }
         });
 
-        register.addEventListener('click', async () => {
+        registerBtn.addEventListener('click', async () => {
             const name = document.querySelector('input#hidden-name').value;
             const password = document.querySelector('input#hidden-password').value;
 
@@ -47,6 +46,13 @@ class HiddenToggler {
                 await setState(state);
                 location.reload();
             }
+        });
+
+        saveNameBtn.addEventListener('click', async () => {
+            const name = document.querySelector('input#hidden-anonymous-name').value;
+            const state = await getState();
+            state.user.name = name;
+            await setState(state);
         });
     }
 
