@@ -30,16 +30,8 @@
 </div>
 
 <div class="conteneur-topic-pagi">
-    <div class="bloc-pagi-default">
-        <div class="pagi-before"> </div>
-        <div class="pagi-after">
-            <span>
-                <a href="/forums/0-51-0-1-0-26-0-blabla-18-25-ans.htm" class="pagi-suivant-actif">
-                    <span> Page suivante </span>
-                </a>
-            </span>
-        </div>
-    </div>
+    {{> ../misc/listPagination }}
+
     <ul class="topic-list topic-list-admin">
         <li class="topic-head">
             <span class="topic-subject"> Sujet </span>
@@ -49,20 +41,11 @@
         </li>
 
         {{#each topics}}
-        {{> row .}}
+            {{> row .}}
         {{/each}}
     </ul>
 
-    <div class="bloc-pagi-default">
-        <div class="pagi-before"> </div>
-        <div class="pagi-after">
-            <span>
-                <a href="/forums/0-51-0-1-0-26-0-blabla-18-25-ans.htm" class="pagi-suivant-actif">
-                    <span> Page suivante </span>
-                </a>
-            </span>
-        </div>
-    </div>
+    {{> ../misc/listPagination }}
 </div>
 
 <div id="bloc-formulaire-forum-placeholder">

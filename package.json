@@ -6,6 +6,7 @@
         "watch": "webpack --config webpack.config.js --watch"
     },
     "dependencies": {
+        "date-fns": "^2.13.0",
         "handlebars": "^4.7.6",
         "open-jvcode": "https://github.com/m7r-227/open-jvcode.git",
         "webextension-polyfill": "^0.6.0"
