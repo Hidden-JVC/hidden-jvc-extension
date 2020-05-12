@@ -18,35 +18,34 @@ class PageInfo {
 
     async init(state) {
         this.currentPage = jvc.pages.OTHER;
-
-        if (state.hidden.enabled) {
-            if (state.hidden.view === 'list') {
-                this.currentPage = jvc.pages.HIDDEN_LIST;
-            } else if (state.hidden.view === 'topic') {
-                this.currentPage = jvc.pages.HIDDEN_TOPIC;
-            }
-        } else {
-            const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm$/);
-            if (matches === null) {
-                return;
-            }
-
-            const [, pageType, forumId] = matches;
-            this.jvc.forumId = forumId;
-
-            if (pageType === '42') {
-                this.currentPage = jvc.pages.JVC_TOPIC;
-                this.jvc.topic = {
-                    topicId: parseInt(matches[3]),
-                    page: parseInt(matches[4])
-                };
-            } else if (pageType === '0') {
-                this.currentPage = jvc.pages.JVC_LIST;
-                this.jvc.list = {
-                    offset: parseInt(matches[6])
-                };
-            }
+        const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm$/);
+        if (matches === null) {
+            return;
         }
+
+        const [, pageType, forumId] = matches;
+        this.jvc.forumId = forumId;
+        this.jvc.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim();
+
+        if (pageType === '42') {
+            this.currentPage = jvc.pages.JVC_TOPIC;
+            this.jvc.topic = {
+                topicId: parseInt(matches[3]),
+                page: parseInt(matches[4])
+            };
+        } else if (pageType === '0') {
+            this.currentPage = jvc.pages.JVC_LIST;
+            this.jvc.list = {
+                offset: parseInt(matches[6])
+            };
+        }
+
+        if (state.hidden.enabled && state.hidden.view === 'list') {
+            this.currentPage = jvc.pages.HIDDEN_LIST;
+        } else if (state.hidden.enabled && state.hidden.view === 'topic') {
+            this.currentPage = jvc.pages.HIDDEN_TOPIC;
+        }
+
     }
 }
 

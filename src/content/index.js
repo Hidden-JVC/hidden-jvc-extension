@@ -1,4 +1,5 @@
 import hiddenJVC from './HiddenJVC.js';
+
 (async function () {
     try {
         await hiddenJVC.init();

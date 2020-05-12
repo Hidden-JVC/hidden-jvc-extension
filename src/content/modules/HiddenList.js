@@ -80,7 +80,7 @@ class HiddenList {
             try {
                 const title = document.querySelector('input#titre_topic').value;
                 const content = document.querySelector('textarea#message_topic').value;
-                const postData = { title, content };
+                const postData = { title, content, forumId: pageInfo.jvc.forumId, forumName: pageInfo.jvc.forumName };
 
                 const state = await getState();
                 if (!state.user.jwt) {
