@@ -3,6 +3,8 @@ import './messages.js';
 import browser from 'webextension-polyfill';
 import { setState, getState } from '../helpers/storage.js';
 
+// browser.tabs.create({ url: 'vuejs-build/index.html' });
+
 async function listener(details) {
     const index = details.url.indexOf('?');
     if (index > -1) {
