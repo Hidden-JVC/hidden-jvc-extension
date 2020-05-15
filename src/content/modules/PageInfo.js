@@ -18,16 +18,16 @@ class PageInfo {
 
     async init(state) {
         this.currentPage = jvc.pages.OTHER;
-        const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm$/);
+        const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm(?:#.*?)?$/);
         if (matches === null) {
             return;
         }
 
         const [, pageType, forumId] = matches;
-        this.jvc.forumId = forumId;
+        this.jvc.forumId = parseInt(forumId);
         this.jvc.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim();
 
-        if (pageType === '42') {
+        if (pageType === '42' || pageType === '1') {
             this.currentPage = jvc.pages.JVC_TOPIC;
             this.jvc.topic = {
                 topicId: parseInt(matches[3]),

@@ -80,14 +80,24 @@ class HiddenList {
             try {
                 const title = document.querySelector('input#titre_topic').value;
                 const content = document.querySelector('textarea#message_topic').value;
-                const postData = { title, content, forumId: pageInfo.jvc.forumId, forumName: pageInfo.jvc.forumName };
+
+                const data = {
+                    topic: {
+                        title,
+                        forumId: pageInfo.jvc.forumId,
+                        forumName: pageInfo.jvc.forumName
+                    },
+                    post: {
+                        content
+                    }
+                };
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    postData.username = state.user.name || 'Anonymous';
+                    data.topic.username = state.user.name || 'Anonymous';
                 }
 
-                const { topicId } = await postRequest(hidden.API_TOPICS, postData, state.user.jwt);
+                const { topicId } = await postRequest(hidden.API_TOPICS, data, state.user.jwt);
                 if (topicId) {
                     const url = `http://www.jeuxvideo.com/forums/42-3000172-38160921-1-0-1-0-presentation-et-regles-du-forum.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
                     location.replace(url);

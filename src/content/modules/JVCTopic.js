@@ -1,36 +1,40 @@
-import { fr } from 'date-fns/locale';
-import { parse, formatISO9075 } from 'date-fns';
+import { formatISO9075, isBefore } from 'date-fns';
 
-import pageInfo from './PageInfo.js';
-import { jvc, hidden } from '../constants';
+import { hidden } from '../constants';
 import { getState } from '../../helpers/storage';
-import { topicData, forumData } from '../helpers/jvc/topic.js';
+import jvcTopic from '../helpers/JVCTopic.js';
 import { getRequest, postRequest } from '../helpers/network.js';
+import postTemplate from '../views/topic/post.handlebars';
 
 class HiddenList {
     constructor() {
         this.topic = null;
-
-        this.topicData = topicData;
-        this.forumData = forumData;
     }
 
     async init() {
-        if (pageInfo.currentPage !== jvc.pages.JVC_TOPIC) {
-            return;
-        }
-
         this.setupForm();
 
-        // const startDate = this.getDate(messages[0]);
-        // const endDate = this.getDate(messages[messages.length - 1]);
+        const query = {
+            startDate: formatISO9075(jvcTopic.posts[0].creationDate)
+        };
 
-        // const result = await getRequest(`${hidden.API_JVC_TOPICS}/${pageInfo.jvc.topic.topicId}`, {
-        //     startDate,
-        //     endDate
-        // });
+        if (
+            jvcTopic.page !== jvcTopic.lastPage &&
+            jvcTopic.posts.length > 1
+        ) {
+            const endDate = await jvcTopic.getNextPageFirstPostDate();
+            console.log(endDate);
+            query.endDate = formatISO9075(endDate);
+            console.log(query.endDate);
 
-        console.log(this.forumData);
+            // query.endDate = formatISO9075(jvcTopic.posts[jvcTopic.posts.length - 1].creationDate);
+        }
+
+        const { topic } = await getRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, query);
+
+        if (topic !== null) {
+            this.insertJVCTopic(topic);
+        }
     }
 
     setupForm() {
@@ -51,18 +55,19 @@ class HiddenList {
 
                 const body = {
                     forum: {
-                        id: 15,
-                        name: 'Forum Blabla moins de 15 ans' // ?
+                        id: jvcTopic.forumId,
+                        name: jvcTopic.forumName
                     },
-                    topic: { // ?
-                        title: 'Enquête sur le ressenti des jeunes durant cette période de crise sanitaire et de confinement',
-                        creationDate: '2020-05-09 08:05:43.117493+00',
+                    topic: {
+                        title: jvcTopic.title,
+                        viewId: jvcTopic.viewId,
+                        firstPostDate: '2020-05-09 08:05:43.117493+00',
                         firstPostContent: 'Bonjour à tous',
                         firstPostUsername: 'BaptisteGonella'
                     },
                     post: {
                         content,
-                        page: 3
+                        page: jvcTopic.lastPage
                     }
                 };
 
@@ -70,6 +75,9 @@ class HiddenList {
                 if (!state.user.jwt) {
                     body.post.username = state.user.name || 'Anonymous';
                 }
+
+                const result = await postRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, body, state.user.jwt);
+                console.log(result);
             } catch (err) {
                 console.error(err);
             }
@@ -77,10 +85,28 @@ class HiddenList {
         return button;
     }
 
-    getDate(message) {
-        const dateStr = message.querySelector('.bloc-date-msg').textContent.trim();
-        const date = parse(dateStr, 'dd MMMM yyyy à kk:mm:ss', new Date(), { locale: fr });
-        return formatISO9075(date);
+    insertJVCTopic(topic) {
+        const jvcPosts = jvcTopic.posts;
+        topic.Posts = topic.Posts.reverse();
+
+        for (const hiddenPost of topic.Posts) {
+            const hiddenDate = new Date(hiddenPost.Post.CreationDate);
+            let previousPost = null;
+
+            for (let i = 0; i < jvcPosts.length; i++) {
+                let jvcDate = jvcPosts[i].creationDate;
+                if (isBefore(hiddenDate, jvcDate)) {
+                    previousPost = jvcPosts[i];
+                    break;
+                }
+            }
+
+            if (previousPost !== null) {
+                previousPost.element.insertAdjacentHTML('beforebegin', postTemplate(hiddenPost));
+            } else {
+                jvcPosts[jvcPosts.length - 1].element.insertAdjacentHTML('afterend', postTemplate(hiddenPost));
+            }
+        }
     }
 }
 

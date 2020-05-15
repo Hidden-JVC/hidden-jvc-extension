@@ -79,15 +79,15 @@ class HiddenTopic {
         button.addEventListener('click', async () => {
             try {
                 const content = document.querySelector('textarea#message_topic').value;
-                const postData = { content };
+                const data = { post: { content } };
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    postData.username = state.user.name || 'Anonymous';
+                    data.post.username = state.user.name || 'Anonymous';
                 }
 
                 const url = `${hidden.API_TOPICS}/${this.topic.Topic.Id}`;
-                await postRequest(url, postData, state.user.jwt);
+                await postRequest(url, data, state.user.jwt);
                 location.reload();
             } catch (err) {
                 console.error(err);

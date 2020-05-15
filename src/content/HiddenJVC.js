@@ -1,4 +1,6 @@
+import { jvc } from './constants';
 import { getState } from '../helpers/storage';
+import jvcTopicHelper from './helpers/JVCTopic.js';
 
 import jvcList from './modules/JVCList.js';
 import jvcTopic from './modules/JVCTopic.js';
@@ -15,11 +17,22 @@ class HiddenJVC {
         await hiddenLogin.init(state);
         await pageInfo.init(state);
 
-        await jvcList.init(state);
-        await jvcTopic.init(state);
+        if (pageInfo.currentPage === jvc.pages.JVC_LIST) {
+            await jvcList.init(state);
+        }
 
-        await hiddenList.init(state);
-        await hiddenTopic.init(state);
+        if (pageInfo.currentPage === jvc.pages.JVC_TOPIC) {
+            await jvcTopicHelper.init();
+            await jvcTopic.init(state);
+        }
+
+        if (pageInfo.currentPage === jvc.pages.HIDDEN_LIST) {
+            await hiddenList.init(state);
+        }
+
+        if (pageInfo.currentPage === jvc.pages.HIDDEN_TOPIC) {
+            await hiddenTopic.init(state);
+        }
 
         await hiddenToggler.init(state);
     }
