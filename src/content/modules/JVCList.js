@@ -16,7 +16,14 @@ class HiddenList {
         }
 
         const { topics } = await getRequest(hidden.API_JVC_TOPICS, { topicIds: topicIds.join(',') });
-        console.log(topics);
+        for (const topicElement of topicElements) {
+            const id = parseInt(topicElement.dataset.id);
+            for (const topic of topics) {
+                if (topic.Topic.Id === id) {
+                    topicElement.querySelector('span.topic-subject').style.borderLeft = '5px solid #083193';
+                }
+            }
+        }
     }
 }
 

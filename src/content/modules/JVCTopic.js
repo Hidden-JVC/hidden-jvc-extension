@@ -23,18 +23,31 @@ class HiddenList {
             jvcTopic.posts.length > 1
         ) {
             const endDate = await jvcTopic.getNextPageFirstPostDate();
-            console.log(endDate);
             query.endDate = formatISO9075(endDate);
-            console.log(query.endDate);
-
-            // query.endDate = formatISO9075(jvcTopic.posts[jvcTopic.posts.length - 1].creationDate);
         }
 
         const { topic } = await getRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, query);
 
         if (topic !== null) {
             this.insertJVCTopic(topic);
+            this.highlightPagination(topic);
         }
+    }
+
+    highlightPagination(topic) {
+        const paginationItems = document.querySelectorAll('.bloc-pagi-default .bloc-liste-num-page span');
+        for (const item of paginationItems) {
+            const paginationPage = parseInt(item.textContent.trim());
+            for (const page of topic.Pages) {
+                if (paginationPage === page) {
+                    const span = document.createElement('span');
+                    span.style.borderTop = '3px solid #083193';
+                    span.style.display = 'block';
+                    item.insertAdjacentElement('afterbegin', span);
+                }
+            }
+        }
+
     }
 
     setupForm() {
@@ -78,6 +91,9 @@ class HiddenList {
 
                 const result = await postRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, body, state.user.jwt);
                 console.log(result);
+
+                const reloadUrl = `http://www.jeuxvideo.com/forums/${jvcTopic.viewId}-${jvcTopic.forumId}-${jvcTopic.id}-${jvcTopic.lastPage}-0-1-0-0.htm`;
+                location.replace(reloadUrl);
             } catch (err) {
                 console.error(err);
             }
