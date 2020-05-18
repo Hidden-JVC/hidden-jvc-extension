@@ -1,6 +1,7 @@
 import { jvc } from './constants';
 import { getState } from '../helpers/storage';
 import jvcTopicHelper from './helpers/JVCTopic.js';
+import jvcForumHelper from './helpers/JVCForum.js';
 
 import jvcList from './modules/JVCList.js';
 import jvcTopic from './modules/JVCTopic.js';
@@ -18,6 +19,7 @@ class HiddenJVC {
         await pageInfo.init(state);
 
         if (pageInfo.currentPage === jvc.pages.JVC_LIST) {
+            await jvcForumHelper.init(state);
             await jvcList.init(state);
         }
 
@@ -27,6 +29,8 @@ class HiddenJVC {
         }
 
         if (pageInfo.currentPage === jvc.pages.HIDDEN_LIST) {
+            
+            await jvcForumHelper.init(state);
             await hiddenList.init(state);
         }
 

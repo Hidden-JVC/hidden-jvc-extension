@@ -3,8 +3,6 @@ import './messages.js';
 import browser from 'webextension-polyfill';
 import { setState, getState } from '../helpers/storage.js';
 
-// browser.tabs.create({ url: 'vuejs-build/index.html' });
-
 async function listener(details) {
     const index = details.url.indexOf('?');
     if (index > -1) {
@@ -33,9 +31,9 @@ async function listener(details) {
 
         await setState(state);
 
-        return {
-            redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
-        };
+        // return {
+        //     redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
+        // };
     }
 }
 
@@ -44,3 +42,7 @@ browser.webRequest.onBeforeRequest.addListener(
     { urls: ['http://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
     ['blocking']
 );
+
+browser.browserAction.onClicked.addListener(() => {
+    browser.tabs.create({ url: 'vuejs-build/index.html' });
+});

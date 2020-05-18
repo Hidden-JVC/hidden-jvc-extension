@@ -4,6 +4,7 @@ import { jvc, hidden } from '../constants';
 import { getState } from '../../helpers/storage';
 import topicsTemplate from '../views/topics/topics.handlebars';
 import { getRequest, postRequest } from '../helpers/network.js';
+import jvcForum from '../helpers/JVCForum.js';
 
 class HiddenList {
     async init(state) {
@@ -13,7 +14,10 @@ class HiddenList {
 
         const form = document.querySelector('#bloc-formulaire-forum');
 
-        const { topics, count } = await getRequest(hidden.API_TOPICS, { page: state.hidden.list.page });
+        const { topics, count } = await getRequest(hidden.API_HIDDEN_TOPICS, {
+            forumId: jvcForum.id,
+            page: state.hidden.list.page,
+        });
 
         this.render(topics, count, state.hidden.list.page);
         this.setupForm(form);
@@ -97,7 +101,7 @@ class HiddenList {
                     data.topic.username = state.user.name || 'Anonymous';
                 }
 
-                const { topicId } = await postRequest(hidden.API_TOPICS, data, state.user.jwt);
+                const { topicId } = await postRequest(hidden.API_HIDDEN_TOPICS, data, state.user.jwt);
                 if (topicId) {
                     const url = `http://www.jeuxvideo.com/forums/42-3000172-38160921-1-0-1-0-presentation-et-regles-du-forum.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
                     location.replace(url);

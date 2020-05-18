@@ -8,7 +8,7 @@ class HiddenToggler {
         const buttonText = state.hidden.enabled ? 'JVC' : 'Hidden JVC';
         const button = this.createButton(buttonText);
         button.addEventListener('click', async () => {
-            const url = `http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=${state.hidden.enabled ? 0 : 1}`;
+            const url = `${location.href}?hidden=${state.hidden.enabled ? 0 : 1}`;
             window.location.replace(url);
         });
     }

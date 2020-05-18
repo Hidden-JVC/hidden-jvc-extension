@@ -16,7 +16,7 @@ class HiddenTopic {
 
         const form = document.querySelector('#bloc-formulaire-forum');
 
-        const { topic } = await getRequest(`${hidden.API_TOPICS}/${state.hidden.topic.id}`, { page: state.hidden.topic.page });
+        const { topic } = await getRequest(`${hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, { page: state.hidden.topic.page });
         this.topic = topic;
         const page = state.hidden.topic.page;
         this.render(topic, page);
@@ -86,7 +86,7 @@ class HiddenTopic {
                     data.post.username = state.user.name || 'Anonymous';
                 }
 
-                const url = `${hidden.API_TOPICS}/${this.topic.Topic.Id}`;
+                const url = `${hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}`;
                 await postRequest(url, data, state.user.jwt);
                 location.reload();
             } catch (err) {
