@@ -1,11 +1,12 @@
 import { postRequest } from '../helpers/network.js';
 import loginTemplate from '../views/loginPanel.handlebars';
 import { getState, setState } from '../../helpers/storage.js';
-import { API_LOGIN, API_REGISTER } from '../constants/hidden';
+import { API_LOGIN, API_REGISTER } from '../constants/Hidden';
 
 class HiddenToggler {
     async init(state) {
-        const html = loginTemplate({ state });
+        const toggleUrl = `${location.href}?hidden=${state.hidden.enabled ? 0 : 1}`;
+        const html = loginTemplate({ state, toggleUrl });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
         if (state.user.jwt === null) {

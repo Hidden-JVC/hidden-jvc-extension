@@ -1,26 +1,17 @@
-import pageInfo from './PageInfo.js';
-import { jvc, hidden } from '../constants';
+import { Hidden } from '../constants';
 import { getRequest } from '../helpers/network.js';
 
 class HiddenList {
     async init() {
-        if (pageInfo.currentPage !== jvc.pages.JVC_LIST) {
-            return;
-        }
+        const topicRows = document.querySelectorAll('ul.topic-list li[data-id]');
+        const topicIds = Array.prototype.map.call(topicRows, (row) => row.dataset.id);
 
-        const topicElements = document.querySelectorAll('ul.topic-list.topic-list-admin li[data-id]');
-
-        const topicIds = [];
-        for (const topicElement of topicElements) {
-            topicIds.push(topicElement.dataset.id);
-        }
-
-        const { topics } = await getRequest(hidden.API_JVC_TOPICS, { topicIds: topicIds.join(',') });
-        for (const topicElement of topicElements) {
-            const id = parseInt(topicElement.dataset.id);
+        const { topics } = await getRequest(Hidden.API_JVC_TOPICS, { topicIds });
+        for (const row of topicRows) {
+            const id = parseInt(row.dataset.id);
             for (const topic of topics) {
                 if (topic.Topic.Id === id) {
-                    topicElement.querySelector('span.topic-subject').style.borderLeft = '5px solid #083193';
+                    row.querySelector('span.topic-subject').style.borderLeft = '5px solid #083193';
                 }
             }
         }

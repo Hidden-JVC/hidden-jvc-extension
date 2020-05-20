@@ -1,7 +1,7 @@
 import * as jvc from './jvc.js';
-import * as hidden from './hidden.js';
+import * as Hidden from './Hidden.js';
 
 export {
     jvc,
-    hidden
+    Hidden
 };
