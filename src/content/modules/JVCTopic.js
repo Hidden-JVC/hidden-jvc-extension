@@ -1,6 +1,6 @@
 import { formatISO9075, isBefore } from 'date-fns';
 
-import { hidden } from '../constants';
+import { Hidden } from '../constants';
 import { getState } from '../../helpers/storage';
 import jvcTopic from '../helpers/JVCTopic.js';
 import { getRequest, postRequest } from '../helpers/network.js';
@@ -26,7 +26,7 @@ class HiddenList {
             query.endDate = formatISO9075(endDate);
         }
 
-        const { topic } = await getRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, query);
+        const { topic } = await getRequest(`${Hidden.API_JVC_TOPICS}/${jvcTopic.id}`, query);
 
         if (topic !== null) {
             this.insertJVCTopic(topic);
@@ -89,7 +89,7 @@ class HiddenList {
                     body.post.username = state.user.name || 'Anonymous';
                 }
 
-                const result = await postRequest(`${hidden.API_JVC_TOPICS}/${jvcTopic.id}`, body, state.user.jwt);
+                const result = await postRequest(`${Hidden.API_JVC_TOPICS}/${jvcTopic.id}`, body, state.user.jwt);
                 console.log(result);
 
                 const reloadUrl = `http://www.jeuxvideo.com/forums/${jvcTopic.viewId}-${jvcTopic.forumId}-${jvcTopic.id}-${jvcTopic.lastPage}-0-1-0-0.htm`;

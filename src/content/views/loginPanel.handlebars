@@ -12,14 +12,17 @@
                     <h4 class="titre-info-fofo"> Etat </h4>
 
                     {{#if state.hidden.enabled}}
-                    <button type="button" class="btn btn-actu-new-list-forum"
-                        style="background-color: #c85025;">
-                        Activé
-                    </button>
+                        <a href="{{ toggleUrl }}">
+                            <button type="button" class="btn btn-actu-new-list-forum" style="background-color: #c85025;">
+                                Activé
+                            </button>
+                        </a>
                     {{else}}
-                    <button type="button" class="btn btn-actu-new-list-forum">
-                        Désactivé
-                    </button>
+                        <a href="{{ toggleUrl }}">
+                            <button type="button" class="btn btn-actu-new-list-forum">
+                                Désactivé
+                            </button>
+                        </a>
                     {{/if}}
                 </div>
 
