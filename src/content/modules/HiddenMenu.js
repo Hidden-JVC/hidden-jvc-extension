@@ -1,18 +1,36 @@
-import { postRequest } from '../helpers/network.js';
-import loginTemplate from '../views/loginPanel.handlebars';
-import { getState, setState } from '../../helpers/storage.js';
-import { API_LOGIN, API_REGISTER } from '../constants/Hidden';
+import hiddenJVC from '../HiddenJVC.js';
 
-class HiddenToggler {
+const { views } = hiddenJVC;
+const { Hidden } = hiddenJVC.constants.Static;
+const { getState, setState } = hiddenJVC.storage;
+const { postRequest } = hiddenJVC.helpers.network;
+
+class HiddenMenu {
+    constructor() {
+        this.pages = 0;
+    }
+
     async init(state) {
-        const toggleUrl = `${location.href}?hidden=${state.hidden.enabled ? 0 : 1}`;
-        const html = loginTemplate({ state, toggleUrl });
+        const html = views.menu({ state });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
+        this.initToggle(state);
         if (state.user.jwt === null) {
             this.initLogin();
         } else {
             this.initLogout();
+        }
+    }
+
+    initToggle(state) {
+        const toggleLink = document.querySelector('a#hidden-toggle');
+        const toggleButton = toggleLink.querySelector('button');
+        toggleLink.href = `${location.href}?hidden=${state.hidden.enabled ? 0 : 1}`;
+        if (state.hidden.enabled) {
+            toggleButton.style.backgroundColor = '#c85025';
+            toggleButton.textContent = state.hidden.enabled = 'Activé';
+        } else {
+            toggleButton.textContent = state.hidden.enabled = 'Désactivé';
         }
     }
 
@@ -25,7 +43,7 @@ class HiddenToggler {
             const name = document.querySelector('input#hidden-name').value;
             const password = document.querySelector('input#hidden-password').value;
 
-            const { jwt } = await postRequest(API_LOGIN, { name, password });
+            const { jwt } = await postRequest(Hidden.API_LOGIN, { name, password });
             if (jwt) {
                 const state = await getState();
                 state.user.jwt = jwt;
@@ -39,7 +57,7 @@ class HiddenToggler {
             const name = document.querySelector('input#hidden-name').value;
             const password = document.querySelector('input#hidden-password').value;
 
-            const { jwt } = await postRequest(API_REGISTER, { name, password });
+            const { jwt } = await postRequest(Hidden.API_REGISTER, { name, password });
             if (jwt) {
                 const state = await getState();
                 state.user.jwt = jwt;
@@ -68,4 +86,5 @@ class HiddenToggler {
     }
 }
 
-export default new HiddenToggler();
+const hiddenMenu = new HiddenMenu();
+hiddenJVC.registerModule(hiddenMenu);

@@ -1,5 +1,4 @@
-import { jvc, Hidden } from '../constants';
-import pageInfo from './PageInfo.js';
+import { Hidden } from '../constants';
 import { getRequest, postRequest } from '../helpers/network.js';
 import { getState } from '../../helpers/storage';
 import topicsTemplate from '../views/topic/topic.handlebars';
@@ -10,10 +9,6 @@ class HiddenTopic {
     }
 
     async init(state) {
-        if (pageInfo.currentPage !== jvc.pages.HIDDEN_TOPIC) {
-            return;
-        }
-
         const form = document.querySelector('#bloc-formulaire-forum');
 
         const { topic } = await getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, { page: state.hidden.topic.page });

@@ -1,5 +1,4 @@
 import { parse } from 'open-jvcode';
-import pageInfo from './PageInfo.js';
 import { Hidden } from '../constants';
 import { getState } from '../../helpers/storage';
 import topicsTemplate from '../views/topics/topics.handlebars';
@@ -84,8 +83,8 @@ class HiddenList {
                 const data = {
                     topic: {
                         title,
-                        forumId: pageInfo.jvc.forumId,
-                        forumName: pageInfo.jvc.forumName
+                        forumId: jvcForum.id,
+                        forumName: jvcForum.name
                     },
                     post: {
                         content
