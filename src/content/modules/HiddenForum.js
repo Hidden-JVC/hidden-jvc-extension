@@ -1,16 +1,23 @@
 import { parse } from 'open-jvcode';
-import { Hidden } from '../constants';
-import { getState } from '../../helpers/storage';
-import topicsTemplate from '../views/topics/topics.handlebars';
-import { getRequest, postRequest } from '../helpers/network.js';
-import jvcForum from '../helpers/JVCForum.js';
 
-class HiddenList {
+import hiddenJVC from '../HiddenJVC.js';
+
+const { getState } = hiddenJVC.storage;
+const { getRequest, postRequest } = hiddenJVC.helpers.network;
+const Runtime = hiddenJVC.constants.Runtime;
+const { JVC, Hidden } = hiddenJVC.constants.Static;
+const { forum } = hiddenJVC.views.forum;
+
+class HiddenForum {
+    constructor() {
+        this.pages = JVC.Pages.HIDDEN_FORUM;
+    }
+
     async init(state) {
         const form = document.querySelector('#bloc-formulaire-forum');
 
         const { topics, count } = await getRequest(Hidden.API_HIDDEN_TOPICS, {
-            forumId: jvcForum.id,
+            forumId: Runtime.forumId,
             page: state.hidden.list.page,
         });
 
@@ -21,7 +28,7 @@ class HiddenList {
     render(topics, count, page) {
         const lastPage = Math.ceil(count / 20);
         const pagination = this.getPaginationData(page, lastPage);
-        const html = topicsTemplate({ topics, page, lastPage, pagination });
+        const html = forum({ topics, page, lastPage, pagination });
         document.querySelector('#forum-main-col').innerHTML = html;
     }
 
@@ -83,8 +90,8 @@ class HiddenList {
                 const data = {
                     topic: {
                         title,
-                        forumId: jvcForum.id,
-                        forumName: jvcForum.name
+                        forumId: Runtime.forumId,
+                        forumName: Runtime.forumName
                     },
                     post: {
                         content
@@ -111,4 +118,5 @@ class HiddenList {
     }
 }
 
-export default new HiddenList();
+const hiddenList = new HiddenForum();
+hiddenJVC.registerModule(hiddenList);

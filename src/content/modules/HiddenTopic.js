@@ -1,10 +1,14 @@
-import { Hidden } from '../constants';
-import { getRequest, postRequest } from '../helpers/network.js';
-import { getState } from '../../helpers/storage';
-import topicsTemplate from '../views/topic/topic.handlebars';
+import hiddenJVC from '../HiddenJVC.js';
+
+const { getState } = hiddenJVC.storage;
+const { getRequest, postRequest } = hiddenJVC.helpers.network;
+const { JVC, Hidden } = hiddenJVC.constants.Static;
+const { topic: topicTemplate } = hiddenJVC.views.topic;
 
 class HiddenTopic {
     constructor() {
+        this.pages = JVC.Pages.HIDDEN_TOPIC;
+
         this.topic = null;
     }
 
@@ -22,7 +26,7 @@ class HiddenTopic {
     render(topic, page) {
         const lastPage = Math.ceil(this.topic.PostsCount / 20);
         const pagination = this.getPaginationData(page, lastPage);
-        const html = topicsTemplate({ topic, page, lastPage, pagination });
+        const html = topicTemplate({ topic, page, lastPage, pagination });
         document.querySelector('#forum-main-col').innerHTML = html;
     }
 
@@ -111,4 +115,5 @@ class HiddenTopic {
     }
 }
 
-export default new HiddenTopic();
+const hiddenTopic = new HiddenTopic();
+hiddenJVC.registerModule(hiddenTopic);

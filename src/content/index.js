@@ -4,6 +4,8 @@ import './modules/AdCleaner.js';
 import './modules/HiddenMenu.js';
 import './modules/JVCForum.js';
 import './modules/JVCTopic.js';
+import './modules/HiddenForum.js';
+import './modules/HiddenTopic.js';
 
 (async function () {
     try {

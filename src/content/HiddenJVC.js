@@ -4,6 +4,8 @@ import * as storage from '../helpers/storage';
 
 import postTemplate from './views/topic/post.handlebars';
 import menuTemplate from './views/menu.handlebars';
+import forumTemplate from './views/forum/forum.handlebars';
+import topicTemplate from './views/topic/topic.handlebars';
 
 class HiddenJVC {
     constructor() {
@@ -14,7 +16,11 @@ class HiddenJVC {
         this.constants = constants;
         this.views = {
             topic: {
-                post: postTemplate
+                post: postTemplate,
+                topic: topicTemplate
+            },
+            forum: {
+                forum: forumTemplate
             },
             menu: menuTemplate
         };
