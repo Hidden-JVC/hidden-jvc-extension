@@ -8,10 +8,4 @@ import './modules/JVCTopic.js';
 import './modules/HiddenForum.js';
 import './modules/HiddenTopic.js';
 
-(async function () {
-    try {
-        await hiddenJVC.init();
-    } catch (err) {
-        console.error(err);
-    }
-})();
+hiddenJVC.init().catch(console.error);

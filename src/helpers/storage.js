@@ -16,8 +16,9 @@ export async function getState() {
                     page: 1
                 },
                 topic: {
+                    id: 0,
                     page: 1,
-                    id: 0
+                    userId: null
                 }
             }
         };

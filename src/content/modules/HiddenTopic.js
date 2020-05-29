@@ -20,8 +20,8 @@ class HiddenTopic {
             page: state.hidden.topic.page
         };
 
-        if (state.hidden.topic.userIdFilter) {
-            query.userId = state.hidden.topic.userIdFilter;
+        if (state.hidden.topic.userId) {
+            query.userId = state.hidden.topic.userId;
         }
 
         const { topic } = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
@@ -35,16 +35,28 @@ class HiddenTopic {
     }
 
     render(state) {
+        const topic = this.topic;
+        const page = state.hidden.topic.page;
         const lastPage = Math.ceil(this.topic.PostsCount / 20);
         const pagination = createPagination(state.hidden.topic.page, lastPage);
-        const forumUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=0`;
+        let opPostOnlyUrl = null;
+
+        if (this.topic.User !== null) {
+            if (state.hidden.topic.userId) {
+                // toggle op only off
+                opPostOnlyUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=null`;
+            } else {
+                // toggle op only on
+                opPostOnlyUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.User.Id}`;
+            }
+        }
 
         const data = {
-            topic: this.topic,
-            page: state.hidden.topic.page,
-            forumUrl,
+            topic,
+            page,
             lastPage,
-            pagination
+            pagination,
+            opPostOnlyUrl
         };
 
         const html = topicTemplate(data);

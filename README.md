@@ -1,6 +1,6 @@
 # Hidden JVC Extension
 
-Hidden JVC est un un forum intégré aux forums de http://www.jeuxvideo.com/.
+Hidden JVC est un forum intégré aux forums de http://www.jeuxvideo.com/.
 
 ## Fonctionnalités
 
@@ -13,6 +13,8 @@ Hidden JVC est un un forum intégré aux forums de http://www.jeuxvideo.com/.
 * Pouvoir consulter les topics indépendants sur un site web intégré a l'extension et sur https://hiddenjvc.com.
 
 * Pouvoir connecter l'extension à différent serveur Hidden JVC.
+
+* Mode fic sur les topics Hidden JVC qui permet de ne voir que les posts de l'auteur tu topic.
 
 ## Compatibilité
 L'extension est compatible avec tous les navigateurs modernes.
@@ -46,7 +48,7 @@ Prérequis: Git et Node.js
     npm install
     npm run build
 
-Ces commandes vont gérénerer un build de l'extension dans le répertoire `./build`
+Ces commandes vont générer un build de l'extension dans le répertoire `./build`
 
 ### Installation
 Firefox:

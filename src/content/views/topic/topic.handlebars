@@ -25,7 +25,11 @@
 
     <div class="bloc-pre-right">
         <div class="group-one">
-            <button class="btn btn-actu-new-list-forum"> Posts de l'auteur </button>
+            {{#if opPostOnlyUrl}}
+            <a href="{{ opPostOnlyUrl }}">
+                <button class="btn btn-actu-new-list-forum"> Mode fic </button>
+            </a>
+            {{/if}}
         </div>
 
         <div class="group-two">

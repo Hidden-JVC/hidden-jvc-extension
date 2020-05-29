@@ -21,12 +21,20 @@ async function listener(details) {
             state.hidden.list.page = isNaN(query.get('listPage')) ? 1 : parseInt(query.get('listPage'));
         }
 
+        if (query.has('topicId')) {
+            state.hidden.topic.id = isNaN(query.get('topicId')) ? 1 : parseInt(query.get('topicId'));
+        }
+
         if (query.has('topicPage')) {
             state.hidden.topic.page = isNaN(query.get('topicPage')) ? 1 : parseInt(query.get('topicPage'));
         }
 
-        if (query.has('topicId')) {
-            state.hidden.topic.id = isNaN(query.get('topicId')) ? 1 : parseInt(query.get('topicId'));
+        if (query.has('topicUserId')) {
+            if (query.get('topicUserId') === 'null') {
+                state.hidden.topic.userId = null;
+            } else {
+                state.hidden.topic.userId = isNaN(query.get('topicUserId')) ? 1 : parseInt(query.get('topicUserId'));
+            }
         }
 
         await setState(state);
