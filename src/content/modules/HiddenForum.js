@@ -4,7 +4,7 @@ import hiddenJVC from '../HiddenJVC.js';
 
 const { getState } = hiddenJVC.storage;
 const { getRequest, postRequest } = hiddenJVC.helpers.network;
-const Runtime = hiddenJVC.constants.Runtime;
+const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
 const { forum } = hiddenJVC.views.forum;
 
@@ -28,8 +28,25 @@ class HiddenForum {
     render(topics, count, page) {
         const lastPage = Math.ceil(count / 20);
         const pagination = this.getPaginationData(page, lastPage);
-        const html = forum({ topics, page, lastPage, pagination });
+
+        for (const topic of topics) {
+            topic.Url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+        }
+
+        const data = {
+            topics,
+            page,
+            lastPage,
+            pagination,
+            forumName: Runtime.forumName
+        };
+
+        const html = forum(data);
         document.querySelector('#forum-main-col').innerHTML = html;
+
+        document.querySelectorAll('button.btn-actualiser-forum').forEach((btn) => {
+            btn.addEventListener('click', () => location.reload());
+        });
     }
 
     getPaginationData(page, lastPage) {
@@ -68,7 +85,9 @@ class HiddenForum {
 
         const preview = document.querySelector('.previsu-editor.text-enrichi-forum');
         const clone = preview.cloneNode();
+        clone.style.backgroundColor = 'var(--hidden-primary-color)';
         preview.insertAdjacentElement('afterend', clone);
+        preview.remove();
 
         const textarea = document.querySelector('textarea#message_topic');
         textarea.addEventListener('keyup', () => {
@@ -105,7 +124,7 @@ class HiddenForum {
 
                 const { topicId } = await postRequest(Hidden.API_HIDDEN_TOPICS, data, state.user.jwt);
                 if (topicId) {
-                    const url = `http://www.jeuxvideo.com/forums/42-3000172-38160921-1-0-1-0-presentation-et-regles-du-forum.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
+                    const url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
                     location.replace(url);
                 } else {
                     throw new Error('fail to create topic');

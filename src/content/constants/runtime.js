@@ -22,7 +22,7 @@ class RuntimeConstants {
     init(state) {
         this.parseUrl();
         this.computeCurrentPage(state);
-        if (this.currentPage === JVC.Pages.JVC_FORUM) {
+        if (this.currentPage & (JVC.Pages.JVC_FORUM | JVC.Pages.HIDDEN_FORUM | JVC.Pages.HIDDEN_TOPIC)) {
             this.parseForum();
         } else if (this.currentPage === JVC.Pages.JVC_TOPIC) {
             this.parseTopic();

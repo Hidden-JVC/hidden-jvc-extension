@@ -119,7 +119,7 @@ class JVCTopic {
             for (const page of topic.Pages) {
                 if (paginationPage === page) {
                     const span = document.createElement('span');
-                    span.style.borderTop = '3px solid #083193';
+                    span.style.borderTop = '3px solid var(--hidden-primary-color)';
                     span.style.display = 'block';
                     item.insertAdjacentElement('afterbegin', span);
                 }

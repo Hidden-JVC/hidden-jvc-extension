@@ -25,7 +25,7 @@ class HiddenMenu {
     initToggle(state) {
         const toggleLink = document.querySelector('a#hidden-toggle');
         const toggleButton = toggleLink.querySelector('button');
-        toggleLink.href = `${location.href}?hidden=${state.hidden.enabled ? 0 : 1}`;
+        toggleLink.href = `${location.origin}${location.pathname}?hidden=${state.hidden.enabled ? 0 : 1}`;
         if (state.hidden.enabled) {
             toggleButton.style.backgroundColor = '#c85025';
             toggleButton.textContent = state.hidden.enabled = 'Activé';

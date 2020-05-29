@@ -1,6 +1,7 @@
 import hiddenJVC from './HiddenJVC.js';
 
 import './modules/AdCleaner.js';
+import './modules/StyleManager.js';
 import './modules/HiddenMenu.js';
 import './modules/JVCForum.js';
 import './modules/JVCTopic.js';
