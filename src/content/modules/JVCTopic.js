@@ -27,7 +27,11 @@ class JVCTopic {
             query.endDate = formatISO9075(endDate);
         }
 
-        const { topic } = await getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
+        const result = await getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
+        if (result === null) {
+            return;
+        }
+        const { topic } = result;
 
         if (topic !== null) {
             this.insertJVCTopic(topic);

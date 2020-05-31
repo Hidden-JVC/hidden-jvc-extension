@@ -9,6 +9,7 @@ module.exports = {
         content: './src/content/index.js',
         background: './src/background/index.js'
     },
+    devtool: 'source-map',
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].js',

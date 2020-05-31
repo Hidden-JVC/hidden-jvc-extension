@@ -1,0 +1,25 @@
+<div id="hidden-modal-{{ id }}" class="modal-generic modal-generic-scroll active" style="display: block;">
+    <div class="modal-generic-main" style="width: 800px; margin-top: 257px;">
+        <a class="modal-generic-close" data-close href="#">
+            <span class="icon-close-popin-jv"> </span>
+        </a>
+        <div class="modal-generic-header">
+            {{ title }}
+        </div>
+        <div class="modal-generic-content">
+            <div>
+                {{ message }}
+            </div>
+            <div class="modal-generic-footer">
+                <a class="btn btn-valider-modal" href="#">
+                    un bouton
+                </a>
+                <button class="btn btn-annuler-modal" data-close>
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="hidden-modal-overlay-{{ id }}" class=" modal-generic modal-generic-overflow active" style="display: block;"></div>

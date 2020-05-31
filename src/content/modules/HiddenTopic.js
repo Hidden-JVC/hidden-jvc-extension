@@ -24,8 +24,11 @@ class HiddenTopic {
             query.userId = state.hidden.topic.userId;
         }
 
-        const { topic } = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
-        this.topic = topic;
+        const result = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
+        if (result === null) {
+            return;
+        }
+        this.topic = result.topic;
 
         this.render(state);
 

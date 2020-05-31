@@ -8,4 +8,4 @@ import './modules/JVCTopic.js';
 import './modules/HiddenForum.js';
 import './modules/HiddenTopic.js';
 
-hiddenJVC.init().catch(console.error);
+hiddenJVC.init();

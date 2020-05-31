@@ -1,6 +1,7 @@
 import helpers from './helpers';
 import constants from './constants';
 import * as storage from '../helpers/storage';
+import Modal from './helpers/Modal.js';
 
 import postTemplate from './views/topic/post.handlebars';
 import menuTemplate from './views/menu.handlebars';
@@ -14,6 +15,7 @@ class HiddenJVC {
         this.helpers = helpers;
         this.storage = storage;
         this.constants = constants;
+        this.Modal = Modal;
         this.views = {
             topic: {
                 post: postTemplate,
@@ -41,7 +43,10 @@ class HiddenJVC {
 
         for (const m of this.modules) {
             if (m.pages === 0 || m.pages & this.constants.Runtime.currentPage) {
-                m.init(state).catch(console.error);
+                m.init(state).catch((error) => {
+                    console.error(error);
+                    this.Modal.create({ title: 'Hidden JVC - Erreur inattendue', message: error.message });
+                });
             }
         }
     }
