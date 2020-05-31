@@ -14,6 +14,7 @@ class RuntimeConstants {
 
         this.is410 = null;
         this.forumName = null;
+        this.forumTopics = [];
         this.topicTitle = null;
         this.topicLastPage = null;
         this.topicMessages = [];
@@ -58,6 +59,37 @@ class RuntimeConstants {
 
     parseForum() {
         this.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim().replace(/^Forum/, '').trim();
+
+        const topics = document.querySelectorAll('.topic-list.topic-list-admin li[data-id]');
+        for (const topic of topics) {
+            let lastPostDate = null;
+            const dateStr = topic.querySelector('.topic-date').textContent.trim();
+            if (dateStr.includes('/')) {
+                lastPostDate = parse(dateStr, 'dd/MM/yyyy', new Date(), { locale: fr });
+            } else {
+                lastPostDate = parse(dateStr, 'HH:mm:ss', new Date(), { locale: fr });
+            }
+
+            const topicImg = topic.querySelector('img.topic-img');
+            const pinned = topicImg.src.includes('topic-marque-');
+            const locked = topicImg.src.includes('topic-marque-off') || topicImg.src.includes('topic-lock');
+
+            // duplicates
+            const href = topic.querySelector('a.lien-jv.topic-title').href;
+            const matches = href.match(/\/forums\/\d+-\d+-(\d+)-1-0-1-0-.*?.htm/);
+            const id = parseInt(matches[1]);
+
+            this.forumTopics.push({
+                li: topic,
+                id,
+                title: topic.querySelector('a.topic-title').title,
+                author: topic.querySelector('.topic-author').textContent.trim(),
+                postCount: parseInt(topic.querySelector('span.topic-count').textContent),
+                pinned,
+                locked,
+                lastPostDate
+            });
+        }
     }
 
     parseTopic() {

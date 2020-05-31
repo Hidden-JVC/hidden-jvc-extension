@@ -6,6 +6,7 @@ import Modal from './helpers/Modal.js';
 import postTemplate from './views/topic/post.handlebars';
 import menuTemplate from './views/menu.handlebars';
 import forumTemplate from './views/forum/forum.handlebars';
+import rowTemplate from './views/forum/row.handlebars';
 import topicTemplate from './views/topic/topic.handlebars';
 
 class HiddenJVC {
@@ -22,7 +23,8 @@ class HiddenJVC {
                 topic: topicTemplate
             },
             forum: {
-                forum: forumTemplate
+                forum: forumTemplate,
+                row: rowTemplate
             },
             menu: menuTemplate
         };
@@ -34,7 +36,13 @@ class HiddenJVC {
 
     async init() {
         const state = await this.storage.getState();
-        this.constants.Runtime.init(state);
+        try {
+            this.constants.Runtime.init(state);
+        } catch (err) {
+            console.error(err);
+            this.Modal.create({ title: 'Hidden JVC - Erreur de parsing', message: err.message });
+            return;
+        }
 
         if (this.constants.Runtime.is410) {
             console.log('410 !');
@@ -43,9 +51,9 @@ class HiddenJVC {
 
         for (const m of this.modules) {
             if (m.pages === 0 || m.pages & this.constants.Runtime.currentPage) {
-                m.init(state).catch((error) => {
-                    console.error(error);
-                    this.Modal.create({ title: 'Hidden JVC - Erreur inattendue', message: error.message });
+                m.init(state).catch((err) => {
+                    console.error(err);
+                    this.Modal.create({ title: 'Hidden JVC - Erreur inattendue', message: err.message });
                 });
             }
         }

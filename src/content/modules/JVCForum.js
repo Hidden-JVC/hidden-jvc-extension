@@ -1,5 +1,9 @@
+import { formatISO9075, isAfter } from 'date-fns';
+
 import hiddenJVC from '../HiddenJVC.js';
 
+const { views } = hiddenJVC;
+const { Runtime } = hiddenJVC.constants;
 const { getRequest } = hiddenJVC.helpers.network;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
 
@@ -9,22 +13,74 @@ class JVCForum {
     }
 
     async init() {
+        await this.initJVCTopics();
+        await this.initHiddenJVCTopics();
+    }
+
+    async initJVCTopics() {
         // Retrieve all jvc topics ids from the list
-        const topicRows = document.querySelectorAll('ul.topic-list li[data-id]');
-        const topicIds = Array.prototype.map.call(topicRows, (row) => row.dataset.id);
+        const topicIds = Runtime.forumTopics.map((t) => t.id);
 
         // From that list of ids, fetch all the topic that contains at least one hidden post
         const { topics } = await getRequest(Hidden.API_JVC_TOPICS, { topicIds });
 
         // Highlight them
-        for (const row of topicRows) {
-            const id = parseInt(row.dataset.id);
+        for (const row of Runtime.forumTopics) {
+            const id = row.id;
             for (const topic of topics) {
                 if (topic.Topic.Id === id) {
-                    row.querySelector('img.topic-img').style.boxShadow = '0px 0px 0px 3px rgba(8,49,147,1)';
+                    // row.li.querySelector('span.topic-subject').style.border = '3px solid var(--hidden-primary-color)';
+                    for (const child of row.li.children) {
+                        child.style.borderTop = '3px solid var(--hidden-primary-color)';
+                        child.style.borderBottom = '3px solid var(--hidden-primary-color)';
+                    }
                 }
             }
         }
+    }
+
+    async initHiddenJVCTopics() {
+        const query = {
+            forumId: Runtime.forumId
+        };
+        const { startDate, endDate } = this.getDateRange();
+        if (startDate !== null) {
+            query.startDate = formatISO9075(startDate);
+        }
+        if (endDate !== null) {
+            query.endDate = formatISO9075(endDate);
+        }
+
+        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
+        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+        for (const hiddenTopic of topics) {
+            const hiddenDate = new Date(hiddenTopic.LastPostDate);
+            for (const jvcTopic of unlockedTopics) {
+                if (isAfter(hiddenDate, jvcTopic.lastPostDate)) {
+                    const html = views.forum.row(hiddenTopic);
+                    jvcTopic.li.insertAdjacentHTML('beforebegin', html);
+                    break;
+                }
+            }
+        }
+    }
+
+    getDateRange() {
+        let startDate = null;
+        let endDate = null;
+
+        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+
+        if (unlockedTopics.length > 2) {
+            startDate = unlockedTopics[0].lastPostDate;
+            endDate = unlockedTopics[unlockedTopics.length - 1].lastPostDate;
+        }
+
+        if (Runtime.forumOffset === 1) {
+            startDate = null;
+        }
+
+        return { startDate, endDate };
     }
 }
 

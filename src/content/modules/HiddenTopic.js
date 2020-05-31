@@ -44,19 +44,22 @@ class HiddenTopic {
         const pagination = createPagination(state.hidden.topic.page, lastPage);
         let opPostOnlyUrl = null;
 
+        const forumUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
+
         if (this.topic.User !== null) {
             if (state.hidden.topic.userId) {
                 // toggle op only off
-                opPostOnlyUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=null`;
+                opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=null`;
             } else {
                 // toggle op only on
-                opPostOnlyUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.User.Id}`;
+                opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.User.Id}`;
             }
         }
 
         const data = {
             topic,
             page,
+            forumUrl,
             lastPage,
             pagination,
             opPostOnlyUrl
