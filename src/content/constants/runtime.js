@@ -31,7 +31,7 @@ class RuntimeConstants {
     }
 
     parseUrl() {
-        const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm(?:#.*?)?$/);
+        const matches = location.href.match(/^http:\/\/www\.jeuxvideo\.com\/(?:recherche\/)?forums\/(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-.*\.htm/);
         if (matches === null) {
             throw new Error('Url mismatch');
         }

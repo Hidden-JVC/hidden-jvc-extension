@@ -1,9 +1,11 @@
+import io from 'socket.io-client/dist/socket.io.slim.js';
+
 import hiddenJVC from '../HiddenJVC.js';
 
 const { views } = hiddenJVC;
-const { Hidden } = hiddenJVC.constants.Static;
 const { getState, setState } = hiddenJVC.storage;
 const { postRequest } = hiddenJVC.helpers.network;
+const { Runtime, Static: { Hidden } } = hiddenJVC.constants;
 
 class HiddenMenu {
     constructor() {
@@ -15,6 +17,7 @@ class HiddenMenu {
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
         this.initToggle(state);
+        this.initUsersCount(state);
         if (state.user.jwt === null) {
             this.initLogin();
         } else {
@@ -28,9 +31,9 @@ class HiddenMenu {
         toggleLink.href = `${location.origin}${location.pathname}?hidden=${state.hidden.enabled ? 0 : 1}`;
         if (state.hidden.enabled) {
             toggleButton.style.backgroundColor = '#c85025';
-            toggleButton.textContent = state.hidden.enabled = 'Activé';
+            toggleButton.textContent = 'Activé';
         } else {
-            toggleButton.textContent = state.hidden.enabled = 'Désactivé';
+            toggleButton.textContent = 'Désactivé';
         }
     }
 
@@ -82,6 +85,34 @@ class HiddenMenu {
             state.user.jwt = null;
             await setState(state);
             location.reload();
+        });
+    }
+
+    initUsersCount(state) {
+        const data = {
+            forumId: Runtime.forumId,
+            hidden: state.hidden.enabled
+        };
+
+        if (state.hidden.enabled && state.hidden.view === 'topic') {
+            data.topicId = state.hidden.topic.id;
+        } else if (Runtime.topicId !== 0) {
+            data.topicId = Runtime.topicId;
+        }
+
+        const socket = io.connect(Hidden.SOCKET_URL, { transports: ['websocket'] });
+
+        socket.on('connect', () => {
+            socket.emit('get-users-count', data, (response) => {
+                if (response && typeof response.forumCount === 'number') {
+                    const countElement = document.querySelector('.nb-connect-fofo');
+                    countElement.textContent = `${data.topicId ? response.topicCount : response.forumCount} connecté(s)`;
+                }
+            });
+        });
+
+        socket.on('connect_error', function (err) {
+            console.error(err);
         });
     }
 }

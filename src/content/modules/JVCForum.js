@@ -17,20 +17,18 @@ class JVCForum {
         await this.initHiddenJVCTopics();
     }
 
+    /**
+     * Checks if any of the current jvc topics contains at least one hidden topic
+     */
     async initJVCTopics() {
-        // Retrieve all jvc topics ids from the list
         const topicIds = Runtime.forumTopics.map((t) => t.id);
 
-        // From that list of ids, fetch all the topic that contains at least one hidden post
         const { topics } = await getRequest(Hidden.API_JVC_TOPICS, { topicIds });
 
-        // Highlight them
-        for (const row of Runtime.forumTopics) {
-            const id = row.id;
-            for (const topic of topics) {
-                if (topic.Topic.Id === id) {
-                    // row.li.querySelector('span.topic-subject').style.border = '3px solid var(--hidden-primary-color)';
-                    for (const child of row.li.children) {
+        for (const jvcTopic of Runtime.forumTopics) {
+            for (const hiddenTopic of topics) {
+                if (hiddenTopic.Topic.Id === jvcTopic.id) {
+                    for (const child of jvcTopic.li.children) {
                         child.style.borderTop = '3px solid var(--hidden-primary-color)';
                         child.style.borderBottom = '3px solid var(--hidden-primary-color)';
                     }
@@ -39,11 +37,15 @@ class JVCForum {
         }
     }
 
+    /**
+     * Retrieve all hidden topics that can be inserted within the current jvc topics
+     */
     async initHiddenJVCTopics() {
-        const query = {
-            forumId: Runtime.forumId
-        };
-        const { startDate, endDate } = this.getDateRange();
+        const query = { forumId: Runtime.forumId };
+
+        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+        const { startDate, endDate } = this.getDateRange(unlockedTopics);
+
         if (startDate !== null) {
             query.startDate = formatISO9075(startDate);
         }
@@ -52,7 +54,11 @@ class JVCForum {
         }
 
         const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
-        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+
+        for (const topic of topics) {
+            topic.Url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+        }
+
         for (const hiddenTopic of topics) {
             const hiddenDate = new Date(hiddenTopic.LastPostDate);
             for (const jvcTopic of unlockedTopics) {
@@ -65,15 +71,13 @@ class JVCForum {
         }
     }
 
-    getDateRange() {
+    getDateRange(topics) {
         let startDate = null;
         let endDate = null;
 
-        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
-
-        if (unlockedTopics.length > 2) {
-            startDate = unlockedTopics[0].lastPostDate;
-            endDate = unlockedTopics[unlockedTopics.length - 1].lastPostDate;
+        if (topics.length > 2) {
+            startDate = topics[0].lastPostDate;
+            endDate = topics[topics.length - 1].lastPostDate;
         }
 
         if (Runtime.forumOffset === 1) {

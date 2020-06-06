@@ -9,6 +9,7 @@
         "date-fns": "^2.13.0",
         "handlebars": "^4.7.6",
         "open-jvcode": "https://github.com/m7r-227/open-jvcode.git",
+        "socket.io-client": "^2.3.0",
         "webextension-polyfill": "^0.6.0"
     },
     "devDependencies": {
