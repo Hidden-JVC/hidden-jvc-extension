@@ -28,7 +28,8 @@ class HiddenMenu {
     initToggle(state) {
         const toggleLink = document.querySelector('a#hidden-toggle');
         const toggleButton = toggleLink.querySelector('button');
-        toggleLink.href = `${location.origin}${location.pathname}?hidden=${state.hidden.enabled ? 0 : 1}`;
+        const url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=${state.hidden.enabled ? 0 : 1}`;
+        toggleLink.href = url;
         if (state.hidden.enabled) {
             toggleButton.style.backgroundColor = '#c85025';
             toggleButton.textContent = 'Activé';

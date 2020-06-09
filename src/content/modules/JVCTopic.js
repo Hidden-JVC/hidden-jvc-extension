@@ -2,10 +2,10 @@ import { formatISO9075, isBefore } from 'date-fns';
 
 import hiddenJVC from '../HiddenJVC.js';
 
-const { getState } = hiddenJVC.storage;
 const { post } = hiddenJVC.views.topic;
-const { JVC, Hidden } = hiddenJVC.constants.Static;
+const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
+const { JVC, Hidden } = hiddenJVC.constants.Static;
 const { getRequest, postRequest } = hiddenJVC.helpers.network;
 
 class JVCTopic {
@@ -123,8 +123,7 @@ class JVCTopic {
             for (const page of topic.Pages) {
                 if (paginationPage === page) {
                     const span = document.createElement('span');
-                    span.style.borderTop = '3px solid var(--hidden-primary-color)';
-                    span.style.display = 'block';
+                    span.classList.add('hidden-pagination-highlight');
                     item.insertAdjacentElement('afterbegin', span);
                 }
             }

@@ -4,7 +4,6 @@ const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
     entry: {
         content: './src/content/index.js',
         background: './src/background/index.js'
@@ -31,6 +30,14 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.scss$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader',
+                ],
+            }
         ]
     },
     plugins: [

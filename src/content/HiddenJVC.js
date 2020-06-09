@@ -1,13 +1,16 @@
 import helpers from './helpers';
 import constants from './constants';
-import * as storage from '../helpers/storage';
 import Modal from './helpers/Modal.js';
+import * as storage from '../helpers/storage';
 
-import postTemplate from './views/topic/post.handlebars';
 import menuTemplate from './views/menu.handlebars';
-import forumTemplate from './views/forum/forum.handlebars';
+import forumForm from './views/forum/form.handlebars';
 import rowTemplate from './views/forum/row.handlebars';
+import postTemplate from './views/topic/post.handlebars';
+import forumTemplate from './views/forum/forum.handlebars';
 import topicTemplate from './views/topic/topic.handlebars';
+
+import './scss/main.scss';
 
 class HiddenJVC {
     constructor() {
@@ -24,7 +27,8 @@ class HiddenJVC {
             },
             forum: {
                 forum: forumTemplate,
-                row: rowTemplate
+                row: rowTemplate,
+                form: forumForm
             },
             menu: menuTemplate
         };

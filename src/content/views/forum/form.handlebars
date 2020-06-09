@@ -1,0 +1,100 @@
+<div id="hidden-form">
+    <form role="form" class="form-post-topic js-form-post-topic">
+        <div class="titre-head-bloc">
+            <div class="titre-bloc"> Nouveau Sujet </div>
+        </div>
+
+        <div class="form-group">
+            <input type="text" class="form-control js-focus-field" id="title"
+                placeholder="Saisir le titre du sujet" tabindex="1">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 bloc-editor-forum">
+                <div class="jv-editor">
+                    <div class="conteneur-editor">
+                        <div class="jv-editor-toolbar">
+                            <div class="pull-right option-previsu jv-editor-option-on-off">
+                                <span class="label-previsu">
+                                    Prévisu
+                                </span>
+                                <button type="button" class="btn-on-off active" autocomplete="off"> </button>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="bold" title="Gras">
+                                    <span class="jvcode-bold"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="italic"
+                                    title="Italique">
+                                    <span class="jvcode-italic"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="underline"
+                                    title="Souligné">
+                                    <span class="jvcode-underline"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="del" title="Barré">
+                                    <span class="jvcode-strike"> </span>
+                                </button>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="list" title="Liste">
+                                    <span class="jvcode-list"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="list-numbered"
+                                    title="Liste numérotée">
+                                    <span class="jvcode-numbered-list"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="quote"
+                                    title="Citation">
+                                    <span class="jvcode-quotes-left"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="code" title="Code">
+                                    <span class="jvcode-embed"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="spoil" title="Spoil">
+                                    <span class="jvcode-eye-blocked"> </span>
+                                </button>
+                            </div>
+
+                            <div class="btn-group">
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="smileys"
+                                    title="Smileys">
+                                    <span class="jvcode-smiley"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="noelshack"
+                                    title="Noelshack">
+                                    <span class="jvcode-image"> </span>
+                                </button>
+                                <button class="btn btn-jv-editor-toolbar" type="button" data-edit="video" title="Vidéo">
+                                    <span class="jvcode-film"> </span>
+                                </button>
+                            </div>
+
+                            {{!-- TODO: direct to open-jvcode documentation --}}
+                            <div class="btn-group">
+                                <a href="/jvcode/documentation.php" title="Aide" target="_blank"
+                                    class="xXx btn btn-jv-editor-toolbar">?</a>
+                            </div>
+                        </div>
+
+                        <div class="text-editor">
+                            <textarea tabindex="3" id="message_topic" class="area-editor js-focus-field"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="previsu-editor text-enrichi-forum" style="display: block;">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 bloc-editor-forum">
+                <button tabindex="4" id="hidden-submit" type="button" class="btn btn-poster-msg">
+                    Poster
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

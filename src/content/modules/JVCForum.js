@@ -28,10 +28,7 @@ class JVCForum {
         for (const jvcTopic of Runtime.forumTopics) {
             for (const hiddenTopic of topics) {
                 if (hiddenTopic.Topic.Id === jvcTopic.id) {
-                    for (const child of jvcTopic.li.children) {
-                        child.style.borderTop = '3px solid var(--hidden-primary-color)';
-                        child.style.borderBottom = '3px solid var(--hidden-primary-color)';
-                    }
+                    jvcTopic.li.classList.add('hidden-topic-count-highlight');
                 }
             }
         }
@@ -43,8 +40,8 @@ class JVCForum {
     async initHiddenJVCTopics() {
         const query = { forumId: Runtime.forumId };
 
-        const unlockedTopics = Runtime.forumTopics.filter((t) => !t.pinned);
-        const { startDate, endDate } = this.getDateRange(unlockedTopics);
+        const jvcTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+        const { startDate, endDate } = this.getDateRange(jvcTopics);
 
         if (startDate !== null) {
             query.startDate = formatISO9075(startDate);
@@ -61,7 +58,7 @@ class JVCForum {
 
         for (const hiddenTopic of topics) {
             const hiddenDate = new Date(hiddenTopic.LastPostDate);
-            for (const jvcTopic of unlockedTopics) {
+            for (const jvcTopic of jvcTopics) {
                 if (isAfter(hiddenDate, jvcTopic.lastPostDate)) {
                     const html = views.forum.row(hiddenTopic);
                     jvcTopic.li.insertAdjacentHTML('beforebegin', html);
