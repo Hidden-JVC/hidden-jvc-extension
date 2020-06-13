@@ -5,6 +5,7 @@ import hiddenJVC from '../HiddenJVC.js';
 const { views } = hiddenJVC;
 const { getState, setState } = hiddenJVC.storage;
 const { postRequest } = hiddenJVC.helpers.network;
+const { ErrorModal, MessageModal } = hiddenJVC.modals;
 const { Runtime, Static: { Hidden } } = hiddenJVC.constants;
 
 class HiddenMenu {
@@ -47,13 +48,20 @@ class HiddenMenu {
             const name = document.querySelector('input#hidden-name').value;
             const password = document.querySelector('input#hidden-password').value;
 
-            const { jwt } = await postRequest(Hidden.API_LOGIN, { name, password });
-            if (jwt) {
-                const state = await getState();
-                state.user.jwt = jwt;
-                state.user.name = name;
-                await setState(state);
-                location.reload();
+            try {
+                const { jwt, error } = await postRequest(Hidden.API_LOGIN, { name, password });
+                if (jwt) {
+                    const state = await getState();
+                    state.user.jwt = jwt;
+                    state.user.registeredName = name;
+                    await setState(state);
+                    location.reload();
+                } else if (error) {
+                    MessageModal.create('Informations', 'Vos identifiants sont incorrects');
+                }
+            } catch (err) {
+                console.error(err);
+                ErrorModal(err.message);
             }
         });
 
@@ -61,20 +69,27 @@ class HiddenMenu {
             const name = document.querySelector('input#hidden-name').value;
             const password = document.querySelector('input#hidden-password').value;
 
-            const { jwt } = await postRequest(Hidden.API_REGISTER, { name, password });
-            if (jwt) {
-                const state = await getState();
-                state.user.jwt = jwt;
-                state.user.name = name;
-                await setState(state);
-                location.reload();
+            try {
+                const { jwt, error } = await postRequest(Hidden.API_REGISTER, { name, password });
+                if (jwt) {
+                    const state = await getState();
+                    state.user.jwt = jwt;
+                    state.user.registeredName = name;
+                    await setState(state);
+                    location.reload();
+                } else if (error) {
+                    MessageModal.create('Informations', error);
+                }
+            } catch (err) {
+                console.error(err);
+                ErrorModal(err.message);
             }
         });
 
         saveNameBtn.addEventListener('click', async () => {
             const name = document.querySelector('input#hidden-anonymous-name').value;
             const state = await getState();
-            state.user.name = name;
+            state.user.anonymousName = name;
             await setState(state);
         });
     }

@@ -7,7 +7,8 @@ export async function getState() {
         const state = {
             user: {
                 jwt: null,
-                name: 'Anonymous'
+                anonymousName: 'Anonymous',
+                registeredName: null
             },
             hidden: {
                 enabled: false,

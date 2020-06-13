@@ -1,6 +1,5 @@
 import helpers from './helpers';
 import constants from './constants';
-import Modal from './helpers/Modal.js';
 import * as storage from '../helpers/storage';
 
 import menuTemplate from './views/menu.handlebars';
@@ -9,6 +8,8 @@ import rowTemplate from './views/forum/row.handlebars';
 import postTemplate from './views/topic/post.handlebars';
 import forumTemplate from './views/forum/forum.handlebars';
 import topicTemplate from './views/topic/topic.handlebars';
+
+import modals from './modals';
 
 import './scss/main.scss';
 
@@ -19,7 +20,7 @@ class HiddenJVC {
         this.helpers = helpers;
         this.storage = storage;
         this.constants = constants;
-        this.Modal = Modal;
+        this.modals = modals;
         this.views = {
             topic: {
                 post: postTemplate,

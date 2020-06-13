@@ -23,7 +23,7 @@
                     <h4 class="titre-info-fofo"> Compte </h4>
 
                     <p>
-                        Connecté en tant que: {{ state.user.name }}
+                        Connecté en tant que: {{ state.user.registeredName }}
                     </p>
 
                     <div class="form-post-topic" style="margin-bottom: 0rem;">
@@ -60,7 +60,7 @@
                     <h4 class="titre-info-fofo"> Pseudo anonyme </h4>
                     <div class="form-post-topic" style="margin-bottom: 0rem;">
                         <input id="hidden-anonymous-name" type="text" class="form-control" placeholder="Pseudo anonyme"
-                            style="margin-bottom: 1rem;" value="{{ state.user.name }}">
+                            style="margin-bottom: 1rem;" value="{{ state.user.anonymousName }}">
 
                         <button id="hidden-save-name" type="button" class="btn btn-actu-new-list-forum">
                             Sauvegarder
