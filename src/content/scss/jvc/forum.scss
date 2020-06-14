@@ -1,0 +1,15 @@
+.hidden-topic-count-highlight {
+    img.topic-img {
+        background-color: $primary;
+        background-blend-mode: multiply;
+    }
+
+    span.topic-count {
+        color: $primary;
+    }
+}
+
+.hidden-pagination-highlight {
+    display: block;
+    border-top: 3px solid $primary;
+}

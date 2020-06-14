@@ -1,39 +1,66 @@
-import { jvc } from './constants';
-import { getState } from '../helpers/storage';
-import jvcTopicHelper from './helpers/JVCTopic.js';
-import jvcForumHelper from './helpers/JVCForum.js';
+import helpers from './helpers';
+import constants from './constants';
+import * as storage from '../helpers/storage';
 
-import jvcList from './modules/JVCList.js';
-import jvcTopic from './modules/JVCTopic.js';
-import pageInfo from './modules/PageInfo.js';
-import hiddenLogin from './modules/HiddenLogin.js';
-import hiddenList from './modules/HiddenList.js';
-import hiddenTopic from './modules/HiddenTopic.js';
+import menuTemplate from './views/menu.handlebars';
+import forumForm from './views/forum/form.handlebars';
+import rowTemplate from './views/forum/row.handlebars';
+import postTemplate from './views/topic/post.handlebars';
+import forumTemplate from './views/forum/forum.handlebars';
+import topicTemplate from './views/topic/topic.handlebars';
+
+import modals from './modals';
+
+import './scss/main.scss';
 
 class HiddenJVC {
+    constructor() {
+        this.modules = [];
+
+        this.helpers = helpers;
+        this.storage = storage;
+        this.constants = constants;
+        this.modals = modals;
+        this.views = {
+            topic: {
+                post: postTemplate,
+                topic: topicTemplate
+            },
+            forum: {
+                forum: forumTemplate,
+                row: rowTemplate,
+                form: forumForm
+            },
+            menu: menuTemplate
+        };
+    }
+
+    registerModule(newModule) {
+        this.modules.push(newModule);
+    }
+
     async init() {
-        const state = await getState();
-        await hiddenLogin.init(state);
-        await pageInfo.init(state);
-
-        if (pageInfo.currentPage === jvc.pages.JVC_LIST) {
-            await jvcForumHelper.init(state);
-            await jvcList.init(state);
+        const state = await this.storage.getState();
+        try {
+            this.constants.Runtime.init(state);
+        } catch (err) {
+            console.error(err);
+            this.Modal.create({ title: 'Hidden JVC - Erreur de parsing', message: err.message });
+            return;
         }
 
-        if (pageInfo.currentPage === jvc.pages.JVC_TOPIC) {
-            await jvcTopicHelper.init();
-            await jvcTopic.init(state);
+        if (this.constants.Runtime.is410) {
+            console.log('410 !');
+            return;
         }
 
-        if (pageInfo.currentPage === jvc.pages.HIDDEN_LIST) {
-            
-            await jvcForumHelper.init(state);
-            await hiddenList.init(state);
-        }
-
-        if (pageInfo.currentPage === jvc.pages.HIDDEN_TOPIC) {
-            await hiddenTopic.init(state);
+        for (const m of this.modules) {
+            if (m.pages === 0 || m.pages & this.constants.Runtime.currentPage) {
+                m.init(state).catch((err) => {
+                    console.error(err);
+                    this.Modal.create({ title: 'Hidden JVC - Erreur inattendue', message: err.message });
+                });
+            }
         }
     }
 }

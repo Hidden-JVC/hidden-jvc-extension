@@ -1,5 +1,5 @@
 <div class="titre-head-bloc">
-    <h2 class="titre-bloc titre-bloc-forum">
+    <h2 class="titre-bloc titre-bloc-forum hidden-forum-title">
         <span> Sujet : </span>
         <span id="bloc-title-forum"> {{ topic.Topic.Title }} </span>
     </h2>
@@ -8,21 +8,35 @@
 <div class="bloc-pre-pagi-forum bloc-outils-top">
     <div class="bloc-pre-left">
         <div class="group-one">
-            <a href="#bloc-formulaire-forum">
+            <a href="#hidden-form">
                 <span class="btn btn-repondre-msg"> Répondre </span>
             </a>
         </div>
+
         <div class="group-two">
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm#bloc-formulaire-forum">
+            <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
                 <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
             </a>
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&page=1">
+            <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
                 <span id="list-topics" class="btn btn-actu-new-list-forum"> Liste des sujets </span>
             </a>
         </div>
     </div>
+
     <div class="bloc-pre-right">
-        <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
+        <div class="group-one">
+            {{#if opPostOnlyUrl}}
+            <a href="{{ opPostOnlyUrl }}">
+                <button class="btn btn-actu-new-list-forum"> Mode fic </button>
+            </a>
+            {{/if}}
+        </div>
+
+        <div class="group-two">
+            <button class="btn btn-actu-new-list-forum" data-reload style="min-width: 6.375rem;">
+                Actualiser
+            </button>
+        </div>
     </div>
 </div>
 
@@ -38,20 +52,19 @@
     <div class="bloc-pre-pagi-forum bloc-outils-bottom">
         <div class="bloc-pre-left">
             <div class="group-two">
-                <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm#bloc-formulaire-forum">
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
                     <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
                 </a>
-                <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm">
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
                     <span class="btn btn-actu-new-list-forum"> Liste des sujets </span>
                 </a>
             </div>
         </div>
+
         <div class="bloc-pre-right">
-            <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
+            <button class="btn btn-actu-new-list-forum" data-reload> Actualiser </button>
         </div>
     </div>
 
-    <div id="bloc-formulaire-forum-placeholder">
-
-    </div>
+    {{> form . }}
 </div>

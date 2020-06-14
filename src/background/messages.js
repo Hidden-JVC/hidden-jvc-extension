@@ -2,12 +2,14 @@ import browser from 'webextension-polyfill';
 
 browser.runtime.onMessage.addListener(handleMessage);
 
-async function handleMessage(message) {
+async function handleMessage(message, sender) {
     switch (message.action) {
         case 'get-request':
             return await getRequest(message);
         case 'post-request':
             return await postRequest(message);
+        case 'inject-script':
+            return browser.tabs.executeScript(sender.tab.id, { code: message.code });
     }
 }
 

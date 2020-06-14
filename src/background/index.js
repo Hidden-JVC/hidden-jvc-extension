@@ -21,19 +21,23 @@ async function listener(details) {
             state.hidden.list.page = isNaN(query.get('listPage')) ? 1 : parseInt(query.get('listPage'));
         }
 
-        if (query.has('topicPage')) {
-            state.hidden.topic.page = isNaN(query.get('topicPage')) ? 1 : parseInt(query.get('topicPage'));
-        }
-
         if (query.has('topicId')) {
             state.hidden.topic.id = isNaN(query.get('topicId')) ? 1 : parseInt(query.get('topicId'));
         }
 
-        await setState(state);
+        if (query.has('topicPage')) {
+            state.hidden.topic.page = isNaN(query.get('topicPage')) ? 1 : parseInt(query.get('topicPage'));
+        }
 
-        // return {
-        //     redirectUrl: 'http://www.jeuxvideo.com/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm'
-        // };
+        if (query.has('topicUserId')) {
+            if (query.get('topicUserId') === 'null') {
+                state.hidden.topic.userId = null;
+            } else {
+                state.hidden.topic.userId = isNaN(query.get('topicUserId')) ? 1 : parseInt(query.get('topicUserId'));
+            }
+        }
+
+        await setState(state);
     }
 }
 
