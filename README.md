@@ -1,8 +1,10 @@
 # Hidden JVC Extension
 
 Hidden JVC est un forum intégré aux forums de http://www.jeuxvideo.com/.
+Le projet est actuellement en version Alpha.
 
-## Fonctionnalités
+
+## Qu'est-ce que c'est
 
 * Pouvoir poster des messages sur des topics JVC visible uniquement pour les utilisateurs d'Hidden JVC.
 
@@ -10,26 +12,26 @@ Hidden JVC est un forum intégré aux forums de http://www.jeuxvideo.com/.
 
 * Pouvoir poster anonymement sans avoir à se créer un compte bien qu'on puisse toujours réserver un pseudo et poser avec un compte vérifié.
 
+* Mode fic pour ne voir que les posts de l'auteur d'un topic.
+
+## Roadmap
+
 * Pouvoir consulter les topics indépendants sur un site web intégré a l'extension et sur https://hiddenjvc.com.
 
 * Pouvoir connecter l'extension à différent serveur Hidden JVC.
 
-* Mode fic sur les topics Hidden JVC qui permet de ne voir que les posts de l'auteur tu topic.
 
 ## Compatibilité
 L'extension est compatible avec tous les navigateurs modernes.
 Néanmois seul firefox permet de contrer efficacement les tentatives de webedia de bloquer l'intégration d'Hidden JVC.
 
-## Documentation utilisateur
-TODO: lien vers le wiki github
-
 ## FAQ
 
 ### Quelles différences avec JVP (https://wiki.jvflux.com/JV_Parallele) ?
 
-* Hidden JVC est open source alors si jamais les devs actuels ne sont plus actifs d'autres devs pourront prendre la main
+* Hidden JVC est open source alors si jamais les devs actuels ne sont plus actifs d'autres devs pourront prendre la main.
 
-* Un des problèmes de JVP était que webedia incluaient des scripts sur JVC pour le bloquer. Par conséquence le temps qu'un fix arrive le forum était inaccessible et qu'une grosse partie de la communauté se lassait très vite. On n'a plus ce problème avec Hidden JVC car les forums sont consultable sur deux autres platformes (site web et pages d'extension)
+* Un des problèmes de JVP était que webedia incluait des scripts sur JVC pour le bloquer. Par conséquence le temps qu'un fix arrive le forum était inaccessible et une grosse partie de la communauté se lassait très vite. On n'a plus ce problème avec Hidden JVC car les forums sont consultables sur deux autres platformes (site web et pages d'extension)
 
 ### Pourquoi une extension web plutôt qu'un userscript
 

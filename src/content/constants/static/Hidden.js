@@ -1,4 +1,4 @@
-export const SERVER_URL = 'http://127.0.0.1';
+export const SERVER_URL = 'http://51.91.157.33';
 export const API_ROOT_URL = `${SERVER_URL}:8787`;
 export const SOCKET_URL = `${SERVER_URL}:8989`;
 
