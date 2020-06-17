@@ -1,8 +1,6 @@
 /* eslint-env node */
 const path = require('path');
 
-const CopyPlugin = require('copy-webpack-plugin');
-
 module.exports = {
     entry: {
         content: './src/content/index.js',
@@ -40,11 +38,6 @@ module.exports = {
             }
         ]
     },
-    plugins: [
-        new CopyPlugin([
-            { from: 'manifest.json', to: '.' },
-        ]),
-    ],
     watchOptions: {
         ignored: /node_modules/
     }

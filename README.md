@@ -1,10 +1,17 @@
 # Hidden JVC Extension
 
 Hidden JVC est un forum intégré aux forums de http://www.jeuxvideo.com/.
+
 Le projet est actuellement en version Alpha.
 
+* [Fonctionnalité](#Fonctionnalité)
+* [Roadmap](#Roadmap)
+* [Compatibilité](#Compatibilité)
+* [FAQ](#FAQ)
+* [Compilation](#Compilation)
 
-## Qu'est-ce que c'est
+
+## Fonctionnalité
 
 * Pouvoir poster des messages sur des topics JVC visible uniquement pour les utilisateurs d'Hidden JVC.
 
@@ -19,6 +26,8 @@ Le projet est actuellement en version Alpha.
 * Pouvoir consulter les topics indépendants sur un site web intégré a l'extension et sur https://hiddenjvc.com.
 
 * Pouvoir connecter l'extension à différent serveur Hidden JVC.
+
+* Pouvoir poster sur des topics lock de JVC.
 
 
 ## Compatibilité
@@ -39,44 +48,21 @@ Quand le propriétaire d'un site web est hostile à un userscript comme l'a ét�
 
 Une extension web elle à beaucoup plus de pouvoir qu'un userscript et permet donc de bypass les scripts de webedia. Je pense notament à cette fonctionnalité de firefox qui permet de modifié la réponse d'une requête avant même qu'elle n'arrive dans l'onglet: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/filterResponseData
 
-## Compiler sois-même l'extension
-
-### Compilation
+## Compilation
 
 Prérequis: Git et Node.js
 
-    git clone https://github.com/m7r-227/hidden-jvc-extension.git
+    git clone https://github.com/Hidden-JVC/hidden-jvc-extension
     cd hidden-jvc-extension
-    npm install
+    npm ci
+
+Pour développer:
+
+    npm run watch
+
+Pour build:
+
     npm run build
 
 Ces commandes vont générer un build de l'extension dans le répertoire `./build`
 
-### Installation
-Firefox:
-
-* Aller sur about:debugging
-
-## Contribuer
-
-Le projet Hidden JVC est réparti sur 4 répos:
-
-### L'extension web
-Permet d'intégrer les forums dans JVC au travers d'une extension web.
-
-https://github.com/m7r-227/hidden-jvc-extension
-
-### Le serveur
-L'api REST qui permet d'intérroger la bdd en postgres
-
-https://github.com/m7r-227/hidden-jvc-server
-
-### Le site web
-Le site web qui permet de consulter Hidden JVC en dehors de JVC
-
-https://github.com/m7r-227/hidden-jvc-website
-
-### Le markup language
-Implémentation de jvcode
-
-https://github.com/m7r-227/open-jvcode
