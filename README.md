@@ -50,19 +50,11 @@ Une extension web elle à beaucoup plus de pouvoir qu'un userscript et permet do
 
 ## Compilation
 
-Prérequis: Git et Node.js
+Prérequis: Git, Node.js et p7zip
 
     git clone https://github.com/Hidden-JVC/hidden-jvc-extension
     cd hidden-jvc-extension
     npm ci
-
-Pour développer:
-
-    npm run watch
-
-Pour build:
-
     npm run build
 
 Ces commandes vont générer un build de l'extension dans le répertoire `./build`
-

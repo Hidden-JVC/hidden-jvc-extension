@@ -4,7 +4,7 @@
     "scripts": {
         "build": "webpack --config webpack.config.js --mode=production",
         "watch": "webpack --config webpack.config.js --watch --mode=development",
-        "web-ext": "web-ext run --firefox=firefox-developer-edition --source-dir=build"
+        "web-ext": "web-ext run --firefox=firefox-developer-edition --source-dir=build --firefox-profile=hidden-jvc-user --keep-profile-changes"
     },
     "dependencies": {
         "date-fns": "^2.13.0",

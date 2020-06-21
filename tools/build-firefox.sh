@@ -1,19 +1,28 @@
-# cleaning
+#!/bin/bash
+
+# exit on error
+set -e
+
+echo "#### Nettoyage ####"
 rm -rf ./build
 
-# build extension
-npm ci
-npm run build
+echo "#### Creation build ####"
+mkdir build
 
-# build website
+echo "#### Déplacement du manifest ####"
+cp ./manifest.json ./build/manifest.json
+
+echo "#### Build du website ####"
 cd hidden-jvc-website
 npm ci
 npm run build
 mv ./dist ../build/hidden-jvc-website
 cd ..
 
-cp ./manifest.json ./build/manifest.json
+echo "#### Build de l'extention ####"
+npm ci
+npm run build
 
-# create archive
+echo "#### Creation de l'archive ####"
 cd ./build
-zip -r hidden-jvc-extension.zip *
+7z a hidden-jvc-extension.7z *

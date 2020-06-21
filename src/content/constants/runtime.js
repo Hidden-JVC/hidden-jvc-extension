@@ -28,6 +28,19 @@ class RuntimeConstants {
         } else if (this.currentPage === JVC.Pages.JVC_TOPIC) {
             this.parseTopic();
         }
+
+        let url = `${location.origin}${location.pathname}`;
+        if (state.hidden.enabled) {
+            url = `${url}?hidden=1&view=${state.hidden.view}`;
+            if (state.hidden.view === 'list') {
+                url = `${url}&listPage=${state.hidden.list.page}`;
+            } else if (state.hidden.view === 'topic') {
+                url = `${url}&topicId=${state.hidden.topic.id}&topicPage=${state.hidden.topic.page}`;
+            }
+        } else {
+            url = `${url}?hidden=0`;
+        }
+        history.replaceState(null, '', url);
     }
 
     parseUrl() {
