@@ -28,6 +28,36 @@ class RuntimeConstants {
         } else if (this.currentPage === JVC.Pages.JVC_TOPIC) {
             this.parseTopic();
         }
+
+        const baseUrl = `${location.origin}${location.pathname}`;
+        const queryAndHash = location.href.replace(baseUrl, '').replace('?', '');
+        const [originalQueryStr, hash] = queryAndHash.split('#');
+
+        const query = new URLSearchParams(originalQueryStr);
+
+        if (state.hidden.enabled) {
+            query.set('hidden', '1');
+            query.set('view', state.hidden.view);
+            if (state.hidden.view === 'list') {
+                query.set('listPage', state.hidden.list.page);
+            } else if (state.hidden.view === 'topic') {
+                query.set('topicId', state.hidden.topic.id);
+                query.set('topicPage', state.hidden.topic.page);
+            }
+        } else {
+            query.set('hidden', '0');
+        }
+
+        let queryStr = '';
+        if (query.toString().length > 0) {
+            queryStr = `?${query.toString()}`;
+        }
+        let hashStr = '';
+        if (typeof hash === 'string') {
+            hashStr = `#${hash}`;
+        }
+        const url = `${baseUrl}${queryStr}${hashStr}`;
+        history.replaceState(null, '', url);
     }
 
     parseUrl() {

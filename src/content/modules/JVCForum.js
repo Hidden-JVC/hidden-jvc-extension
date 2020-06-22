@@ -51,16 +51,19 @@ class JVCForum {
         }
 
         const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
+        console.log(topics);
 
         for (const topic of topics) {
             topic.Url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
         }
 
+        const displaySelect = document.querySelector('.topic-select') !== null;
+
         for (const hiddenTopic of topics) {
             const hiddenDate = new Date(hiddenTopic.LastPostDate);
             for (const jvcTopic of jvcTopics) {
                 if (isAfter(hiddenDate, jvcTopic.lastPostDate)) {
-                    const html = views.forum.row(hiddenTopic);
+                    const html = views.forum.row({ topic: hiddenTopic, displaySelect });
                     jvcTopic.li.insertAdjacentHTML('beforebegin', html);
                     break;
                 }

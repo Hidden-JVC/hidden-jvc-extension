@@ -1,6 +1,6 @@
 <div class="panel panel-jv-forum" style="padding-bottom: 0rem;">
     <div class="panel-heading">
-        Hidden JVC
+        Hidden JVC (<span style="color: #d83636"> ALPHA </span>)
         <span class="nb-connect-fofo">
             0 connecté(s)
         </span>
@@ -59,10 +59,16 @@
                 <div class="scrollable-content bloc-info-forum">
                     <h4 class="titre-info-fofo"> Pseudo anonyme </h4>
                     <div class="form-post-topic" style="margin-bottom: 0rem;">
-                        <input id="hidden-anonymous-name" type="text" class="form-control" placeholder="Pseudo anonyme"
-                            style="margin-bottom: 1rem;" value="{{ state.user.anonymousName }}">
+                        <p id="hidden-display-name"> {{ state.user.anonymousName }} </p>
 
-                        <button id="hidden-save-name" type="button" class="btn btn-actu-new-list-forum">
+                        <button id="hidden-edit-name" type="button" class="btn btn-actu-new-list-forum">
+                            Modifier
+                        </button>
+
+                        <input id="hidden-anonymous-name" type="text" class="form-control" placeholder="Pseudo anonyme"
+                            style="margin-bottom: 1rem; display: none;" value="{{ state.user.anonymousName }}">
+
+                        <button id="hidden-save-name" type="button" class="btn btn-actu-new-list-forum" style="display: none;">
                             Sauvegarder
                         </button>
                     </div>

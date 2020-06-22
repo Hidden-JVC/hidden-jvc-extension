@@ -1,13 +1,13 @@
 <li class="hidden-topic-row">
     <span class="topic-subject">
-        {{#if Topic.Pinned}}
-            {{#if Topic.Locked}}
+        {{#if topic.Topic.Pinned}}
+            {{#if topic.Topic.Locked}}
                 <img src="/img/forums/topic-marque-off.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
             {{else}}
                 <img src="/img/forums/topic-marque-on.png" alt="Topic épinglé" title="Topic épinglé" class="topic-img">
             {{/if}}            
         {{else}}
-            {{#if Topic.Locked}}
+            {{#if topic.Topic.Locked}}
                 <img src="/img/forums/topic-lock.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
             {{else}}
                 {{#if ([../helpers/hotTopic] PostsCount)}}
@@ -19,31 +19,33 @@
         {{/if}}
 
         <a class="lien-jv topic-title"
-            href="{{ Url }}"
-            title="{{ Topic.Title }}">
-            {{ Topic.Title }}
+            href="{{ topic.Url }}"
+            title="{{ topic.Topic.Title }}">
+            {{ topic.Topic.Title }}
         </a>
     </span>
 
     {{#if Author}}
     <a class="xXx text-user topic-author" style="color: #20bbdf">
-        {{ Author.Name }}
+        {{ topic.Author.Name }}
     </a>
     {{else}}
     <a class="xXx text-user topic-author">
-        {{ Topic.Username }}
+        {{ topic.Topic.Username }}
     </a>
     {{/if}}
 
     <span class="topic-count">
-        {{ PostsCount }}
+        {{ topic.PostsCount }}
     </span>
 
     <span class="topic-date">
-        <a href="{{ lastPageUrl }}" class="xXx lien-jv">
-            {{ [../helpers/topicDate] LastPostDate }}
+        <a href="{{ topic.lastPageUrl }}" class="xXx lien-jv">
+            {{ [../helpers/topicDate] topic.LastPostDate }}
         </a>
     </span>
 
-    <span class="topic-select"> </span>
+    {{#if displaySelect}}
+        <span class="topic-select"> </span>
+    {{/if}}
 </li>

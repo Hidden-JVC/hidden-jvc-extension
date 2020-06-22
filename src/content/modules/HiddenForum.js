@@ -38,7 +38,8 @@ class HiddenForum {
             page,
             lastPage,
             pagination,
-            forumName: Runtime.forumName
+            forumName: Runtime.forumName,
+            displaySelect: true
         };
 
         const html = views.forum.forum(data);

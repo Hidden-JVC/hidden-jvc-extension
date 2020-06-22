@@ -4,41 +4,53 @@
 
 * Docker
 
-* Node.JS
+* Node.js
 
-## Installation
+Le projet est réparti sur 4 répos:
 
-    mkdir hidden-jvc
-    cd hidden-jvc
-
-    git clone https://github.com/Hidden-JVC/hidden-jvc-server
-    cd hidden-jvc-server
-    npm ci
-    cd ..
+## L'extension web
 
     git clone https://github.com/Hidden-JVC/hidden-jvc-extension
     cd hidden-jvc-extension
     npm ci
-    cd ..
+
+Pour développer:
+
+    npm run watch
+
+Pour build:
+
+    npm run build
+
+## Le serveur
+L'api REST qui permet d'intérroger la bdd en postgres.
+
+    git clone https://github.com/Hidden-JVC/hidden-jvc-server
+    cd hidden-jvc-server
+    npm ci
+
+Lancer la bdd:
+
+    docker-compose up
+
+Lancer le serveur:
+
+    npm start
+
+## Le site web
+Le site web qui permet de consulter Hidden JVC en dehors de JVC.
 
     git clone https://github.com/Hidden-JVC/hidden-jvc-website
     cd hidden-jvc-website
     npm ci
-    cd ..
+
+Pour développer:
+
+    npm run serve
+
+## Le markup language
+Implémentation de jvcode.
 
     git clone https://github.com/Hidden-JVC/open-jvcode
     cd open-jvcode
     npm ci
-    cd ..
-
-## Développement
-
-    cd hidden-jvc-server
-    docker-compose up
-    npm start
-
-    cd hidden-jvc-extension
-    npm run watch
-
-    cd hidde-jvc-website
-    npm run serve

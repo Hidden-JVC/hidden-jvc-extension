@@ -1,7 +1,8 @@
-import './messages.js';
-
 import browser from 'webextension-polyfill';
+
 import { setState, getState } from '../helpers/storage.js';
+
+import './messages.js';
 
 async function listener(details) {
     const index = details.url.indexOf('?');
@@ -47,6 +48,18 @@ browser.webRequest.onBeforeRequest.addListener(
     ['blocking']
 );
 
+function redirectListener(details) {
+    const hash = details.url.replace('http://www.jeuxvideo.com/hidden-redirect/', '');
+    const path = browser.runtime.getURL('hidden-jvc-website/index.html');
+    browser.tabs.update(details.tabId, { url: `${path}#/${hash}` });
+}
+
+browser.webRequest.onBeforeRequest.addListener(
+    redirectListener,
+    { urls: ['http://www.jeuxvideo.com/hidden-redirect/*'], types: ['main_frame'] },
+    ['blocking']
+);
+
 browser.browserAction.onClicked.addListener(() => {
-    browser.tabs.create({ url: 'vuejs-build/index.html' });
+    browser.tabs.create({ url: 'hidden-jvc-website/index.html' });
 });
