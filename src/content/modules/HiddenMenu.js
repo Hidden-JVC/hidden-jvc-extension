@@ -42,7 +42,6 @@ class HiddenMenu {
     initLogin() {
         const loginBtn = document.querySelector('#hidden-login');
         const registerBtn = document.querySelector('#hidden-register');
-        const saveNameBtn = document.querySelector('#hidden-save-name');
 
         loginBtn.addEventListener('click', async () => {
             const name = document.querySelector('input#hidden-name').value;
@@ -86,8 +85,28 @@ class HiddenMenu {
             }
         });
 
+        const editNameBtn = document.querySelector('#hidden-edit-name');
+        const displayName = document.querySelector('#hidden-display-name');
+        const saveNameBtn = document.querySelector('#hidden-save-name');
+        const nameInput = document.querySelector('#hidden-anonymous-name');
+
+        editNameBtn.addEventListener('click', () => {
+            displayName.style.display = 'none';
+            editNameBtn.style.display = 'none';
+
+            nameInput.style.display = 'block';
+            saveNameBtn.style.display = 'block';
+        });
+
         saveNameBtn.addEventListener('click', async () => {
-            const name = document.querySelector('input#hidden-anonymous-name').value;
+            displayName.style.display = 'block';
+            editNameBtn.style.display = 'block';
+
+            nameInput.style.display = 'none';
+            saveNameBtn.style.display = 'none';
+
+            const name = nameInput.value;
+            displayName.textContent = name;
             const state = await getState();
             state.user.anonymousName = name;
             await setState(state);

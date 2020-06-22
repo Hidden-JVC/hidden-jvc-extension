@@ -29,17 +29,34 @@ class RuntimeConstants {
             this.parseTopic();
         }
 
-        let url = `${location.origin}${location.pathname}`;
+        const baseUrl = `${location.origin}${location.pathname}`;
+        const queryAndHash = location.href.replace(baseUrl, '').replace('?', '');
+        const [originalQueryStr, hash] = queryAndHash.split('#');
+
+        const query = new URLSearchParams(originalQueryStr);
+
         if (state.hidden.enabled) {
-            url = `${url}?hidden=1&view=${state.hidden.view}`;
+            query.set('hidden', '1');
+            query.set('view', state.hidden.view);
             if (state.hidden.view === 'list') {
-                url = `${url}&listPage=${state.hidden.list.page}`;
+                query.set('listPage', state.hidden.list.page);
             } else if (state.hidden.view === 'topic') {
-                url = `${url}&topicId=${state.hidden.topic.id}&topicPage=${state.hidden.topic.page}`;
+                query.set('topicId', state.hidden.topic.id);
+                query.set('topicPage', state.hidden.topic.page);
             }
         } else {
-            url = `${url}?hidden=0`;
+            query.set('hidden', '0');
         }
+
+        let queryStr = '';
+        if (query.toString().length > 0) {
+            queryStr = `?${query.toString()}`;
+        }
+        let hashStr = '';
+        if (typeof hash === 'string') {
+            hashStr = `#${hash}`;
+        }
+        const url = `${baseUrl}${queryStr}${hashStr}`;
         history.replaceState(null, '', url);
     }
 

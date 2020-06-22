@@ -46,7 +46,7 @@
             </li>
 
             {{#each topics}}
-            {{> row .}}
+            {{> row topic=. displaySelect=../displaySelect }}
             {{/each}}
         </ul>
 
