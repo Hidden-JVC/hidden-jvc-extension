@@ -25,4 +25,4 @@ npm run build
 
 echo "#### Creation de l'archive ####"
 cd ./build
-7z a hidden-jvc-extension.7z *
+7z a -tzip hidden-jvc-extension.zip *
