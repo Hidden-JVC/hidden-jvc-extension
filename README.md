@@ -50,7 +50,12 @@ Une extension web elle à beaucoup plus de pouvoir qu'un userscript et permet do
 
 ## Compilation
 
-Prérequis: Git, Node.js et p7zip
+Prérequis:
+- Git
+- Node.js
+- 7zip / p7zip
+
+Installation:
 
     git clone https://github.com/Hidden-JVC/hidden-jvc-extension
     cd hidden-jvc-extension

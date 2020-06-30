@@ -2,6 +2,14 @@
     "manifest_version": 2,
     "name": "Hidden JVC",
     "version": "0.3.0",
+
+    "icons": {
+        "48" : "icons/icon-48.png",
+        "128": "icons/icon-128.png",
+	"256": "icons/icon-256.png",
+	"408": "icons/icon-408.png"
+    },
+
     "permissions": [
         "storage",
         "webRequest",
@@ -24,7 +32,13 @@
         }
     ],
     "browser_action": {
-        "default_title": "Hidden JVC"
+        "default_title": "Hidden JVC",
+        "default_icon": {
+	    "48" : "icons/icon-48.png",
+	    "128": "icons/icon-128.png",
+	    "256": "icons/icon-256.png",
+	    "408": "icons/icon-408.png"
+        }
     },
     "browser_specific_settings": {
         "gecko": {
