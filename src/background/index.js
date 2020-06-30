@@ -44,19 +44,19 @@ async function listener(details) {
 
 browser.webRequest.onBeforeRequest.addListener(
     listener,
-    { urls: ['http://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
+    { urls: ['https://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
     ['blocking']
 );
 
 function redirectListener(details) {
-    const hash = details.url.replace('http://www.jeuxvideo.com/hidden-redirect/', '');
+    const hash = details.url.replace('https://www.jeuxvideo.com/hidden-redirect/', '');
     const path = browser.runtime.getURL('hidden-jvc-website/index.html');
     browser.tabs.update(details.tabId, { url: `${path}#/${hash}` });
 }
 
 browser.webRequest.onBeforeRequest.addListener(
     redirectListener,
-    { urls: ['http://www.jeuxvideo.com/hidden-redirect/*'], types: ['main_frame'] },
+    { urls: ['https://www.jeuxvideo.com/hidden-redirect/*'], types: ['main_frame'] },
     ['blocking']
 );
 

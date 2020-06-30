@@ -1,6 +1,6 @@
 # Hidden JVC Extension
 
-Hidden JVC est un forum intégré aux forums de http://www.jeuxvideo.com/.
+Hidden JVC est un forum intégré aux forums de https://www.jeuxvideo.com/.
 
 Le projet est actuellement en version Alpha.
 

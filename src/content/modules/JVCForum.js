@@ -54,7 +54,7 @@ class JVCForum {
         console.log(topics);
 
         for (const topic of topics) {
-            topic.Url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+            topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
         }
 
         const displaySelect = document.querySelector('.topic-select') !== null;

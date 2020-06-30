@@ -6,7 +6,7 @@
         "storage",
         "webRequest",
         "webRequestBlocking",
-        "http://www.jeuxvideo.com/*"
+        "https://www.jeuxvideo.com/*"
     ],
     "background": {
         "scripts": [
@@ -16,7 +16,7 @@
     "content_scripts": [
         {
             "matches": [
-                "http://www.jeuxvideo.com/*"
+                "https://www.jeuxvideo.com/*"
             ],
             "js": [
                 "content.js"
