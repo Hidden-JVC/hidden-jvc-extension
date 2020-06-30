@@ -21,11 +21,11 @@ class HiddenForum {
             page: state.hidden.list.page,
         });
 
-        this.render(topics, count, state.hidden.list.page);
+        this.render(topics, count, state.hidden.list.page, state.user);
         this.initDomEvents(form);
     }
 
-    render(topics, count, page) {
+    render(topics, count, page, user) {
         const lastPage = Math.ceil(count / 20);
         const pagination = createPagination(page, lastPage);
 
@@ -34,6 +34,7 @@ class HiddenForum {
         }
 
         const data = {
+            user,
             topics,
             page,
             lastPage,

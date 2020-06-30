@@ -48,10 +48,11 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, error } = await postRequest(Hidden.API_LOGIN, { name, password });
+                const { jwt, user, error } = await postRequest(Hidden.API_LOGIN, { name, password });
                 if (jwt) {
                     const state = await getState();
                     state.user.jwt = jwt;
+                    state.user.type = user.type;
                     state.user.registeredName = name;
                     await setState(state);
                     location.reload();
@@ -118,6 +119,7 @@ class HiddenMenu {
         logoutBtn.addEventListener('click', async () => {
             const state = await getState();
             state.user.jwt = null;
+            state.user.type = null;
             await setState(state);
             location.reload();
         });

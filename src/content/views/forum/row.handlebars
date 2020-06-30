@@ -25,6 +25,13 @@
         </a>
     </span>
 
+    <span class="topic-count">
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem; content: '\e001'">
+            <img src="./images/icons.trash.svg" alt="">
+        </span>
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem">  </span>
+    </span>
+
     {{#if Author}}
     <a class="xXx text-user topic-author" style="color: #20bbdf">
         {{ topic.Author.Name }}
@@ -44,8 +51,4 @@
             {{ [../helpers/topicDate] topic.LastPostDate }}
         </a>
     </span>
-
-    {{#if displaySelect}}
-        <span class="topic-select"> </span>
-    {{/if}}
 </li>
