@@ -51,9 +51,9 @@ Une extension web elle à beaucoup plus de pouvoir qu'un userscript et permet do
 ## Compilation
 
 Prérequis:
-- Git
-- Node.js
-- 7zip / p7zip
+* Git
+* Node.js
+* 7zip / p7zip
 
 Installation:
 
