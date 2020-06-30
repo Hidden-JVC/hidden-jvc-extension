@@ -44,7 +44,7 @@ class HiddenTopic {
         const pagination = createPagination(state.hidden.topic.page, lastPage);
         let opPostOnlyUrl = null;
 
-        const forumUrl = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
+        const forumUrl = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
 
         if (this.topic.User !== null) {
             if (state.hidden.topic.userId) {

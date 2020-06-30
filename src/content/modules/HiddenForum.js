@@ -30,7 +30,7 @@ class HiddenForum {
         const pagination = createPagination(page, lastPage);
 
         for (const topic of topics) {
-            topic.Url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+            topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
         }
 
         const data = {
@@ -77,7 +77,7 @@ class HiddenForum {
 
                 const { topicId } = await network.postRequest(Hidden.API_HIDDEN_TOPICS, data, state.user.jwt);
                 if (topicId) {
-                    const url = `http://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
+                    const url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
                     location.replace(url);
                 } else {
                     throw new Error('fail to create topic');

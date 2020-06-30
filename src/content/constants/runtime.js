@@ -152,7 +152,7 @@ class RuntimeConstants {
 
         if (lastPageButton !== null) {
             const url = lastPageButton.href;
-            const matches = url.match(/^http:\/\/www\.jeuxvideo\.com\/forums\/\d+?-\d+?-\d+?-(\d+?)-.*$/);
+            const matches = url.match(/^https:\/\/www\.jeuxvideo\.com\/forums\/\d+?-\d+?-\d+?-(\d+?)-.*$/);
             if (matches !== null) {
                 this.topicLastPage = parseInt(matches[1]);
             }
@@ -185,7 +185,7 @@ class RuntimeConstants {
     }
 
     generateTopicUrl(page) {
-        return `http://www.jeuxvideo.com/forums/${this.viewId}-${this.forumId}-${this.topicId}-${page}-0-1-0-0.htm`;
+        return `https://www.jeuxvideo.com/forums/${this.viewId}-${this.forumId}-${this.topicId}-${page}-0-1-0-0.htm`;
     }
 }
 
