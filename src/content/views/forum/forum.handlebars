@@ -37,16 +37,14 @@
         <ul class="topic-list topic-list-admin">
             <li class="topic-head">
                 <span class="topic-subject"> Sujet </span>
+                <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span>
                 <span class="topic-author"> Auteur </span>
                 <span class="topic-count"> Nb </span>
                 <span class="topic-date"> Dernier msg </span>
-                <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
-                    <input id="select-all-msg" type="checkbox">
-                </label>
             </li>
 
             {{#each topics}}
-            {{> row topic=. displaySelect=../displaySelect }}
+            {{> row topic=. displaySelect=../displaySelect user=../user }}
             {{/each}}
         </ul>
 

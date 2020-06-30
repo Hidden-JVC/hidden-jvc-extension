@@ -10,6 +10,11 @@ class AdCleaner {
         if (wootBox !== null) {
             wootBox.remove();
         }
+
+        const sideDfp = document.querySelector('#forum-right-col .sideDfp');
+        if (sideDfp !== null) {
+            sideDfp.remove();
+        }
     }
 }
 

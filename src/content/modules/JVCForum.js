@@ -51,7 +51,6 @@ class JVCForum {
         }
 
         const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
-        console.log(topics);
 
         for (const topic of topics) {
             topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;

@@ -10,7 +10,6 @@ Le projet est actuellement en version Alpha.
 * [FAQ](#FAQ)
 * [Compilation](#Compilation)
 
-
 ## Fonctionnalité
 
 * Pouvoir poster des messages sur des topics JVC visible uniquement pour les utilisateurs d'Hidden JVC.
@@ -47,6 +46,16 @@ Néanmois seul firefox permet de contrer efficacement les tentatives de webedia 
 Quand le propriétaire d'un site web est hostile à un userscript comme l'a été webedia avec JVP, ça devient très vite difficile voir impossible de pouvoir contrer les tentatives de bloquer le bon fonctionnement du userscript.
 
 Une extension web elle à beaucoup plus de pouvoir qu'un userscript et permet donc de bypass les scripts de webedia. Je pense notament à cette fonctionnalité de firefox qui permet de modifié la réponse d'une requête avant même qu'elle n'arrive dans l'onglet: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/webRequest/filterResponseData
+
+### Pourquoi pas chrome
+
+Avec firefox Quantum (v57) en 2017
+Chrome n'a toujours pas implémenté depuis plus de 9 ans
+https://bugs.chromium.org/p/chromium/issues/detail?id=104058
+https://bugs.chromium.org/p/chromium/issues/detail?id=487422
+
+diminution du pouvoir des extension de bloquer les pubs
+https://blog.mozilla.org/addons/2019/09/03/mozillas-manifest-v3-faq/
 
 ## Compilation
 
