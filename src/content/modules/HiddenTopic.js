@@ -35,6 +35,7 @@ class HiddenTopic {
         this.initForm();
         this.initQuotes();
         this.initReloadButtons();
+        this.initModeration(state);
     }
 
     render(state) {
@@ -59,6 +60,7 @@ class HiddenTopic {
         const data = {
             topic,
             page,
+            user: state.user,
             forumUrl,
             lastPage,
             pagination,
@@ -158,6 +160,43 @@ class HiddenTopic {
         document.querySelectorAll('[data-reload]').forEach((btn) => {
             btn.addEventListener('click', () => location.reload());
         });
+    }
+
+    initModeration(state) {
+        const topicIds = [this.topic.Topic.Id];
+
+        const lockTopicBtn = document.querySelector('#lock-topic-btn');
+        if (lockTopicBtn !== null) {
+            lockTopicBtn.addEventListener('click', async () => {
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action: 'lock', topicIds }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                } else {
+                    console.log('fail');
+                }
+            });
+        }
+
+        const unlockTopicBtn = document.querySelector('#unlock-topic-btn');
+        if (unlockTopicBtn !== null) {
+            unlockTopicBtn.addEventListener('click', async () => {
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action: 'unlock', topicIds }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                }
+            });
+        }
+
+        const deleteTopicBtn = document.querySelector('#delete-topic-btn');
+        if (deleteTopicBtn !== null) {
+            deleteTopicBtn.addEventListener('click', async () => {
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action: 'delete', topicIds }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                    location.href = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=list`;
+                }
+            });
+        }
     }
 }
 

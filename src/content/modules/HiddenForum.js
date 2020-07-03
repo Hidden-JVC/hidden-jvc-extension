@@ -87,6 +87,23 @@ class HiddenForum {
                 console.error(err);
             }
         });
+
+        document.querySelector('#moderation-action-submit').addEventListener('click', async () => {
+            const topicInputs = document.querySelectorAll('.topic-select input');
+            const topicIds = [];
+            for (const input of topicInputs) {
+                if (input.checked) {
+                    topicIds.push(parseInt(input.value));
+                }
+            }
+            const action = document.querySelector('#moderation-action-select').value;
+
+            const state = await getState();
+            const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action, topicIds }, state.user.jwt);
+            if (success) {
+                location.reload();
+            }
+        });
     }
 }
 
