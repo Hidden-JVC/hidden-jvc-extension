@@ -32,10 +32,13 @@ class HiddenTopic {
 
         this.render(state);
 
-        this.initForm();
+        if (!this.topic.Topic.Locked) {
+            this.initForm();
+        }
         this.initQuotes();
         this.initReloadButtons();
         this.initModeration(state);
+        this.initPostDelete();
     }
 
     render(state) {
@@ -152,6 +155,21 @@ class HiddenTopic {
                 textarea.value += content;
                 textarea.focus();
                 this.updatePreview();
+            });
+        }
+    }
+
+    initPostDelete() {
+        const buttons = document.querySelectorAll('[data-post-delete]');
+        for (const btn of buttons) {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postDelete;
+                const state = await getState();
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action: 'delete', postIds: [postId] }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                }
             });
         }
     }
