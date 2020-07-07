@@ -40,7 +40,7 @@
     </div>
 </div>
 
-{{#isModerator user}}
+{{#isModerator user.type}}
     <div class="bloc-pre-pagi-forum bloc-outils-top">
         <div class="bloc-pre-left">
             {{#if topic.Topic.Locked }}
@@ -70,7 +70,7 @@
     {{> ../misc/pagination }}
 
     {{#each topic.Posts}}
-    {{> post . }}
+    {{> post . user=../user }}
     {{/each}}
 
     {{> ../misc/pagination }}
@@ -92,5 +92,7 @@
         </div>
     </div>
 
+    {{#unless topic.Topic.Locked}}
     {{> form . }}
+    {{/unless}}
 </div>

@@ -1,5 +1,5 @@
-export default function (user, options) {
-    if (user.type === 'Admin' || user.type === 'Moderator') {
+export default function (type, options) {
+    if (type === 'Admin' || type === 'Moderator') {
         return options.fn(this);
     } else {
         return options.inverse(this);
