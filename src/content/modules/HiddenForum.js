@@ -21,11 +21,11 @@ class HiddenForum {
             page: state.hidden.list.page,
         });
 
-        this.render(topics, count, state.hidden.list.page);
+        this.render(topics, count, state.hidden.list.page, state.user);
         this.initDomEvents(form);
     }
 
-    render(topics, count, page) {
+    render(topics, count, page, user) {
         const lastPage = Math.ceil(count / 20);
         const pagination = createPagination(page, lastPage);
 
@@ -34,6 +34,7 @@ class HiddenForum {
         }
 
         const data = {
+            user,
             topics,
             page,
             lastPage,
@@ -86,6 +87,27 @@ class HiddenForum {
                 console.error(err);
             }
         });
+
+        const moderationActionSubmit = document.querySelector('#moderation-action-submit');
+        if (moderationActionSubmit !== null) {
+
+            moderationActionSubmit.addEventListener('click', async () => {
+                const topicInputs = document.querySelectorAll('.topic-select input');
+                const topicIds = [];
+                for (const input of topicInputs) {
+                    if (input.checked) {
+                        topicIds.push(parseInt(input.value));
+                    }
+                }
+                const action = document.querySelector('#moderation-action-select').value;
+
+                const state = await getState();
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action, topicIds }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                }
+            });
+        }
     }
 }
 

@@ -40,11 +40,37 @@
     </div>
 </div>
 
+{{#isModerator user.type}}
+    <div class="bloc-pre-pagi-forum bloc-outils-top">
+        <div class="bloc-pre-left">
+            {{#if topic.Topic.Locked }}
+            <button id="unlock-topic-btn" class="btn btn-actu-new-list-forum">
+                Délock
+            </button>
+            {{else}}
+            <button id="lock-topic-btn" class="btn btn-actu-new-list-forum">
+                Lock
+            </button>
+            {{/if}}
+
+            <button id="delete-topic-btn" class="btn btn-actu-new-list-forum">
+                Supprimer
+            </button>
+        </div>
+
+        <div class="bloc-rech-forum">
+        </div>
+
+        <div class="bloc-pre-right">
+        </div>
+    </div>
+{{/isModerator}}
+
 <div class="conteneur-messages-pagi">
     {{> ../misc/pagination }}
 
     {{#each topic.Posts}}
-    {{> post . }}
+    {{> post . user=../user }}
     {{/each}}
 
     {{> ../misc/pagination }}
@@ -66,5 +92,7 @@
         </div>
     </div>
 
+    {{#unless topic.Topic.Locked}}
     {{> form . }}
+    {{/unless}}
 </div>

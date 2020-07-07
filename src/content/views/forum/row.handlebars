@@ -11,7 +11,7 @@
                 <img src="/img/forums/topic-lock.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
             {{else}}
                 {{#if ([../helpers/hotTopic] PostsCount)}}
-                    <img src="/img/forums/topic-dossier2.png" alt="Topic hot" title="Topic hot" class="topic-img">        
+                    <img src="/img/forums/topic-dossier2.png" alt="Topic hot" title="Topic hot" class="topic-img">
                 {{else}}
                     <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
                 {{/if}}
@@ -24,6 +24,14 @@
             {{ topic.Topic.Title }}
         </a>
     </span>
+
+    {{!-- <span class="topic-count">
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem; content: '\e001'">
+        </span>
+
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem">
+        </span>
+    </span> --}}
 
     {{#if Author}}
     <a class="xXx text-user topic-author" style="color: #20bbdf">
@@ -45,7 +53,9 @@
         </a>
     </span>
 
-    {{#if displaySelect}}
-        <span class="topic-select"> </span>
-    {{/if}}
+    {{#isModerator user}}
+        <label for="hidden-select-{{ topic.Topic.Id }}" class="topic-select" style="padding: 0 .125rem">
+            <input id="hidden-select-{{ topic.Topic.Id }}" value="{{ topic.Topic.Id }}" type="checkbox">
+        </label>
+    {{/isModerator}}
 </li>

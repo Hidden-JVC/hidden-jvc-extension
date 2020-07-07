@@ -31,22 +31,56 @@
         </div>
     </div>
 
+    {{#isModerator user}}
+        <div class="bloc-pre-pagi-forum bloc-outils-top">
+            <div class="bloc-pre-left">
+                {{!-- <a href="#bloc-formulaire-forum">
+                    <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
+                </a> --}}
+            </div>
+
+            <div class="bloc-rech-forum">
+                    {{!-- <input class="txt-search" type="text" placeholder="Rechercher dans le forum" name="search_in_forum"
+                        id="search_in_forum" autocomplete="off" value=""> --}}
+
+                    <select id="moderation-action-select" class="select-search">
+                        <option value="lock"> Lock </option>
+                        <option value="unlock"> Délock </option>
+                        <option value="pin"> Epingler </option>
+                        <option value="unpin"> Désépingler </option>
+                        <option value="delete"> Supprimer </option>
+                    </select>
+
+                    <button id="moderation-action-submit" class="btn btn-lancer-rech">
+                        <span class="icon-search"> </span>
+                    </button>
+            </div>
+
+            <div class="bloc-pre-right">
+                {{!-- <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button> --}}
+            </div>
+        </div>
+    {{/isModerator}}
+
     <div class="conteneur-topic-pagi">
         {{> ../misc/listPagination }}
 
         <ul class="topic-list topic-list-admin">
             <li class="topic-head">
                 <span class="topic-subject"> Sujet </span>
+                {{!-- <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span> --}}
                 <span class="topic-author"> Auteur </span>
                 <span class="topic-count"> Nb </span>
                 <span class="topic-date"> Dernier msg </span>
-                <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
-                    <input id="select-all-msg" type="checkbox">
-                </label>
+                {{#isModerator user}}
+                    <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
+                        <input id="select-all-msg" type="checkbox">
+                    </label>
+                {{/isModerator}}
             </li>
 
             {{#each topics}}
-            {{> row topic=. displaySelect=../displaySelect }}
+            {{> row topic=. displaySelect=../displaySelect user=../user }}
             {{/each}}
         </ul>
 

@@ -9,32 +9,35 @@ module.exports = {
     devtool: 'source-map',
     output: {
         path: path.join(__dirname, 'build'),
-        filename: '[name].js',
+        filename: '[name].js'
     },
     module: {
         rules: [
             {
                 test: /\.handlebars$/i,
-                use: 'handlebars-loader',
+                loader: 'handlebars-loader',
+                options: {
+                    helperDirs: path.join(__dirname, 'src/content/views/helpers')
+                }
             },
             {
-                test: /\.(png|jpg|gif)$/i,
+                test: /\.(png|jpg|gif|svg)$/i,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
                             limit: 1024 * 1024 * 1024,
-                        },
-                    },
-                ],
+                        }
+                    }
+                ]
             },
             {
                 test: /\.scss$/i,
                 use: [
                     'style-loader',
                     'css-loader',
-                    'sass-loader',
-                ],
+                    'sass-loader'
+                ]
             }
         ]
     },
