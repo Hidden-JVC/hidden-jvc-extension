@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    {{#isModerator user}}
+    {{#isModerator user.type}}
         <div class="bloc-pre-pagi-forum bloc-outils-top">
             <div class="bloc-pre-left">
                 {{!-- <a href="#bloc-formulaire-forum">
@@ -72,7 +72,7 @@
                 <span class="topic-author"> Auteur </span>
                 <span class="topic-count"> Nb </span>
                 <span class="topic-date"> Dernier msg </span>
-                {{#isModerator user}}
+                {{#isModerator user.type}}
                     <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
                         <input id="select-all-msg" type="checkbox">
                     </label>
