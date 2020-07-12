@@ -1,6 +1,6 @@
 {
     "name": "hidden-jvc-extension",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "scripts": {
         "build": "webpack --config webpack.config.js --mode=production --env.NODE_ENV=production",
         "watch": "webpack --config webpack.config.js --watch --mode=development --env.NODE_ENV=development",
