@@ -4,11 +4,20 @@ Hidden JVC est un forum intégré aux forums de https://www.jeuxvideo.com/.
 
 Le projet est actuellement en version Alpha.
 
+* [Téléchargement](#Téléchargement)
 * [Fonctionnalité](#Fonctionnalité)
 * [Roadmap](#Roadmap)
 * [Compatibilité](#Compatibilité)
 * [FAQ](#FAQ)
 * [Compilation](#Compilation)
+
+## Téléchargement
+
+* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/firefox.png) Firefox : https://github.com/Hidden-JVC/hidden-jvc-extension/releases/latest
+
+#### version maintenue par [@borrougagnou](https://github.com/borrougagnou) :
+* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/chrome.png) Chrome : https://chrome.google.com/webstore/detail/hidden-jvc/mdghlmpglafocnnpohgfeckaickmkapc
+* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/opera.png) Opera : Stable \[en cours\]![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/close16.png), Developer ✔, Next ✔
 
 ## Fonctionnalité
 
