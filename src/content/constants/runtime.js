@@ -13,6 +13,7 @@ class RuntimeConstants {
         this.forumOffset = null;
 
         this.is410 = null;
+        this.isLocked = null;
         this.forumName = null;
         this.forumTopics = [];
         this.topicTitle = null;
@@ -127,6 +128,8 @@ class RuntimeConstants {
         if (this.is410) {
             return;
         }
+
+        this.isLocked = document.querySelector('.message-lock-topic') !== null;
 
         this.topicTitle = document.querySelector('span#bloc-title-forum').textContent.trim();
 

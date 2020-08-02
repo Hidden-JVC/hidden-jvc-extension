@@ -1,11 +1,10 @@
-.hidden-topic-count-highlight {
-    img.topic-img {
-        background-color: $primary;
-        background-blend-mode: multiply;
+.jvc-topic-contains-hidden-post {
+    a.topic-title {
+        color: $hidden-link !important;
     }
 
-    span.topic-count {
-        color: $primary;
+    a.topic-title:visited {
+        color: $hidden-link-visited !important;
     }
 }
 

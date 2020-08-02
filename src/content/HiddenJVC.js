@@ -8,6 +8,7 @@ import rowTemplate from './views/forum/row.handlebars';
 import postTemplate from './views/topic/post.handlebars';
 import forumTemplate from './views/forum/forum.handlebars';
 import topicTemplate from './views/topic/topic.handlebars';
+import topicFormTemplate from './views/topic/form.handlebars';
 
 import modals from './modals';
 
@@ -24,7 +25,8 @@ class HiddenJVC {
         this.views = {
             topic: {
                 post: postTemplate,
-                topic: topicTemplate
+                topic: topicTemplate,
+                topicForm: topicFormTemplate
             },
             forum: {
                 forum: forumTemplate,
