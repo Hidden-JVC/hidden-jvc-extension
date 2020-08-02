@@ -6,7 +6,9 @@ const { post } = hiddenJVC.views.topic;
 const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
+const { topicForm } = hiddenJVC.views.topic;
 const { getRequest, postRequest } = hiddenJVC.helpers.network;
+const { initForm } = hiddenJVC.helpers;
 
 class JVCTopic {
     constructor() {
@@ -41,8 +43,19 @@ class JVCTopic {
 
     setupForm() {
         const form = document.querySelector('#bloc-formulaire-forum');
-        const jvcPostButton = form.querySelector('.btn.btn-poster-msg.js-post-message');
-        jvcPostButton.insertAdjacentElement('afterend', this.createPostButton());
+        if (Runtime.isLocked) {
+            const html = topicForm();
+            form.insertAdjacentHTML('afterend', html);
+            form.remove();
+            const hiddenForm = document.querySelector('#hidden-form');
+            const submitBtn = hiddenForm.querySelector('#form-submit');
+            submitBtn.insertAdjacentElement('afterend', this.createPostButton());
+            submitBtn.remove();
+            initForm(hiddenForm);
+        } else {
+            const jvcPostButton = form.querySelector('.btn.btn-poster-msg.js-post-message');
+            jvcPostButton.insertAdjacentElement('afterend', this.createPostButton());
+        }
     }
 
     createPostButton() {

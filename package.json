@@ -1,10 +1,10 @@
 {
     "name": "hidden-jvc-extension",
-    "version": "0.5.1",
+    "version": "0.6.0",
     "scripts": {
         "build": "webpack --config webpack.config.js --mode=production --env.NODE_ENV=production",
         "watch": "webpack --config webpack.config.js --watch --mode=development --env.NODE_ENV=development",
-        "web-ext": "web-ext run --firefox=firefox-developer-edition --source-dir=build --firefox-profile=hidden-jvc-user --keep-profile-changes"
+        "web-ext": "web-ext run --source-dir=build --firefox-profile=hidden-jvc-user --keep-profile-changes"
     },
     "dependencies": {
         "date-fns": "^2.13.0",

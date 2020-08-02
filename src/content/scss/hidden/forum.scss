@@ -7,7 +7,7 @@ li.hidden-topic-row:nth-of-type(2n) {
 }
 
 li.hidden-topic-row:nth-of-type(2n+1) {
-    background-color: $primary-light;
+    background-color: $primary-darken;
 }
 
 .hidden-post:nth-of-type(2n) {
@@ -15,7 +15,7 @@ li.hidden-topic-row:nth-of-type(2n+1) {
 }
 
 .hidden-post:nth-of-type(2n+1) {
-    background-color: $primary-light !important;
+    background-color: $primary-darken !important;
 }
 
 .btn-poster-msg {

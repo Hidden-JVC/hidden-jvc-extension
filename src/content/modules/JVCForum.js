@@ -18,7 +18,7 @@ class JVCForum {
     }
 
     /**
-     * Checks if any of the current jvc topics contains at least one hidden topic
+     * Checks if any of the current jvc topics contains at least one hidden post
      */
     async initJVCTopics() {
         const topicIds = Runtime.forumTopics.map((t) => t.id);
@@ -28,14 +28,14 @@ class JVCForum {
         for (const jvcTopic of Runtime.forumTopics) {
             for (const hiddenTopic of topics) {
                 if (hiddenTopic.Topic.Id === jvcTopic.id) {
-                    jvcTopic.li.classList.add('hidden-topic-count-highlight');
+                    jvcTopic.li.classList.add('jvc-topic-contains-hidden-post');
                 }
             }
         }
     }
 
     /**
-     * Retrieve all hidden topics that can be inserted within the current jvc topics
+     * Retrieve all the hidden topics that can be inserted between the current jvc topics
      */
     async initHiddenJVCTopics() {
         const query = { forumId: Runtime.forumId };
