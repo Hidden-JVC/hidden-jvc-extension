@@ -1,0 +1,100 @@
+<div id="forum-main-col" class="col-main">
+    <div class="titre-head-bloc">
+        <h2 class="titre-bloc titre-bloc-forum hidden-forum-title">
+            <span> Sujet : </span>
+            <span id="bloc-title-forum"> {{ topic.Topic.Title }} </span>
+        </h2>
+    </div>
+
+    <div class="bloc-pre-pagi-forum bloc-outils-top">
+        <div class="bloc-pre-left">
+            <div class="group-one">
+                <a href="#hidden-form">
+                    <span class="btn btn-repondre-msg"> Répondre </span>
+                </a>
+            </div>
+
+            <div class="group-two">
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
+                    <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
+                </a>
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
+                    <span id="list-topics" class="btn btn-actu-new-list-forum"> Liste des sujets </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="bloc-pre-right">
+            <div class="group-one">
+                {{#if opPostOnlyUrl}}
+                <a href="{{ opPostOnlyUrl }}">
+                    <button class="btn btn-actu-new-list-forum"> Mode fic </button>
+                </a>
+                {{/if}}
+            </div>
+
+            <div class="group-two">
+                <button class="btn btn-actu-new-list-forum" data-reload style="min-width: 6.375rem;">
+                    Actualiser
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{#isModerator user.type}}
+    <div class="bloc-pre-pagi-forum bloc-outils-top">
+        <div class="bloc-pre-left">
+            {{#if topic.Topic.Locked }}
+            <button id="unlock-topic-btn" class="btn btn-actu-new-list-forum">
+                Délock
+            </button>
+            {{else}}
+            <button id="lock-topic-btn" class="btn btn-actu-new-list-forum">
+                Lock
+            </button>
+            {{/if}}
+
+            <button id="delete-topic-btn" class="btn btn-actu-new-list-forum">
+                Supprimer
+            </button>
+        </div>
+
+        <div class="bloc-rech-forum">
+        </div>
+
+        <div class="bloc-pre-right">
+        </div>
+    </div>
+    {{/isModerator}}
+
+    <div class="conteneur-messages-pagi">
+        {{> ../misc/pagination }}
+
+        {{#each topic.Posts}}
+        {{> post . user=../user }}
+        {{/each}}
+
+        {{> ../misc/pagination }}
+
+        <div class="bloc-pre-pagi-forum bloc-outils-bottom">
+            <div class="bloc-pre-left">
+                <div class="group-two">
+                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
+                        <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
+                    </a>
+                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
+                        <span class="btn btn-actu-new-list-forum"> Liste des sujets </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bloc-pre-right">
+                <button class="btn btn-actu-new-list-forum" data-reload> Actualiser </button>
+            </div>
+        </div>
+
+        {{#unless topic.Topic.Locked}}
+        {{> form . }}
+        {{/unless}}
+    </div>
+</div>

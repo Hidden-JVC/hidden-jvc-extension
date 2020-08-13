@@ -1,6 +1,9 @@
 import hiddenJVC from '../HiddenJVC.js';
 
-const { views } = hiddenJVC;
+import formTemplate from '../views/hidden/forum/form.handlebars';
+import forumTemplate from '../views/hidden/forum/forum.handlebars';
+import loadingTemplate from '../views/hidden/forum/loading.handlebars';
+
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
@@ -12,7 +15,9 @@ class HiddenForum {
     }
 
     async init(state) {
-        const html = views.forum.form();
+        document.querySelector('#forum-main-col').outerHTML = loadingTemplate();
+
+        const html = formTemplate();
         document.body.insertAdjacentHTML('beforeend', html);
         const form = document.querySelector('#hidden-form');
 
@@ -39,11 +44,10 @@ class HiddenForum {
             page,
             lastPage,
             pagination,
-            forumName: Runtime.forumName,
-            displaySelect: true
+            forumName: Runtime.forumName
         };
 
-        const html = views.forum.forum(data);
+        const html = forumTemplate(data);
         document.querySelector('#forum-main-col').outerHTML = html;
     }
 

@@ -2,10 +2,12 @@ import { parse } from 'open-jvcode';
 
 import hiddenJVC from '../HiddenJVC.js';
 
+import topicTemplate from '../views/hidden/topic/topic.handlebars';
+import loadingTemplate from '../views/hidden/topic/loading.handlebars';
+
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { topic: topicTemplate } = hiddenJVC.views.topic;
 const { createPagination, network, postDateFormat } = hiddenJVC.helpers;
 
 class HiddenTopic {
@@ -16,6 +18,8 @@ class HiddenTopic {
     }
 
     async init(state) {
+        document.querySelector('#forum-main-col').outerHTML = loadingTemplate();
+
         const query = {
             page: state.hidden.topic.page
         };
@@ -71,7 +75,7 @@ class HiddenTopic {
         };
 
         const html = topicTemplate(data);
-        document.querySelector('#forum-main-col').innerHTML = html;
+        document.querySelector('#forum-main-col').outerHTML = html;
     }
 
     initForm() {

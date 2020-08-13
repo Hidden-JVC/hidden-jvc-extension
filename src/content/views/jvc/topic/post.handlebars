@@ -1,0 +1,67 @@
+<div class="bloc-message-forum hidden-post">
+    <div class="conteneur-message">
+        <div class="bloc-avatar-msg">
+            <div class="back-img-msg">
+                <div>
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank" class="xXx ">
+                        <img src="https://risibank.fr/cache/stickers/d209/20968-full.png" class="user-avatar-msg"
+                            alt="cisla">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="inner-head-content">
+            <div class="bloc-header">
+                {{#if User}}
+                {{#isModerator User.Type}}
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user" style="color: red">
+                    {{ User.Name }}
+                </a>
+                {{else}}
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
+                    {{ User.Name }}
+                </a>
+                {{/isModerator}}
+
+                {{else}}
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user">
+                    {{ Post.Username }}
+                </a>
+                {{/if}}
+
+                <div class="bloc-options-msg">
+                    <span class="picto-msg-quote" title="Citer" data-quote="{{ Post.Id }}">
+                        <span> Citer </span>
+                    </span>
+                    {{#isModerator user.type}}
+                    <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ Post.Id }}">
+                        <span> Supprimer </span>
+                    </span>
+                    {{/isModerator}}
+                    {{!-- <span class="picto-msg-tronche" title="Blacklister" data-action="add" data-id-alias="6554891">
+                        <span> Blacklister </span>
+                    </span> --}}
+                    {{!-- <span class="picto-msg-exclam" title="Faire un signalement">
+                        <span> Alerte </span>
+                    </span> --}}
+                </div>
+
+                <div class="bloc-date-msg">
+                    <a href="/cisla/forums/message/1036520623" target="_blank" class="xXx lien-jv">
+                        {{ [../helpers/postDate] Post.CreationDate }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="bloc-contenu">
+                <div class="txt-msg  text-enrichi-forum ">
+                    {{{ [../helpers/jvcode] Post.Content }}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
