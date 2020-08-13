@@ -12,6 +12,8 @@ async function listener(details) {
 
         if (query.has('hidden')) {
             state.hidden.enabled = query.get('hidden') === '1';
+        } else {
+            state.hidden.enabled = false;
         }
 
         if (query.has('view') && ['list', 'topic'].includes(query.get('view'))) {

@@ -1,14 +1,14 @@
 import { formatISO9075, isBefore } from 'date-fns';
 
 import hiddenJVC from '../HiddenJVC.js';
+import formTemplate from '../views/jvc/topic/form.handlebars';
+import postTemplate from '../views/jvc/topic/post.handlebars';
 
-const { post } = hiddenJVC.views.topic;
+const { initForm } = hiddenJVC.helpers;
 const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { topicForm } = hiddenJVC.views.topic;
 const { getRequest, postRequest } = hiddenJVC.helpers.network;
-const { initForm } = hiddenJVC.helpers;
 
 class JVCTopic {
     constructor() {
@@ -44,7 +44,7 @@ class JVCTopic {
     setupForm() {
         const form = document.querySelector('#bloc-formulaire-forum');
         if (Runtime.isLocked) {
-            const html = topicForm();
+            const html = formTemplate();
             form.insertAdjacentHTML('afterend', html);
             form.remove();
             const hiddenForm = document.querySelector('#hidden-form');
@@ -62,7 +62,7 @@ class JVCTopic {
         const button = document.createElement('button');
         button.textContent = 'Poster sur Hidden JVC';
         button.type = 'button';
-        button.classList.add('btn', 'btn-poster-msg');
+        button.classList.add('btn', 'btn-poster-msg', 'hidden-btn-poster-msg');
         button.style.backgroundColor = '#083193';
         button.addEventListener('click', async () => {
             try {
@@ -122,9 +122,9 @@ class JVCTopic {
             }
 
             if (previousPost !== null) {
-                previousPost.element.insertAdjacentHTML('beforebegin', post(hiddenPost));
+                previousPost.element.insertAdjacentHTML('beforebegin', postTemplate(hiddenPost));
             } else {
-                bottomPagination.insertAdjacentHTML('beforebegin', post(hiddenPost));
+                bottomPagination.insertAdjacentHTML('beforebegin', postTemplate(hiddenPost));
             }
         }
     }

@@ -35,7 +35,6 @@ class RuntimeConstants {
         const [originalQueryStr, hash] = queryAndHash.split('#');
 
         const query = new URLSearchParams(originalQueryStr);
-
         if (state.hidden.enabled) {
             query.set('hidden', '1');
             query.set('view', state.hidden.view);
@@ -45,20 +44,18 @@ class RuntimeConstants {
                 query.set('topicId', state.hidden.topic.id);
                 query.set('topicPage', state.hidden.topic.page);
             }
-        } else {
-            query.set('hidden', '0');
-        }
 
-        let queryStr = '';
-        if (query.toString().length > 0) {
-            queryStr = `?${query.toString()}`;
+            let queryStr = '';
+            if (query.toString().length > 0) {
+                queryStr = `?${query.toString()}`;
+            }
+            let hashStr = '';
+            if (typeof hash === 'string') {
+                hashStr = `#${hash}`;
+            }
+            const url = `${baseUrl}${queryStr}${hashStr}`;
+            history.replaceState(null, '', url);
         }
-        let hashStr = '';
-        if (typeof hash === 'string') {
-            hashStr = `#${hash}`;
-        }
-        const url = `${baseUrl}${queryStr}${hashStr}`;
-        history.replaceState(null, '', url);
     }
 
     parseUrl() {

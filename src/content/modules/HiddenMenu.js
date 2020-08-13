@@ -1,8 +1,8 @@
 import io from 'socket.io-client/dist/socket.io.slim.js';
 
 import hiddenJVC from '../HiddenJVC.js';
+import menuTemplate from '../views/menu.handlebars';
 
-const { views } = hiddenJVC;
 const { getState, setState } = hiddenJVC.storage;
 const { postRequest } = hiddenJVC.helpers.network;
 const { ErrorModal, MessageModal } = hiddenJVC.modals;
@@ -14,7 +14,7 @@ class HiddenMenu {
     }
 
     async init(state) {
-        const html = views.menu({ state });
+        const html = menuTemplate({ state });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
         this.initToggle(state);
