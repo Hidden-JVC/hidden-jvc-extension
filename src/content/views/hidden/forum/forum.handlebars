@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    {{#isModerator user.type}}
+    {{#if user.isModerator}}
         <div class="bloc-pre-pagi-forum bloc-outils-top">
             <div class="bloc-pre-left">
                 {{!-- <a href="#bloc-formulaire-forum">
@@ -44,11 +44,11 @@
                         id="search_in_forum" autocomplete="off" value=""> --}}
 
                     <select id="moderation-action-select" class="select-search">
-                        <option value="lock"> Lock </option>
-                        <option value="unlock"> Délock </option>
-                        <option value="pin"> Epingler </option>
-                        <option value="unpin"> Désépingler </option>
-                        <option value="delete"> Supprimer </option>
+                        <option value="Lock"> Lock </option>
+                        <option value="UnLock"> Délock </option>
+                        <option value="Pin"> Epingler </option>
+                        <option value="UnPin"> Désépingler </option>
+                        <option value="DeleteTopic"> Supprimer </option>
                     </select>
 
                     <button id="moderation-action-submit" class="btn btn-lancer-rech">
@@ -60,7 +60,7 @@
                 {{!-- <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button> --}}
             </div>
         </div>
-    {{/isModerator}}
+    {{/if}}
 
     <div class="conteneur-topic-pagi">
         {{> ../misc/listPagination }}
@@ -72,11 +72,11 @@
                 <span class="topic-author"> Auteur </span>
                 <span class="topic-count"> Nb </span>
                 <span class="topic-date"> Dernier msg </span>
-                {{#isModerator user.type}}
+                {{#if user.isModerator}}
                     <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
                         <input id="select-all-msg" type="checkbox">
                     </label>
-                {{/isModerator}}
+                {{/if}}
             </li>
 
             {{#each topics}}
@@ -87,5 +87,5 @@
         {{> ../misc/listPagination }}
     </div>
 
-    <div id="hidden-form-placeholder"> </div>
+    {{> form}}
 </div>

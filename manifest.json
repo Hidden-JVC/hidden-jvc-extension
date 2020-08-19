@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Hidden JVC",
-    "version": "0.6.1",
+    "version": "0.7.0",
 
     "icons": {
         "48" : "icons/icon-48.png",
@@ -12,12 +12,13 @@
     },
 
     "permissions": [
+        "cookies",
         "storage",
         "webRequest",
         "webRequestBlocking",
         "https://www.jeuxvideo.com/*",
         "https://api.hiddenjvc.com/*",
-        "https://docket.hiddenjvc.com/*"
+        "https://socket.hiddenjvc.com/*"
     ],
 
     "background": {

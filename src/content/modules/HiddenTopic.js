@@ -29,6 +29,7 @@ class HiddenTopic {
         }
 
         const result = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
+        // TODO: better check
         if (result === null) {
             return;
         }
@@ -54,13 +55,13 @@ class HiddenTopic {
 
         const forumUrl = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
 
-        if (this.topic.User !== null) {
+        if (this.topic.Author !== null) {
             if (state.hidden.topic.userId) {
                 // toggle op only off
                 opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=null`;
             } else {
                 // toggle op only on
-                opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.User.Id}`;
+                opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.Author.Id}`;
             }
         }
 
@@ -170,7 +171,7 @@ class HiddenTopic {
                 e.stopPropagation();
                 const postId = btn.dataset.postDelete;
                 const state = await getState();
-                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action: 'delete', postIds: [postId] }, state.user.jwt);
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_POSTS_MODERATION, { action: 'DeletePost', ids: [postId] }, state.user.jwt);
                 if (success) {
                     location.reload();
                 }

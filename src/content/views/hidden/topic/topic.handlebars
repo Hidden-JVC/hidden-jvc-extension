@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    {{#isModerator user.type}}
+    {{#if user.isModerator}}
     <div class="bloc-pre-pagi-forum bloc-outils-top">
         <div class="bloc-pre-left">
             {{#if topic.Topic.Locked }}
@@ -65,7 +65,7 @@
         <div class="bloc-pre-right">
         </div>
     </div>
-    {{/isModerator}}
+    {{/if}}
 
     <div class="conteneur-messages-pagi">
         {{> ../misc/pagination }}

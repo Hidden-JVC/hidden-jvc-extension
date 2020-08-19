@@ -7,7 +7,7 @@ export async function getState() {
         const state = {
             user: {
                 jwt: null,
-                type: null,
+                isModerator: false,
                 anonymousName: 'Anonymous',
                 registeredName: null
             },

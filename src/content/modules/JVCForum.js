@@ -29,6 +29,7 @@ class JVCForum {
             for (const hiddenTopic of topics) {
                 if (hiddenTopic.Topic.Id === jvcTopic.id) {
                     jvcTopic.li.classList.add('jvc-topic-contains-hidden-post');
+                    jvcTopic.li.querySelector('.topic-count').innerHTML = `<span style="color: green"> ${hiddenTopic.PostsCount} </span> / ${jvcTopic.postCount}`;
                 }
             }
         }
