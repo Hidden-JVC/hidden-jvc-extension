@@ -14,34 +14,33 @@
         <div class="inner-head-content">
             <div class="bloc-header">
                 {{#if User}}
-                {{#isModerator User.Type}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user" style="color: red">
-                    {{ User.Name }}
-                </a>
+                    {{#if User.IsModerator}}
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                        class="xXx bloc-pseudo-msg text-user" style="color: red">
+                        {{ User.Name }}
+                    </a>
+                    {{else}}
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                        class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
+                        {{ User.Name }}
+                    </a>
+                    {{/if}}
                 {{else}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
-                    {{ User.Name }}
-                </a>
-                {{/isModerator}}
-
-                {{else}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user">
-                    {{ Post.Username }}
-                </a>
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                        class="xXx bloc-pseudo-msg text-user">
+                        {{ Post.Username }}
+                    </a>
                 {{/if}}
 
                 <div class="bloc-options-msg">
                     <span class="picto-msg-quote" title="Citer" data-quote="{{ Post.Id }}">
                         <span> Citer </span>
                     </span>
-                    {{#isModerator user.type}}
+                    {{#if user.isModerator}}
                     <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ Post.Id }}">
                         <span> Supprimer </span>
                     </span>
-                    {{/isModerator}}
+                    {{/if}}
                     {{!-- <span class="picto-msg-tronche" title="Blacklister" data-action="add" data-id-alias="6554891">
                         <span> Blacklister </span>
                     </span> --}}

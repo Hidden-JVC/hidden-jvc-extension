@@ -34,9 +34,15 @@
     </span> --}}
 
     {{#if Author}}
-    <a class="xXx text-user topic-author" style="color: #20bbdf">
-        {{ topic.Author.Name }}
-    </a>
+        {{#if Author.IsModerator}}
+            <a class="xXx text-user topic-author" style="color: red">
+                {{ topic.Author.Name }}
+            </a>
+        {{else}}
+            <a class="xXx text-user topic-author" style="color: #20bbdf">
+                {{ topic.Author.Name }}
+            </a>
+        {{/if}}
     {{else}}
     <a class="xXx text-user topic-author">
         {{ topic.Topic.Username }}
@@ -53,9 +59,9 @@
         </a>
     </span>
 
-    {{#isModerator user.type}}
+    {{#if user.isModerator}}
         <label for="hidden-select-{{ topic.Topic.Id }}" class="topic-select" style="padding: 0 .125rem">
             <input id="hidden-select-{{ topic.Topic.Id }}" value="{{ topic.Topic.Id }}" type="checkbox">
         </label>
-    {{/isModerator}}
+    {{/if}}
 </li>

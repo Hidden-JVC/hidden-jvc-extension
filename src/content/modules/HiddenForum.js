@@ -1,6 +1,5 @@
 import hiddenJVC from '../HiddenJVC.js';
 
-import formTemplate from '../views/hidden/forum/form.handlebars';
 import forumTemplate from '../views/hidden/forum/forum.handlebars';
 import loadingTemplate from '../views/hidden/forum/loading.handlebars';
 
@@ -17,17 +16,13 @@ class HiddenForum {
     async init(state) {
         document.querySelector('#forum-main-col').outerHTML = loadingTemplate();
 
-        const html = formTemplate();
-        document.body.insertAdjacentHTML('beforeend', html);
-        const form = document.querySelector('#hidden-form');
-
         const { topics, count } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, {
             forumId: Runtime.forumId,
             page: state.hidden.list.page,
         });
 
         this.render(topics, count, state.hidden.list.page, state.user);
-        this.initDomEvents(form);
+        this.initDomEvents();
     }
 
     render(topics, count, page, user) {
@@ -51,13 +46,13 @@ class HiddenForum {
         document.querySelector('#forum-main-col').outerHTML = html;
     }
 
-    initDomEvents(form) {
+    initDomEvents() {
         document.querySelectorAll('button.btn-actualiser-forum').forEach((btn) => {
             btn.addEventListener('click', () => location.reload());
         });
 
+        const form = document.querySelector('#hidden-form');
         initForm(form);
-        document.querySelector('#hidden-form-placeholder').replaceWith(form);
 
         form.querySelector('#hidden-submit').addEventListener('click', async () => {
             try {
@@ -97,16 +92,16 @@ class HiddenForum {
 
             moderationActionSubmit.addEventListener('click', async () => {
                 const topicInputs = document.querySelectorAll('.topic-select input');
-                const topicIds = [];
+                const ids = [];
                 for (const input of topicInputs) {
                     if (input.checked) {
-                        topicIds.push(parseInt(input.value));
+                        ids.push(parseInt(input.value));
                     }
                 }
                 const action = document.querySelector('#moderation-action-select').value;
 
                 const state = await getState();
-                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action, topicIds }, state.user.jwt);
+                const { success } = await network.postRequest(Hidden.API_HIDDEN_TOPICS_MODERATION, { action, ids }, state.user.jwt);
                 if (success) {
                     location.reload();
                 }
