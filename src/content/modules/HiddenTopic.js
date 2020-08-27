@@ -122,7 +122,7 @@ class HiddenTopic {
         submitBtn.addEventListener('click', async () => {
             try {
                 const content = document.querySelector('textarea#message_topic').value;
-                const data = { post: { content } };
+                const data = { content };
 
                 const state = await getState();
                 if (!state.user.jwt) {

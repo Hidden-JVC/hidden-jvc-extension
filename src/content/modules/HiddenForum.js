@@ -60,14 +60,9 @@ class HiddenForum {
                 const content = document.querySelector('textarea#message_topic').value;
 
                 const data = {
-                    topic: {
-                        title,
-                        forumId: Runtime.forumId,
-                        forumName: Runtime.forumName
-                    },
-                    post: {
-                        content
-                    }
+                    title,
+                    content,
+                    forumId: Runtime.forumId
                 };
 
                 const state = await getState();
