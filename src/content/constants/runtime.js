@@ -14,9 +14,7 @@ class RuntimeConstants {
 
         this.is410 = null;
         this.isLocked = null;
-        this.forumName = null;
         this.forumTopics = [];
-        this.topicTitle = null;
         this.topicLastPage = null;
         this.topicMessages = [];
     }
@@ -86,8 +84,6 @@ class RuntimeConstants {
     }
 
     parseForum() {
-        this.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim().replace(/^Forum/, '').trim();
-
         const topics = document.querySelectorAll('.topic-list.topic-list-admin li[data-id]');
         for (const topic of topics) {
             let lastPostDate = null;
@@ -128,22 +124,8 @@ class RuntimeConstants {
 
         this.isLocked = document.querySelector('.message-lock-topic') !== null;
 
-        this.topicTitle = document.querySelector('span#bloc-title-forum').textContent.trim();
-
-        this.parseTopicName();
         this.parseTopicLastPage();
         this.parseTopicMessages();
-    }
-
-    parseTopicName() {
-        const breadcrumbs = document.querySelectorAll('.fil-ariane-crumb span');
-        for (let i = 0; i < breadcrumbs.length - 1; i++) {
-            const text = breadcrumbs[i].textContent.trim();
-            if (/^Tous les forums$/.test(text)) {
-                this.forumName = breadcrumbs[i + 1].textContent.trim().replace(/^Forum/, '').trim();
-                break;
-            }
-        }
     }
 
     parseTopicLastPage() {

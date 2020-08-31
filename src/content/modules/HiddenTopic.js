@@ -51,6 +51,7 @@ class HiddenTopic {
         const page = state.hidden.topic.page;
         const lastPage = Math.ceil(this.topic.PostsCount / 20);
         const pagination = createPagination(state.hidden.topic.page, lastPage);
+        const isModerator = state.user.isAdmin || state.user.moderators.filter((m) => m.ForumId === Runtime.forumId).length === 1;
         let opPostOnlyUrl = null;
 
         const forumUrl = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
@@ -69,6 +70,7 @@ class HiddenTopic {
             topic,
             page,
             user: state.user,
+            isModerator,
             forumUrl,
             lastPage,
             pagination,
@@ -122,7 +124,7 @@ class HiddenTopic {
         submitBtn.addEventListener('click', async () => {
             try {
                 const content = document.querySelector('textarea#message_topic').value;
-                const data = { post: { content } };
+                const data = { content };
 
                 const state = await getState();
                 if (!state.user.jwt) {

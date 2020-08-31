@@ -69,26 +69,15 @@ class JVCTopic {
                 const content = document.querySelector('textarea#message_topic').value;
 
                 const body = {
-                    forum: {
-                        id: Runtime.forumId,
-                        name: Runtime.forumName
-                    },
-                    topic: {
-                        title: Runtime.topicTitle,
-                        viewId: Runtime.viewId,
-                        firstPostDate: '2020-05-09 08:05:43.117493+00',
-                        firstPostContent: 'Bonjour à tous',
-                        firstPostUsername: 'BaptisteGonella'
-                    },
-                    post: {
-                        content,
-                        page: Runtime.topicLastPage
-                    }
+                    forumId: Runtime.forumId,
+                    viewId: Runtime.viewId,
+                    content,
+                    page: Runtime.topicLastPage
                 };
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    body.post.username = state.user.name || 'Anonymous';
+                    body.username = state.user.name || 'Anonymous';
                 }
 
                 const { postId } = await postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
