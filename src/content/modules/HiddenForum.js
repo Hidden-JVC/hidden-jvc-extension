@@ -70,7 +70,7 @@ class HiddenForum {
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    data.topic.username = state.user.name || 'Anonymous';
+                    data.username = state.user.name || 'Anonymous';
                 }
 
                 const { topicId } = await network.postRequest(Hidden.API_HIDDEN_TOPICS, data, state.user.jwt);

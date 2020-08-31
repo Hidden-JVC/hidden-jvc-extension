@@ -128,7 +128,7 @@ class HiddenTopic {
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    data.post.username = state.user.name || 'Anonymous';
+                    data.username = state.user.name || 'Anonymous';
                 }
 
                 const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}`;
