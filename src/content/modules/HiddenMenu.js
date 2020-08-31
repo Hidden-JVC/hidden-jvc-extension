@@ -48,11 +48,12 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, isModerator, error } = await postRequest(Hidden.API_LOGIN, { name, password });
+                const { jwt, isAdmin, moderators, error } = await postRequest(Hidden.API_LOGIN, { name, password });
                 if (jwt) {
                     const state = await getState();
                     state.user.jwt = jwt;
-                    state.user.isModerator = isModerator;
+                    state.user.isAdmin = isAdmin;
+                    state.user.moderators = moderators;
                     state.user.registeredName = name;
                     await setState(state);
                     location.reload();
@@ -118,8 +119,10 @@ class HiddenMenu {
         const logoutBtn = document.querySelector('#hidden-logout');
         logoutBtn.addEventListener('click', async () => {
             const state = await getState();
-            state.user.jwt = null;
-            state.user.type = null;
+            state.user.jwt = null,
+            state.user.isAdmin = false;
+            state.user.moderators = [];
+            state.user.registeredName = null;
             await setState(state);
             location.reload();
         });

@@ -59,7 +59,7 @@
         </a>
     </span>
 
-    {{#if user.isModerator}}
+    {{#if isModerator}}
         <label for="hidden-select-{{ topic.Topic.Id }}" class="topic-select" style="padding: 0 .125rem">
             <input id="hidden-select-{{ topic.Topic.Id }}" value="{{ topic.Topic.Id }}" type="checkbox">
         </label>

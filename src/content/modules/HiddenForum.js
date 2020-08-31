@@ -33,8 +33,11 @@ class HiddenForum {
             topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
         }
 
+        const isModerator = user.isAdmin || user.moderators.filter((m) => m.ForumId === Runtime.forumId).length === 1;
+
         const data = {
             user,
+            isModerator,
             topics,
             page,
             lastPage,

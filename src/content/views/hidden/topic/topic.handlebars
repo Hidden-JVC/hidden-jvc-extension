@@ -71,7 +71,7 @@
         {{> ../misc/pagination }}
 
         {{#each topic.Posts}}
-        {{> post . user=../user }}
+        {{> post . isModerator=../isModerator }}
         {{/each}}
 
         {{> ../misc/pagination }}
