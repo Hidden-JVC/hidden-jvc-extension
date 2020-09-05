@@ -14,52 +14,60 @@
         <div class="inner-head-content">
             <div class="bloc-header">
                 {{#if User}}
-                    {{#if User.IsModerator}}
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                        class="xXx bloc-pseudo-msg text-user" style="color: red">
-                        {{ User.Name }}
-                    </a>
-                    {{else}}
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                        class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
-                        {{ User.Name }}
-                    </a>
-                    {{/if}}
+                {{#if User.IsModerator}}
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user" style="color: red">
+                    {{ post.User.Name }}
+                </a>
                 {{else}}
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                        class="xXx bloc-pseudo-msg text-user">
-                        {{ Post.Username }}
-                    </a>
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
+                    {{ post.User.Name }}
+                </a>
+                {{/if}}
+                {{else}}
+                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                    class="xXx bloc-pseudo-msg text-user">
+                    {{ post.Post.Username }}
+                </a>
                 {{/if}}
 
                 <div class="bloc-options-msg">
-                    <span class="picto-msg-quote" title="Citer" data-quote="{{ Post.Id }}">
+                    <span class="picto-msg-quote" title="Citer" data-quote="{{ post.Post.Id }}">
                         <span> Citer </span>
                     </span>
-                    {{#if isModerator}}
-                        <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ Post.Id }}">
-                            <span> Supprimer </span>
-                        </span>
+
+                    {{#if ([../helpers/isFromConnectedUser] connectedUser post.User) }}
+                    <span class="picto-msg-crayon" title="Editer" data-post-edit="{{ post.Post.Id }}">
+                        <span> Editer </span>
+                    </span>
                     {{/if}}
-                    {{!-- <span class="picto-msg-tronche" title="Blacklister" data-action="add" data-id-alias="6554891">
-                        <span> Blacklister </span>
-                    </span> --}}
-                    {{!-- <span class="picto-msg-exclam" title="Faire un signalement">
-                        <span> Alerte </span>
-                    </span> --}}
+
+                    {{#if isModerator}}
+                    <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ post.Post.Id }}">
+                        <span> Supprimer </span>
+                    </span>
+                    {{/if}}
                 </div>
 
                 <div class="bloc-date-msg">
                     <a href="/cisla/forums/message/1036520623" target="_blank" class="xXx lien-jv">
-                        {{ [../helpers/postDate] Post.CreationDate }}
+                        {{ [../helpers/postDate] post.Post.CreationDate }}
                     </a>
                 </div>
             </div>
 
             <div class="bloc-contenu">
-                <div class="txt-msg  text-enrichi-forum ">
-                    {{{ [../helpers/jvcode] Post.Content }}}
+                <div class="txt-msg  text-enrichi-forum" data-post-display="{{ post.Post.Id }}">
+                    {{{ [../helpers/jvcode] post.Post.Content }}}
+                    {{!-- {{> editForm }} --}}
                 </div>
+
+                {{#if post.Post.ModificationDate}}
+                    <div class="info-edition-msg">
+                        Message édité le {{ [../helpers/postDate] post.Post.ModificationDate }}
+                    </div>
+                {{/if}}
             </div>
         </div>
     </div>

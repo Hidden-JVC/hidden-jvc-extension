@@ -2,7 +2,8 @@ import { formatISO9075, isAfter } from 'date-fns';
 
 import hiddenJVC from '../HiddenJVC.js';
 
-const { views } = hiddenJVC;
+import rowTemplate from '../views/jvc/forum/row.handlebars';
+
 const { Runtime } = hiddenJVC.constants;
 const { getRequest } = hiddenJVC.helpers.network;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
@@ -63,7 +64,7 @@ class JVCForum {
             const hiddenDate = new Date(hiddenTopic.LastPostDate);
             for (const jvcTopic of jvcTopics) {
                 if (isAfter(hiddenDate, jvcTopic.lastPostDate)) {
-                    const html = views.forum.row({ topic: hiddenTopic, displaySelect });
+                    const html = rowTemplate({ topic: hiddenTopic, displaySelect });
                     jvcTopic.li.insertAdjacentHTML('beforebegin', html);
                     break;
                 }

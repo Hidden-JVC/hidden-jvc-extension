@@ -1,0 +1,67 @@
+<li class="hidden-topic-row">
+    <span class="topic-subject">
+        {{#if topic.Topic.Pinned}}
+            {{#if topic.Topic.Locked}}
+                <img src="/img/forums/topic-marque-off.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
+            {{else}}
+                <img src="/img/forums/topic-marque-on.png" alt="Topic épinglé" title="Topic épinglé" class="topic-img">
+            {{/if}}            
+        {{else}}
+            {{#if topic.Topic.Locked}}
+                <img src="/img/forums/topic-lock.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
+            {{else}}
+                {{#if ([../helpers/hotTopic] PostsCount)}}
+                    <img src="/img/forums/topic-dossier2.png" alt="Topic hot" title="Topic hot" class="topic-img">
+                {{else}}
+                    <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
+                {{/if}}
+            {{/if}}
+        {{/if}}
+
+        <a class="lien-jv topic-title"
+            href="{{ topic.Url }}"
+            title="{{ topic.Topic.Title }}">
+            {{ topic.Topic.Title }}
+        </a>
+    </span>
+
+    {{!-- <span class="topic-count">
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem; content: '\e001'">
+        </span>
+
+        <span class="btn btn-actu-new-list-forum" style="min-width: 1.2rem; max-height: 1.2rem">
+        </span>
+    </span> --}}
+
+    {{#if Author}}
+        {{#if Author.IsModerator}}
+            <a class="xXx text-user topic-author" style="color: red">
+                {{ topic.Author.Name }}
+            </a>
+        {{else}}
+            <a class="xXx text-user topic-author" style="color: #20bbdf">
+                {{ topic.Author.Name }}
+            </a>
+        {{/if}}
+    {{else}}
+    <a class="xXx text-user topic-author">
+        {{ topic.Topic.Username }}
+    </a>
+    {{/if}}
+
+    <span class="topic-count">
+        {{ topic.PostsCount }}
+    </span>
+
+    <span class="topic-date">
+        <a href="{{ topic.lastPageUrl }}" class="xXx lien-jv">
+            {{ [../helpers/topicDate] topic.LastPostDate }}
+        </a>
+    </span>
+
+    {{#if isModerator}}
+        <label for="hidden-select-{{ topic.Topic.Id }}" class="topic-select" style="padding: 0 .125rem">
+            <input id="hidden-select-{{ topic.Topic.Id }}" value="{{ topic.Topic.Id }}" type="checkbox">
+        </label>
+    {{/if}}
+</li>

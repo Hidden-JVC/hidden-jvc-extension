@@ -1,21 +1,23 @@
 import { formatISO9075, isBefore } from 'date-fns';
 
+import { parse } from 'open-jvcode';
+
 import hiddenJVC from '../HiddenJVC.js';
-import formTemplate from '../views/jvc/topic/form.handlebars';
+import replyFormTemplate from '../views/jvc/topic/replyForm.handlebars';
+import editFormTemplate from '../views/jvc/topic/editForm.handlebars';
 import postTemplate from '../views/jvc/topic/post.handlebars';
 
-const { initForm } = hiddenJVC.helpers;
+const { initForm, network } = hiddenJVC.helpers;
 const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { getRequest, postRequest } = hiddenJVC.helpers.network;
 
 class JVCTopic {
     constructor() {
         this.pages = JVC.Pages.JVC_TOPIC;
     }
 
-    async init() {
+    async init(state) {
         this.setupForm();
         const query = {
             startDate: formatISO9075(Runtime.topicMessages[0].creationDate)
@@ -29,22 +31,24 @@ class JVCTopic {
             query.endDate = formatISO9075(endDate);
         }
 
-        const result = await getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
+        const result = await network.getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
         if (result === null) {
             return;
         }
         const { topic } = result;
 
         if (topic !== null) {
-            this.insertJVCTopic(topic);
+            this.insertJVCTopic(topic, state);
             this.highlightPagination(topic);
+            this.initPostEdition(topic);
+            this.initPostDeletion();
         }
     }
 
     setupForm() {
         const form = document.querySelector('#bloc-formulaire-forum');
         if (Runtime.isLocked) {
-            const html = formTemplate();
+            const html = replyFormTemplate();
             form.insertAdjacentHTML('afterend', html);
             form.remove();
             const hiddenForm = document.querySelector('#hidden-form');
@@ -62,7 +66,7 @@ class JVCTopic {
         const button = document.createElement('button');
         button.textContent = 'Poster sur Hidden JVC';
         button.type = 'button';
-        button.classList.add('btn', 'btn-poster-msg', 'hidden-btn-poster-msg');
+        button.classList.add('btn', 'btn-poster-msg', 'hidden-primary-color-bg');
         button.style.backgroundColor = '#083193';
         button.addEventListener('click', async () => {
             try {
@@ -80,7 +84,7 @@ class JVCTopic {
                     body.username = state.user.name || 'Anonymous';
                 }
 
-                const { postId } = await postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
+                const { postId } = await network.postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
                 if (typeof postId !== 'number') {
                     throw new Error('fail to create post');
                 } else {
@@ -93,10 +97,11 @@ class JVCTopic {
         return button;
     }
 
-    insertJVCTopic(topic) {
+    insertJVCTopic(topic, state) {
         const jvcMessages = Runtime.topicMessages;
 
         const bottomPagination = document.querySelectorAll('.bloc-pagi-default')[1];
+        const isModerator = state.user.isAdmin || state.user.moderators.filter((m) => m.ForumId === Runtime.forumId).length === 1;
 
         for (const hiddenPost of topic.Posts) {
             const hiddenDate = new Date(hiddenPost.Post.CreationDate);
@@ -110,10 +115,11 @@ class JVCTopic {
                 }
             }
 
+            const data = { post: hiddenPost, connectedUser: state.user, isModerator };
             if (previousPost !== null) {
-                previousPost.element.insertAdjacentHTML('beforebegin', postTemplate(hiddenPost));
+                previousPost.element.insertAdjacentHTML('beforebegin', postTemplate(data));
             } else {
-                bottomPagination.insertAdjacentHTML('beforebegin', postTemplate(hiddenPost));
+                bottomPagination.insertAdjacentHTML('beforebegin', postTemplate(data));
             }
         }
     }
@@ -129,6 +135,63 @@ class JVCTopic {
                     item.insertAdjacentElement('afterbegin', span);
                 }
             }
+        }
+    }
+
+    initPostEdition(topic) {
+        const buttons = document.querySelectorAll('[data-post-edit]');
+        for (const btn of buttons) {
+            btn.addEventListener('click', async (e) => {
+                try {
+                    e.stopPropagation();
+                    const postId = parseInt(btn.dataset.postEdit);
+                    const post = topic.Posts.find((p) => p.Post.Id === postId);
+
+                    const display = document.querySelector(`[data-post-display="${postId}"]`);
+                    display.innerHTML = editFormTemplate({ postId, content: post.Post.Content });
+
+                    const form = document.querySelector(`[data-post-id="${postId}"]`);
+                    initForm(form);
+
+                    const cancelBtn = form.querySelector('[data-cancel');
+                    cancelBtn.addEventListener('click', () => {
+                        display.innerHTML = parse(post.Post.Content);
+                    });
+
+                    const submitBtn = form.querySelector('[data-submit');
+                    submitBtn.addEventListener('click', async () => {
+                        const textarea = form.querySelector('textarea#message_topic');
+
+                        const data = {
+                            content: textarea.value.trim()
+                        };
+                        const state = await getState();
+
+                        const url = `${Hidden.API_JVC_TOPICS}/${topic.Topic.Id}/${postId}`;
+                        const { success } = await network.postRequest(url, data, state.user.jwt);
+                        if (success) {
+                            location.reload();
+                        }
+                    });
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        }
+    }
+
+    initPostDeletion() {
+        const buttons = document.querySelectorAll('[data-post-delete]');
+        for (const btn of buttons) {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const postId = btn.dataset.postDelete;
+                const state = await getState();
+                const { success } = await network.postRequest(Hidden.API_JVC_POSTS_MODERATION, { action: 'DeletePost', ids: [postId] }, state.user.jwt);
+                if (success) {
+                    location.reload();
+                }
+            });
         }
     }
 }
