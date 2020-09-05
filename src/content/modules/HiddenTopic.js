@@ -3,12 +3,13 @@ import { parse } from 'open-jvcode';
 import hiddenJVC from '../HiddenJVC.js';
 
 import topicTemplate from '../views/hidden/topic/topic.handlebars';
+import editFormTemplate from '../views/hidden/topic/editForm.handlebars';
 import loadingTemplate from '../views/hidden/topic/loading.handlebars';
 
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { createPagination, network, postDateFormat } = hiddenJVC.helpers;
+const { createPagination, network, postDateFormat, initForm } = hiddenJVC.helpers;
 
 class HiddenTopic {
     constructor() {
@@ -44,6 +45,7 @@ class HiddenTopic {
         this.initReloadButtons();
         this.initModeration(state);
         this.initPostDelete();
+        this.initPostEdition();
     }
 
     render(state) {
@@ -69,7 +71,7 @@ class HiddenTopic {
         const data = {
             topic,
             page,
-            user: state.user,
+            connectedUser: state.user,
             isModerator,
             forumUrl,
             lastPage,
@@ -82,48 +84,14 @@ class HiddenTopic {
     }
 
     initForm() {
-        const textarea = document.querySelector('#hidden-form textarea#message_topic');
 
-        const buttons = document.querySelectorAll('[data-edit]');
-        for (const btn of buttons) {
-            btn.addEventListener('click', () => {
-                const start = textarea.selectionStart;
-                const end = textarea.selectionEnd;
+        const form = document.querySelector('#hidden-form');
+        initForm(form);
 
-                const before = textarea.value.substring(0, start);
-                const selected = textarea.value.substring(start, end);
-                const after = textarea.value.substring(end, textarea.value.length);
-
-                const edit = btn.dataset.edit;
-                switch (edit) {
-                    case 'bold':
-                        textarea.value = `${before}**${selected}**${after}`;
-                        break;
-                    case 'italic':
-                        textarea.value = `${before}*${selected}*${after}`;
-                        break;
-                    case 'underline':
-                        textarea.value = `${before}<ins>${selected}</ins>${after}`;
-                        break;
-                    case 'del':
-                        textarea.value = `${before}~~${selected}~~${after}`;
-                        break;
-                    case 'spoil':
-                        textarea.value = `${before}<spoil>${selected}</spoil>${after}`;
-                        break;
-                }
-                textarea.focus();
-                textarea.selectionEnd = end;
-                this.updatePreview();
-            });
-        }
-
-        textarea.addEventListener('keyup', this.updatePreview);
-
-        const submitBtn = document.querySelector('#hidden-form #form-submit');
+        const submitBtn = form.querySelector('#form-submit');
         submitBtn.addEventListener('click', async () => {
             try {
-                const content = document.querySelector('textarea#message_topic').value;
+                const content = form.querySelector('textarea#message_topic').value;
                 const data = { content };
 
                 const state = await getState();
@@ -176,6 +144,48 @@ class HiddenTopic {
                 const { success } = await network.postRequest(Hidden.API_HIDDEN_POSTS_MODERATION, { action: 'DeletePost', ids: [postId] }, state.user.jwt);
                 if (success) {
                     location.reload();
+                }
+            });
+        }
+    }
+
+    initPostEdition() {
+        const buttons = document.querySelectorAll('[data-post-edit]');
+        for (const btn of buttons) {
+            btn.addEventListener('click', async (e) => {
+                try {
+                    e.stopPropagation();
+                    const postId = parseInt(btn.dataset.postEdit);
+                    const post = this.topic.Posts.find((p) => p.Post.Id === postId);
+
+                    const display = document.querySelector(`[data-post-display="${postId}"]`);
+                    display.innerHTML = editFormTemplate({ postId, content: post.Post.Content });
+
+                    const form = document.querySelector(`[data-post-id="${postId}"]`);
+                    initForm(form);
+
+                    const cancelBtn = form.querySelector('[data-cancel');
+                    cancelBtn.addEventListener('click', () => {
+                        display.innerHTML = parse(post.Post.Content);
+                    });
+
+                    const submitBtn = form.querySelector('[data-submit');
+                    submitBtn.addEventListener('click', async () => {
+                        const textarea = form.querySelector('textarea#message_topic');
+
+                        const data = {
+                            content: textarea.value.trim()
+                        };
+                        const state = await getState();
+
+                        const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/${postId}`;
+                        const { success } = await network.postRequest(url, data, state.user.jwt);
+                        if (success) {
+                            location.reload();
+                        }
+                    });
+                } catch (err) {
+                    console.error(err);
                 }
             });
         }

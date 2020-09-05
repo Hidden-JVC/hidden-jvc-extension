@@ -10,7 +10,7 @@
         <div class="bloc-pre-left">
             <div class="group-one">
                 <a href="#hidden-form">
-                    <span class="btn btn-repondre-msg"> Répondre </span>
+                    <span class="btn btn-actu-new-list-forum hidden-primary-color-bg"> Répondre </span>
                 </a>
             </div>
 
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    {{#if user.isModerator}}
+    {{#if isModerator}}
     <div class="bloc-pre-pagi-forum bloc-outils-top">
         <div class="bloc-pre-left">
             {{#if topic.Topic.Locked }}
@@ -71,7 +71,7 @@
         {{> ../misc/pagination }}
 
         {{#each topic.Posts}}
-        {{> post . isModerator=../isModerator }}
+        {{> [post] post=. isModerator=../isModerator connectedUser=../connectedUser}}
         {{/each}}
 
         {{> ../misc/pagination }}
@@ -94,7 +94,7 @@
         </div>
 
         {{#unless topic.Topic.Locked}}
-        {{> form . }}
+            {{> replyForm . }}
         {{/unless}}
     </div>
 </div>

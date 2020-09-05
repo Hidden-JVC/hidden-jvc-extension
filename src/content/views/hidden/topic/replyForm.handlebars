@@ -1,10 +1,9 @@
 <div id="hidden-form">
-
     <div class="titre-head-bloc">
         <div class="titre-bloc"> Répondre </div>
     </div>
 
-    <form role="form" class="form-post-topic form-post-message js-form-post-message">
+    <form class="form-post-topic">
         <div class="row">
             <div class="col-md-12 bloc-editor-forum">
                 <div class="jv-editor">
@@ -14,7 +13,7 @@
                                 <span class="label-previsu">
                                     Prévisu
                                 </span>
-                                <button type="button" class="btn-on-off active" autocomplete="off"> </button>
+                                <button type="button" id="toggle-preview" class="btn-on-off active" autocomplete="off"> </button>
                             </div>
 
                             <div class="btn-group">
@@ -88,13 +87,9 @@
             </div>
 
             <div class="col-md-12 bloc-editor-forum">
-                <button id="form-submit" type="button" class="btn btn-poster-msg hidden-btn-poster-msg">
+                <button id="form-submit" type="button" class="btn btn-poster-msg hidden-primary-color-bg">
                     Poster
                 </button>
-
-                <select class="select-user-post" id="form_alias_rang" name="form_alias_rang" style="display: none;">
-                    <option value="1" selected=""></option>
-                </select>
             </div>
         </div>
     </form>

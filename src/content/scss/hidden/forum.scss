@@ -3,21 +3,17 @@ h2.hidden-forum-title.titre-bloc.titre-bloc-forum {
 }
 
 li.hidden-topic-row:nth-of-type(2n) {
-    background-color: $primary;
+    background-color: $background-even;
 }
 
 li.hidden-topic-row:nth-of-type(2n+1) {
-    background-color: $primary-darken;
+    background-color: $background-odd;
 }
 
 .hidden-post:nth-of-type(2n) {
-    background-color: $primary !important;
+    background-color: $background-even !important;
 }
 
 .hidden-post:nth-of-type(2n+1) {
-    background-color: $primary-darken !important;
-}
-
-.hidden-btn-poster-msg {
-    background-color: $primary !important;
+    background-color: $background-odd !important;
 }

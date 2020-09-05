@@ -1,7 +1,8 @@
 import { parse } from 'open-jvcode';
 
 export default function (form) {
-    const textarea = form.querySelector('#hidden-form textarea#message_topic');
+    const preview = form.querySelector('.previsu-editor');
+    const textarea = form.querySelector('textarea#message_topic');
 
     const buttons = document.querySelectorAll('[data-edit]');
     for (const btn of buttons) {
@@ -38,10 +39,21 @@ export default function (form) {
     }
 
     textarea.addEventListener('keyup', updatePreview);
+    updatePreview();
 
     function updatePreview() {
-        const textarea = document.querySelector('#hidden-form textarea#message_topic');
-        const preview = document.querySelector('#hidden-form .previsu-editor');
+        
         preview.innerHTML = parse(textarea.value);
+    }
+
+    const previewButton = form.querySelector('#toggle-preview');
+    previewButton.addEventListener('click', () => {
+        previewButton.classList.toggle('active');
+        updatePreviewVisibility();
+    });
+    updatePreviewVisibility();
+
+    function updatePreviewVisibility() {
+        preview.style.display = previewButton.classList.contains('active') ? 'block' : 'none';
     }
 }

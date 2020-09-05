@@ -14,6 +14,7 @@ class RuntimeConstants {
 
         this.is410 = null;
         this.isLocked = null;
+        this.forumName = null;
         this.forumTopics = [];
         this.topicLastPage = null;
         this.topicMessages = [];
@@ -84,6 +85,7 @@ class RuntimeConstants {
     }
 
     parseForum() {
+        this.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim().replace(/^Forum/, '').trim();
         const topics = document.querySelectorAll('.topic-list.topic-list-admin li[data-id]');
         for (const topic of topics) {
             let lastPostDate = null;
