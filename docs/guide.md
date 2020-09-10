@@ -3,33 +3,42 @@
 ## Menu
 
 Le menu d'Hidden JVC se situe sur toutes les pages sur le coté droit de la page.
-Le bouton sous le menu "Etat" permet de savoir si l'on se trouve sur le jvc classique (Désactivé) ou sur hidden jvc (Activé).
 
-Sur hidden JVC, il est possible de poster anonyment sans créer de compte. Pour cela il faut ne pas être connecté avec un compte Hidden JVC et deux menus sont présent.
+Quand vous êtes sur la liste des sujet, la partie "ETAT" apparait et permet de passer entre JVC et Hidden JVC
 
-Le menu "Connexion" qui permet à la fois de se connecter ou de créer un nouveau compte.
-Le menu "Pseudo anonyme" qui permet de choisir n'importe quel pseudo pour poster anonymement.
+La partie "Connexion" permet à la fois de se créer un compte et de se connnecter. A noter qu'on peut poster sur Hidden JVC sans compte.
 
-Si vous êtes connecté alors vous aurez simplement un menu vous permettant de vous deconnecter.
+La partie "Pseudo anonyme" permet de choisir le pseudo avec lequel vous allez poster si vous n'êtes pas connecté.
 
-## Liste des sujets
+![](menu.png)
 
-Sur cette liste, on peut voir les sujets cachés dont le dernier post se situe entre le premier et le dernier post de la liste des sujets de jvc. Les sujets caché apparaiterons avec un fond vert.
+## Liste des sujets JVC
 
-Si un topic jvc contient au moins un post d'Hidden JVC alors sont titre sera en vert et le nombre de post cachés sera affiché dans la colonne "NB"
+Sur la liste des sujets classique de JVC les topics d'Hidden JVC sont sur un fond vert.
+
+Les topics JVC avec au moins un post d'Hidden JVC ont un titre vert et le nombre de posts est ajouter dans la colonne "NB"
 
 ![](jvc-list.png)
 
 ## Topic JVC
 
-Les messages d'Hidden JVC sont intégrés entre les messages de JVC trier par date.
-Un trait vert sera rajouté sur le numéro d'une page dans la pagination ce qui signifie qu'au moins un message d'Hidden JVC se trouve sur cette page.
 
-A noter qu'il est également possible de poster des messages cachés sur les topics lock de JVC.
+Sur un topic JVC classique les posts d'Hidden JVC apparaissent sur un fond vert.
 
-![](hidden-post-lock.png)
+Il y a également un trait vert sur les pages qui contiennent un post. (Cet indicateur peut être incorrect si des posts JVC sont supprimés).
 
+A noter qu'il est possible de poster sur les topics lock de JVC.
 
-## Liste des sujets cachés
+![](jvc-topic.png)
 
-## Topic caché
+## Liste des sujets Hidden JVC
+
+Quand vous êtes sur cette page tout les topics JVC sont remplacés par ceux de Hidden JVC
+
+![](hidden-list.png)
+
+## Topic d'Hidden JVC
+
+Sur les topics d'Hidden JVC vous pouvez cliquer sur le bouton "Mode fic" pour n'afficher que les posts de l'auteur du topic.
+
+![](hidden-topic.png)
