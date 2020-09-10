@@ -6,7 +6,7 @@ import menuTemplate from '../views/menu.handlebars';
 const { getState, setState } = hiddenJVC.storage;
 const { postRequest } = hiddenJVC.helpers.network;
 const { ErrorModal, MessageModal } = hiddenJVC.modals;
-const { Runtime, Static: { Hidden } } = hiddenJVC.constants;
+const { Runtime, Static: { JVC, Hidden } } = hiddenJVC.constants;
 
 class HiddenMenu {
     constructor() {
@@ -14,11 +14,15 @@ class HiddenMenu {
     }
 
     async init(state) {
-        const html = menuTemplate({ state });
+        const toggleButtonEnbaled = Runtime.currentPage === JVC.Pages.JVC_FORUM || Runtime.currentPage === JVC.Pages.HIDDEN_FORUM;
+
+        const html = menuTemplate({ state, toggleButtonEnbaled });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
 
-        this.initToggle(state);
         this.initUsersCount(state);
+        if (toggleButtonEnbaled) {
+            this.initToggle(state);
+        }
         if (state.user.jwt === null) {
             this.initLogin();
         } else {
@@ -32,9 +36,10 @@ class HiddenMenu {
         const url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=${state.hidden.enabled ? 0 : 1}`;
         toggleLink.href = url;
         if (state.hidden.enabled) {
-            toggleButton.style.backgroundColor = '#c85025';
+            toggleButton.classList.add('hidden-primary-color-bg');
             toggleButton.textContent = 'Activé';
         } else {
+            toggleButton.classList.remove('hidden-primary-color-bg');
             toggleButton.textContent = 'Désactivé';
         }
     }
