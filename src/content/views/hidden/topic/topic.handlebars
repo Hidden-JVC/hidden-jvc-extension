@@ -71,7 +71,7 @@
         {{> ../misc/pagination }}
 
         {{#each topic.Posts}}
-        {{> [post] post=. isModerator=../isModerator connectedUser=../connectedUser}}
+        {{> [post] post=. isModerator=../isModerator connectedUser=../connectedUser isAuthor=../isAuthor}}
         {{/each}}
 
         {{> ../misc/pagination }}

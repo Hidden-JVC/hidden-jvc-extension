@@ -1,6 +1,6 @@
 <div class="panel panel-jv-forum" style="padding-bottom: 0rem;">
     <div class="panel-heading">
-        Hidden JVC (<span class="hidden-primary-color"> v0.8.0 </span>)
+        Hidden JVC (<span class="hidden-primary-color"> v0.9.0 </span>)
         <span class="nb-connect-fofo">
             0 connecté(s)
         </span>
@@ -8,15 +8,17 @@
     <div class="panel-body">
         <div class="scrollable">
             <div class="scrollable-wrapper">
-                <div class="scrollable-content bloc-info-forum">
-                    <h4 class="titre-info-fofo"> Etat </h4>
+                {{#if toggleButtonEnbaled}}
+                    <div class="scrollable-content bloc-info-forum">
+                        <h4 class="titre-info-fofo"> Etat </h4>
 
-                    <a id="hidden-toggle">
-                        <button type="button" class="btn btn-actu-new-list-forum hidden-primary-color-bg">
-                            Activé
-                        </button>
-                    </a>
-                </div>
+                        <a id="hidden-toggle">
+                            <button type="button" class="btn btn-actu-new-list-forum hidden-primary-color-bg">
+                                Activé
+                            </button>
+                        </a>
+                    </div>
+                {{/if}}
 
                 {{#if state.user.jwt}}
                 <div class="scrollable-content bloc-info-forum">

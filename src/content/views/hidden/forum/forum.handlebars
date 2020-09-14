@@ -63,28 +63,39 @@
     {{/if}}
 
     <div class="conteneur-topic-pagi">
-        {{> ../misc/listPagination }}
 
-        <ul class="topic-list topic-list-admin">
-            <li class="topic-head">
-                <span class="topic-subject"> Sujet </span>
-                {{!-- <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span> --}}
-                <span class="topic-author"> Auteur </span>
-                <span class="topic-count"> Nb </span>
-                <span class="topic-date"> Dernier msg </span>
-                {{#if isModerator}}
-                    <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
-                        <input id="select-all-msg" type="checkbox">
-                    </label>
-                {{/if}}
-            </li>
+        {{#if topics.length}}
+            {{> ../misc/listPagination }}
 
-            {{#each topics}}
-            {{> row topic=. displaySelect=../displaySelect isModerator=../isModerator }}
-            {{/each}}
-        </ul>
+            <ul class="topic-list topic-list-admin">
+                <li class="topic-head">
+                    <span class="topic-subject"> Sujet </span>
+                    {{!-- <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span> --}}
+                    <span class="topic-author"> Auteur </span>
+                    <span class="topic-count"> Nb </span>
+                    <span class="topic-date"> Dernier msg </span>
+                    {{#if isModerator}}
+                        <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
+                            <input id="select-all-msg" type="checkbox">
+                        </label>
+                    {{/if}}
+                </li>
 
-        {{> ../misc/listPagination }}
+                {{#each topics}}
+                {{> row topic=. displaySelect=../displaySelect isModerator=../isModerator }}
+                {{/each}}
+            </ul>
+
+            {{> ../misc/listPagination }}
+        {{else}}
+            <div class="conteneur-topic-pagi">
+
+                <span style="margin-bottom: 10px;display: inline-block;color: #aaa;background: #fff;border-bottom: 1px solid #cdcdcd;padding: 10px;width: 100%;text-align: center;">
+                    Il n'y a aucun sujet, soyez le premier à en créer un !
+                </span>
+
+            </div>
+        {{/if}}
     </div>
 
     {{> form}}

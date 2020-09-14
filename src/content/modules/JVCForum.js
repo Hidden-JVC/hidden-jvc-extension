@@ -13,9 +13,10 @@ class JVCForum {
         this.pages = JVC.Pages.JVC_FORUM;
     }
 
-    async init() {
-        await this.initJVCTopics();
-        await this.initHiddenJVCTopics();
+    init() {
+        this.initJVCTopics();
+        this.initHiddenTopicsPinned();
+        this.initHiddenTopics();
     }
 
     /**
@@ -36,23 +37,45 @@ class JVCForum {
         }
     }
 
+    async initHiddenTopicsPinned() {
+        if (Runtime.forumOffset !== 1) {
+            return;
+        }
+        const hiddenTopics = await this.getHiddenTopicsPinned();
+        const pinnedJvcTopics = Runtime.forumTopics.filter((t) => t.pinned);
+        const displaySelect = document.querySelector('.topic-select') !== null;
+
+        for (const topic of hiddenTopics) {
+            topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+        }
+
+        if (pinnedJvcTopics.length === 0) {
+            const jvcTopic = Runtime.forumTopics[0];
+
+            for (const hiddenTopic of hiddenTopics) {
+                const html = rowTemplate({ topic: hiddenTopic, displaySelect });
+                jvcTopic.li.insertAdjacentHTML('beforebegin', html);
+            }
+        } else {
+            for (const hiddenTopic of hiddenTopics) {
+                const hiddenDate = new Date(hiddenTopic.LastPostDate);
+                for (const jvcTopic of pinnedJvcTopics) {
+                    if (isAfter(hiddenDate, jvcTopic.lastPostDate)) {
+                        const html = rowTemplate({ topic: hiddenTopic, displaySelect });
+                        jvcTopic.li.insertAdjacentHTML('beforebegin', html);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Retrieve all the hidden topics that can be inserted between the current jvc topics
      */
-    async initHiddenJVCTopics() {
-        const query = { forumId: Runtime.forumId };
-
+    async initHiddenTopics() {
         const jvcTopics = Runtime.forumTopics.filter((t) => !t.pinned);
-        const { startDate, endDate } = this.getDateRange(jvcTopics);
-
-        if (startDate !== null) {
-            query.startDate = formatISO9075(startDate);
-        }
-        if (endDate !== null) {
-            query.endDate = formatISO9075(endDate);
-        }
-
-        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
+        const topics = await this.getHiddenTopics();
 
         for (const topic of topics) {
             topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
@@ -70,6 +93,30 @@ class JVCForum {
                 }
             }
         }
+    }
+
+    async getHiddenTopicsPinned() {
+        const query = { forumId: Runtime.forumId, pinned: 1 };
+        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
+        return topics;
+    }
+
+    async getHiddenTopics() {
+        const query = { forumId: Runtime.forumId, pinned: 0 };
+
+        const jvcTopics = Runtime.forumTopics.filter((t) => !t.pinned);
+        const { startDate, endDate } = this.getDateRange(jvcTopics);
+
+        if (startDate !== null) {
+            query.startDate = formatISO9075(startDate);
+        }
+        if (endDate !== null) {
+            query.endDate = formatISO9075(endDate);
+        }
+
+        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
+
+        return topics;
     }
 
     getDateRange(topics) {

@@ -1,4 +1,4 @@
-<div class="bloc-message-forum hidden-post">
+<div class="bloc-message-forum hidden-post {{#if post.Post.Pinned}} hidden-post-pinned {{/if}}">
     <div class="conteneur-message">
         <div class="bloc-avatar-msg">
             <div class="back-img-msg">
@@ -14,39 +14,55 @@
         <div class="inner-head-content">
             <div class="bloc-header">
                 {{#if User}}
-                {{#if User.IsModerator}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user" style="color: red">
-                    {{ post.User.Name }}
-                </a>
+                    {{#if User.IsModerator}}
+                        <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                            class="xXx bloc-pseudo-msg text-user" style="color: red">
+                            {{ post.User.Name }}
+                        </a>
+                    {{else}}
+                        <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                            class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
+                            {{ post.User.Name }}
+                        </a>
+                    {{/if}}
                 {{else}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
-                    {{ post.User.Name }}
-                </a>
-                {{/if}}
-                {{else}}
-                <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                    class="xXx bloc-pseudo-msg text-user">
-                    {{ post.Post.Username }}
-                </a>
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                        class="xXx bloc-pseudo-msg text-user">
+                        {{ post.Post.Username }}
+                    </a>
                 {{/if}}
 
                 <div class="bloc-options-msg">
+                    {{#if isAuthor}}
+                        {{#unless post.Post.Op}}
+                            {{#if post.Post.Pinned}}
+                                <span style="opacity: 1;" title="Désépingler" data-post-unpin="{{ post.Post.Id }}">
+                                    <span style="opacity: 1;"> Désépingler </span>
+                                </span>
+                            {{/if}}
+
+                            {{#unless post.Post.Pinned}}
+                                <span style="opacity: 1;" title="Epingler" data-post-pin="{{ post.Post.Id }}">
+                                    <span style="opacity: 1;"> Epingler </span>
+                                </span>
+                            {{/unless}}
+                        {{/unless}}
+                    {{/if}}
+
                     <span class="picto-msg-quote" title="Citer" data-quote="{{ post.Post.Id }}">
                         <span> Citer </span>
                     </span>
 
                     {{#if ([../helpers/isFromConnectedUser] connectedUser post.User) }}
-                    <span class="picto-msg-crayon" title="Editer" data-post-edit="{{ post.Post.Id }}">
-                        <span> Editer </span>
-                    </span>
+                        <span class="picto-msg-crayon" title="Editer" data-post-edit="{{ post.Post.Id }}">
+                            <span> Editer </span>
+                        </span>
                     {{/if}}
 
                     {{#if isModerator}}
-                    <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ post.Post.Id }}">
-                        <span> Supprimer </span>
-                    </span>
+                        <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ post.Post.Id }}">
+                            <span> Supprimer </span>
+                        </span>
                     {{/if}}
                 </div>
 
@@ -64,9 +80,9 @@
                 </div>
 
                 {{#if post.Post.ModificationDate}}
-                    <div class="info-edition-msg">
-                        Message édité le {{ [../helpers/postDate] post.Post.ModificationDate }}
-                    </div>
+                <div class="info-edition-msg">
+                    Message édité le {{ [../helpers/postDate] post.Post.ModificationDate }}
+                </div>
                 {{/if}}
             </div>
         </div>
