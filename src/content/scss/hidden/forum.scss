@@ -17,3 +17,7 @@ li.hidden-topic-row:nth-of-type(2n+1) {
 .hidden-post:nth-of-type(2n+1) {
     background-color: $background-odd !important;
 }
+
+.hidden-post-pinned {
+    border: 2px solid red !important;
+}

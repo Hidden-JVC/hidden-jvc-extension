@@ -4,7 +4,7 @@
 
 Le menu d'Hidden JVC se situe sur toutes les pages sur le coté droit de la page.
 
-Quand vous êtes sur la liste des sujet, la partie "ETAT" apparait et permet de passer entre JVC et Hidden JVC
+Quand vous êtes sur la liste des sujet, la partie "Etat" apparait et permet de passer entre JVC et Hidden JVC
 
 La partie "Connexion" permet à la fois de se créer un compte et de se connnecter. A noter qu'on peut poster sur Hidden JVC sans compte.
 

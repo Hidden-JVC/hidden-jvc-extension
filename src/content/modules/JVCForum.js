@@ -45,6 +45,10 @@ class JVCForum {
         const pinnedJvcTopics = Runtime.forumTopics.filter((t) => t.pinned);
         const displaySelect = document.querySelector('.topic-select') !== null;
 
+        for (const topic of hiddenTopics) {
+            topic.Url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicId=${topic.Topic.Id}&topicPage=1`;
+        }
+
         if (pinnedJvcTopics.length === 0) {
             const jvcTopic = Runtime.forumTopics[0];
 

@@ -46,6 +46,7 @@ class HiddenTopic {
         this.initModeration(state);
         this.initPostDelete();
         this.initPostEdition();
+        this.initPostPin();
     }
 
     render(state) {
@@ -54,6 +55,7 @@ class HiddenTopic {
         const lastPage = Math.ceil(this.topic.PostsCount / 20);
         const pagination = createPagination(state.hidden.topic.page, lastPage);
         const isModerator = state.user.isAdmin || state.user.moderators.filter((m) => m.ForumId === Runtime.forumId).length === 1;
+        const isAuthor = this.topic.Author && (state.user.userId === this.topic.Author.Id);
         let opPostOnlyUrl = null;
 
         const forumUrl = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm`;
@@ -72,6 +74,7 @@ class HiddenTopic {
             topic,
             page,
             connectedUser: state.user,
+            isAuthor,
             isModerator,
             forumUrl,
             lastPage,
@@ -186,6 +189,31 @@ class HiddenTopic {
                     });
                 } catch (err) {
                     console.error(err);
+                }
+            });
+        }
+    }
+
+    initPostPin() {
+        const buttons = document.querySelectorAll('[data-post-pin],[data-post-unpin]');
+        for (const btn of buttons) {
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                let postId = null;
+                let pinned = null;
+                if (btn.dataset.postPin) {
+                    pinned = true;
+                    postId = parseInt(btn.dataset.postPin);
+                } else if (btn.dataset.postUnpin) {
+                    pinned = false;
+                    postId = parseInt(btn.dataset.postUnpin);
+                }
+
+                const state = await getState();
+                const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/${postId}`;
+                const { success } = await network.postRequest(url, { pinned }, state.user.jwt);
+                if (success) {
+                    location.reload();
                 }
             });
         }
