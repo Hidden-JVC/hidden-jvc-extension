@@ -2,14 +2,14 @@ import browser from 'webextension-polyfill';
 
 browser.runtime.onMessage.addListener(handleMessage);
 
-async function handleMessage(message, sender) {
+async function handleMessage(message) {
     switch (message.action) {
         case 'get-request':
             return await getRequest(message);
         case 'post-request':
             return await postRequest(message);
-        case 'inject-script':
-            return browser.tabs.executeScript(sender.tab.id, { code: message.code });
+        case 'open-website':
+            browser.tabs.create({ url: `hidden-jvc-website/index.html#/${message.path ? message.path : ''}` });
     }
 }
 

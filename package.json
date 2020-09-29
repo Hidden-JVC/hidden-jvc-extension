@@ -1,6 +1,6 @@
 {
     "name": "hidden-jvc-extension",
-    "version": "0.6.0",
+    "version": "0.10.0",
     "scripts": {
         "build": "webpack --config webpack.config.js --mode=production --env.NODE_ENV=production",
         "watch": "webpack --config webpack.config.js --watch --mode=development --env.NODE_ENV=development",
@@ -9,7 +9,7 @@
     "dependencies": {
         "date-fns": "^2.13.0",
         "handlebars": "^4.7.6",
-        "open-jvcode": "https://github.com/m7r-227/open-jvcode.git",
+        "open-jvcode": "file:hidden-jvc-jvcode",
         "socket.io-client": "^2.3.0",
         "webextension-polyfill": "^0.6.0"
     },

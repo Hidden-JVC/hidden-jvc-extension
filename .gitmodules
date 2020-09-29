@@ -1,3 +1,6 @@
 [submodule "hidden-jvc-website"]
 	path = hidden-jvc-website
 	url = https://github.com/Hidden-JVC/hidden-jvc-website
+[submodule "hidden-jvc-jvcode"]
+	path = hidden-jvc-jvcode
+	url = https://github.com/Hidden-JVC/hidden-jvc-jvcode

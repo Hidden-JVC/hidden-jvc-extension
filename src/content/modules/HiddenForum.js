@@ -6,7 +6,7 @@ import loadingTemplate from '../views/hidden/forum/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { network, createPagination, initForm } = hiddenJVC.helpers;
+const { network, createPagination, initForm, sendMessage } = hiddenJVC.helpers;
 
 class HiddenForum {
     constructor() {
@@ -105,6 +105,10 @@ class HiddenForum {
                 }
             });
         }
+
+        document.querySelector('#open-website').addEventListener('click', () => {
+            sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden` });
+        });
     }
 }
 
