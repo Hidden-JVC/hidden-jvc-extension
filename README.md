@@ -13,7 +13,7 @@ Le projet est actuellement en version Alpha.
 
 ## Téléchargement
 
-* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/firefox.png) Firefox : https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.9.0
+* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/firefox.png) Firefox : https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.10.0
 
 #### version maintenue par [@borrougagnou](https://github.com/borrougagnou) :
 * ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/chrome.png) Chrome : https://chrome.google.com/webstore/detail/hidden-jvc/mdghlmpglafocnnpohgfeckaickmkapc

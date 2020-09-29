@@ -7,7 +7,7 @@ import replyFormTemplate from '../views/jvc/topic/replyForm.handlebars';
 import editFormTemplate from '../views/jvc/topic/editForm.handlebars';
 import postTemplate from '../views/jvc/topic/post.handlebars';
 
-const { initForm, network } = hiddenJVC.helpers;
+const { initForm, network, getForumName, getJVCTopicInfo } = hiddenJVC.helpers;
 const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
@@ -15,6 +15,7 @@ const { JVC, Hidden } = hiddenJVC.constants.Static;
 class JVCTopic {
     constructor() {
         this.pages = JVC.Pages.JVC_TOPIC;
+        this.topic = null;
     }
 
     async init(state) {
@@ -33,9 +34,11 @@ class JVCTopic {
 
         const result = await network.getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
         if (result === null) {
+            console.error('api error');
             return;
         }
         const { topic } = result;
+        this.topic = topic;
 
         if (topic !== null) {
             this.insertJVCTopic(topic, state);
@@ -78,6 +81,17 @@ class JVCTopic {
                     content,
                     page: Runtime.topicLastPage
                 };
+
+                if (this.topic === null) {
+                    const forumName = await getForumName(Runtime.forumId);
+                    const topicInfo = await getJVCTopicInfo(Runtime.viewId, Runtime.forumId, Runtime.topicId);
+
+                    body.forumName = forumName;
+                    body.topicTitle = topicInfo.title;
+                    body.topicDate = topicInfo.date;
+                    body.topicContent = topicInfo.content;
+                    body.topicAuthor = topicInfo.author;
+                }
 
                 const state = await getState();
                 if (!state.user.jwt) {

@@ -11,6 +11,7 @@
                 <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
             </a>
         </div>
+
         <div class="bloc-rech-forum">
             {{!-- <form class="form-rech-forum" method="get" action="/recherche/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm">
                 <input class="txt-search" type="text" placeholder="Rechercher dans le forum" name="search_in_forum"
@@ -26,75 +27,78 @@
                 </button>
             </form> --}}
         </div>
+
         <div class="bloc-pre-right">
             <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
+            <span id="open-website" class="btn btn-actu-new-list-forum"> Ouvrir dans Hidden JVC </span>
         </div>
     </div>
 
     {{#if isModerator}}
-        <div class="bloc-pre-pagi-forum bloc-outils-top">
-            <div class="bloc-pre-left">
-                {{!-- <a href="#bloc-formulaire-forum">
+    <div class="bloc-pre-pagi-forum bloc-outils-top">
+        <div class="bloc-pre-left">
+            {{!-- <a href="#bloc-formulaire-forum">
                     <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
                 </a> --}}
-            </div>
+        </div>
 
-            <div class="bloc-rech-forum">
-                    {{!-- <input class="txt-search" type="text" placeholder="Rechercher dans le forum" name="search_in_forum"
+        <div class="bloc-rech-forum">
+            {{!-- <input class="txt-search" type="text" placeholder="Rechercher dans le forum" name="search_in_forum"
                         id="search_in_forum" autocomplete="off" value=""> --}}
 
-                    <select id="moderation-action-select" class="select-search">
-                        <option value="Lock"> Lock </option>
-                        <option value="UnLock"> Délock </option>
-                        <option value="Pin"> Epingler </option>
-                        <option value="UnPin"> Désépingler </option>
-                        <option value="DeleteTopic"> Supprimer </option>
-                    </select>
+            <select id="moderation-action-select" class="select-search">
+                <option value="Lock"> Lock </option>
+                <option value="UnLock"> Délock </option>
+                <option value="Pin"> Epingler </option>
+                <option value="UnPin"> Désépingler </option>
+                <option value="DeleteTopic"> Supprimer </option>
+            </select>
 
-                    <button id="moderation-action-submit" class="btn btn-lancer-rech">
-                        <span class="icon-search"> </span>
-                    </button>
-            </div>
-
-            <div class="bloc-pre-right">
-                {{!-- <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button> --}}
-            </div>
+            <button id="moderation-action-submit" class="btn btn-lancer-rech">
+                <span class="icon-search"> </span>
+            </button>
         </div>
+
+        <div class="bloc-pre-right">
+            {{!-- <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button> --}}
+        </div>
+    </div>
     {{/if}}
 
     <div class="conteneur-topic-pagi">
 
         {{#if topics.length}}
-            {{> ../misc/listPagination }}
+        {{> ../misc/listPagination }}
 
-            <ul class="topic-list topic-list-admin">
-                <li class="topic-head">
-                    <span class="topic-subject"> Sujet </span>
-                    {{!-- <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span> --}}
-                    <span class="topic-author"> Auteur </span>
-                    <span class="topic-count"> Nb </span>
-                    <span class="topic-date"> Dernier msg </span>
-                    {{#if isModerator}}
-                        <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
-                            <input id="select-all-msg" type="checkbox">
-                        </label>
-                    {{/if}}
-                </li>
+        <ul class="topic-list topic-list-admin">
+            <li class="topic-head">
+                <span class="topic-subject"> Sujet </span>
+                {{!-- <span class="topic-count" style="/*width: 3.75rem*/"> Actions </span> --}}
+                <span class="topic-author"> Auteur </span>
+                <span class="topic-count"> Nb </span>
+                <span class="topic-date"> Dernier msg </span>
+                {{#if isModerator}}
+                <label class="topic-select" for="select-all-msg" title="Sélectionner tous les topics">
+                    <input id="select-all-msg" type="checkbox">
+                </label>
+                {{/if}}
+            </li>
 
-                {{#each topics}}
-                {{> row topic=. displaySelect=../displaySelect isModerator=../isModerator }}
-                {{/each}}
-            </ul>
+            {{#each topics}}
+            {{> row topic=. displaySelect=../displaySelect isModerator=../isModerator }}
+            {{/each}}
+        </ul>
 
-            {{> ../misc/listPagination }}
+        {{> ../misc/listPagination }}
         {{else}}
-            <div class="conteneur-topic-pagi">
+        <div class="conteneur-topic-pagi">
 
-                <span style="margin-bottom: 10px;display: inline-block;color: #aaa;background: #fff;border-bottom: 1px solid #cdcdcd;padding: 10px;width: 100%;text-align: center;">
-                    Il n'y a aucun sujet, soyez le premier à en créer un !
-                </span>
+            <span
+                style="margin-bottom: 10px;display: inline-block;color: #aaa;background: #fff;border-bottom: 1px solid #cdcdcd;padding: 10px;width: 100%;text-align: center;">
+                Il n'y a aucun sujet, soyez le premier à en créer un !
+            </span>
 
-            </div>
+        </div>
         {{/if}}
     </div>
 
