@@ -65,7 +65,8 @@ class HiddenForum {
                 const data = {
                     title,
                     content,
-                    forumId: Runtime.forumId
+                    forumId: Runtime.forumId,
+                    forumName: Runtime.forumName
                 };
 
                 const state = await getState();

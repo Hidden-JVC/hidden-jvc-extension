@@ -34,8 +34,12 @@
     </span> --}}
 
     {{#if Author}}
-        {{#if Author.IsModerator}}
+        {{#if Author.IsAdmin}}
             <a class="xXx text-user topic-author" style="color: red">
+                {{ topic.Author.Name }}
+            </a>
+        {{else if Author.IsModerator}}
+            <a class="xXx text-user topic-author" style="color: green">
                 {{ topic.Author.Name }}
             </a>
         {{else}}
