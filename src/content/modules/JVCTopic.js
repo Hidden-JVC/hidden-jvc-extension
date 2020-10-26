@@ -201,7 +201,7 @@ class JVCTopic {
                 e.stopPropagation();
                 const postId = btn.dataset.postDelete;
                 const state = await getState();
-                const { success } = await network.postRequest(Hidden.API_JVC_POSTS_MODERATION, { action: 'DeletePost', ids: [postId] }, state.user.jwt);
+                const { success } = await network.postRequest(Hidden.API_JVC_POSTS_MODERATION, { action: 'Delete', ids: [postId] }, state.user.jwt);
                 if (success) {
                     location.reload();
                 }

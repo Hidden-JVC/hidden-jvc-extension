@@ -30,6 +30,10 @@ Le projet est actuellement en version Alpha.
 
 * Mode fic pour ne voir que les posts de l'auteur d'un topic.
 
+* Toutes les actions de modérations sont consultables en temps réel.
+
+* Les dernières sauvegardes de la base de données sont téléchargeables.
+
 ## Roadmap
 
 * Pouvoir consulter les topics d'Hidden JVC sur un site web intégré a l'extension et sur https://hiddenjvc.com.
@@ -37,8 +41,6 @@ Le projet est actuellement en version Alpha.
 * Pouvoir connecter l'extension à différents serveurs Hidden JVC.
 
 * Pouvoir backup des topics JVC
-
-* Mettre à disposition tout les backups de la base de données afin de s'assurer que même si le serveur tombe n'importe qui pourra faire revivre le forum.
 
 ## FAQ
 
@@ -66,4 +68,4 @@ Installation:
     npm ci
     npm run build
 
-Ces commandes vont générer le fichier `hidden-jvc-extension.zip` le répertoire `./build`
+Ces commandes vont générer le fichier `hidden-jvc-extension.zip` dans le répertoire `./build`
