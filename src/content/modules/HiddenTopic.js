@@ -1,3 +1,5 @@
+import browser from 'webextension-polyfill';
+
 import { parse } from 'open-jvcode';
 
 import hiddenJVC from '../HiddenJVC.js';
@@ -9,7 +11,7 @@ import loadingTemplate from '../views/hidden/topic/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { createPagination, network, postDateFormat, initForm } = hiddenJVC.helpers;
+const { createPagination, network, postDateFormat, initForm, sendMessage } = hiddenJVC.helpers;
 
 class HiddenTopic {
     constructor() {
@@ -30,7 +32,6 @@ class HiddenTopic {
         }
 
         const result = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
-        // TODO: better check
         if (result === null) {
             return;
         }
@@ -41,6 +42,11 @@ class HiddenTopic {
         if (!this.topic.Topic.Locked) {
             this.initForm();
         }
+
+        document.querySelector('#open-website').addEventListener('click', () => {
+            sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden/${this.topic.Topic.Id}` });
+        });
+
         this.initQuotes();
         this.initReloadButtons();
         this.initModeration(state);
@@ -67,6 +73,12 @@ class HiddenTopic {
             } else {
                 // toggle op only on
                 opPostOnlyUrl = `${forumUrl}?hidden=1&topicId=${this.topic.Topic.Id}&topicPage=1&topicUserId=${this.topic.Author.Id}`;
+            }
+        }
+
+        for (const post of topic.Posts) {
+            if(post.User !== null) {
+                post.ProfileUrl = `https://www.jeuxvideo.com/hidden-redirect/users/${post.User.Name}`;
             }
         }
 

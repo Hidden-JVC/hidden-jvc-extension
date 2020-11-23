@@ -3,8 +3,8 @@
         <div class="bloc-avatar-msg">
             <div class="back-img-msg">
                 <div>
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank" class="xXx ">
-                        <img src="https://risibank.fr/cache/stickers/d209/20968-full.png" class="user-avatar-msg"
+                    <a {{#if User}} href="{{ post.ProfileUrl }}" {{/if}} class="xXx">
+                        <img src="{{ [../helpers/getUserProfilePicture] post }}" class="user-avatar-msg"
                             alt="cisla">
                     </a>
                 </div>
@@ -15,18 +15,15 @@
             <div class="bloc-header">
                 {{#if User}}
                     {{#if User.IsAdmin}}
-                        <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                            class="xXx bloc-pseudo-msg text-user" style="color: red">
+                        <a href="{{ post.ProfileUrl }}" target="_blank" class="xXx bloc-pseudo-msg text-user" style="color: red">
                             {{ post.User.Name }}
                         </a>
                     {{else if User.IsModerator}}
-                        <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                            class="xXx bloc-pseudo-msg text-user" style="color: green">
+                        <a href="{{ post.ProfileUrl }}" target="_blank" class="xXx bloc-pseudo-msg text-user" style="color: green">
                             {{ post.User.Name }}
                         </a>
                     {{else}}
-                        <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                            class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
+                        <a href="{{ post.ProfileUrl }}" target="_blank" class="xXx bloc-pseudo-msg text-user" style="color: #20bbdf">
                             {{ post.User.Name }}
                         </a>
                     {{/if}}

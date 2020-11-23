@@ -63,5 +63,5 @@ browser.webRequest.onBeforeRequest.addListener(
 );
 
 browser.browserAction.onClicked.addListener(() => {
-    browser.tabs.create({ url: 'hidden-jvc-website/index.html' });
+    browser.tabs.create({ url: 'hidden-jvc-website/index.html#/forums/51/hidden' });
 });

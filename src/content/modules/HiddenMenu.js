@@ -37,10 +37,10 @@ class HiddenMenu {
         toggleLink.href = url;
         if (state.hidden.enabled) {
             toggleButton.classList.add('hidden-primary-color-bg');
-            toggleButton.textContent = 'Activé';
+            toggleButton.textContent = 'Vers JVC';
         } else {
             toggleButton.classList.remove('hidden-primary-color-bg');
-            toggleButton.textContent = 'Désactivé';
+            toggleButton.textContent = 'Vers Hidden JVC';
         }
     }
 
