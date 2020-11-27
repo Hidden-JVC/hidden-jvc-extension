@@ -11,17 +11,12 @@ mkdir build
 
 echo "#### Build du website"
 cd hidden-jvc-website
-npm ci
+export USE_SUB_FOLDER=1
 npm run build
 mv ./dist ../build/hidden-jvc-website
 cd ..
 
-cd hidden-jvc-jvcode
-npm ci
-cd ..
-
 echo "#### Build de l'extention"
-npm ci
 npm run build
 
 echo "#### Déplacement du manifest"

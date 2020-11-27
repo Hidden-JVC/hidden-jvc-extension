@@ -13,7 +13,7 @@ Le projet est actuellement en version Alpha.
 
 ## Téléchargement
 
-* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/firefox.png) Firefox : https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.10.1
+* ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/firefox.png) Firefox : https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.11.0
 
 #### version maintenue par [@borrougagnou](https://github.com/borrougagnou) :
 * ![](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/chrome.png) Chrome : https://chrome.google.com/webstore/detail/hidden-jvc/mdghlmpglafocnnpohgfeckaickmkapc
@@ -30,6 +30,10 @@ Le projet est actuellement en version Alpha.
 
 * Mode fic pour ne voir que les posts de l'auteur d'un topic.
 
+* Toutes les actions de modérations sont consultables en temps réel.
+
+* Les dernières sauvegardes de la base de données sont téléchargeables.
+
 ## Roadmap
 
 * Pouvoir consulter les topics d'Hidden JVC sur un site web intégré a l'extension et sur https://hiddenjvc.com.
@@ -37,8 +41,6 @@ Le projet est actuellement en version Alpha.
 * Pouvoir connecter l'extension à différents serveurs Hidden JVC.
 
 * Pouvoir backup des topics JVC
-
-* Mettre à disposition tout les backups de la base de données afin de s'assurer que même si le serveur tombe n'importe qui pourra faire revivre le forum.
 
 ## FAQ
 
@@ -66,4 +68,4 @@ Installation:
     npm ci
     npm run build
 
-Ces commandes vont générer le fichier `hidden-jvc-extension.zip` le répertoire `./build`
+Ces commandes vont générer le fichier `hidden-jvc-extension.zip` dans le répertoire `./build`

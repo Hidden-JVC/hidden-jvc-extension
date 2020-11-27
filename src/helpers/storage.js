@@ -11,7 +11,8 @@ export async function getState() {
                 isAdmin: false,
                 moderators: [],
                 anonymousName: 'Anonymous',
-                registeredName: null
+                registeredName: null,
+                favoriteStickers: []
             },
             hidden: {
                 enabled: false,
