@@ -1,5 +1,3 @@
-import browser from 'webextension-polyfill';
-
 import { parse } from 'open-jvcode';
 
 import hiddenJVC from '../HiddenJVC.js';
@@ -11,7 +9,7 @@ import loadingTemplate from '../views/hidden/topic/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { createPagination, network, postDateFormat, initForm, sendMessage } = hiddenJVC.helpers;
+const { createPagination, network, postDateFormat, initForm, sendMessage, createModal } = hiddenJVC.helpers;
 
 class HiddenTopic {
     constructor() {
@@ -31,28 +29,39 @@ class HiddenTopic {
             query.userId = state.hidden.topic.userId;
         }
 
-        const result = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
-        if (result === null) {
-            return;
+        try {
+            const { topic, error } = await network.getRequest(`${Hidden.API_HIDDEN_TOPICS}/${state.hidden.topic.id}`, query);
+
+            if (error) {
+                createModal(error);
+                return;
+            }
+
+            this.topic = topic;
+
+            this.render(state);
+
+            if (!this.topic.Topic.Locked) {
+                this.initForm();
+            }
+
+            const openWebsiteBtn = document.querySelector('#open-website');
+            if (openWebsiteBtn !== null) {
+                openWebsiteBtn.addEventListener('click', () => {
+                    sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden/${this.topic.Topic.Id}` });
+                });
+            }
+
+            this.initQuotes();
+            this.initReloadButtons();
+            this.initModeration(state);
+            this.initPostDelete();
+            this.initPostEdition();
+            this.initPostPin();
+        } catch (err) {
+            console.error(err);
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
         }
-        this.topic = result.topic;
-
-        this.render(state);
-
-        if (!this.topic.Topic.Locked) {
-            this.initForm();
-        }
-
-        document.querySelector('#open-website').addEventListener('click', () => {
-            sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden/${this.topic.Topic.Id}` });
-        });
-
-        this.initQuotes();
-        this.initReloadButtons();
-        this.initModeration(state);
-        this.initPostDelete();
-        this.initPostEdition();
-        this.initPostPin();
     }
 
     render(state) {
@@ -77,7 +86,7 @@ class HiddenTopic {
         }
 
         for (const post of topic.Posts) {
-            if(post.User !== null) {
+            if (post.User !== null) {
                 post.ProfileUrl = `https://www.jeuxvideo.com/hidden-redirect/users/${post.User.Name}`;
             }
         }
@@ -99,7 +108,6 @@ class HiddenTopic {
     }
 
     initForm() {
-
         const form = document.querySelector('#hidden-form');
         initForm(form);
 
@@ -114,11 +122,16 @@ class HiddenTopic {
                     data.username = state.user.name || 'Anonymous';
                 }
 
-                const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}`;
-                await network.postRequest(url, data, state.user.jwt);
-                location.reload();
+                const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/posts`;
+                const { error } = await network.postRequest(url, data, state.user.jwt);
+                if (error) {
+                    createModal(error);
+                } else {
+                    location.reload();
+                }
             } catch (err) {
                 console.error(err);
+                createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
             }
         });
     }
@@ -193,10 +206,17 @@ class HiddenTopic {
                         };
                         const state = await getState();
 
-                        const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/${postId}`;
-                        const { success } = await network.postRequest(url, data, state.user.jwt);
-                        if (success) {
-                            location.reload();
+                        try {
+                            const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/posts/${postId}`;
+                            const { error } = await network.postRequest(url, data, state.user.jwt);
+                            if (error) {
+                                createModal(error);
+                            } else {
+                                location.reload();
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
                         }
                     });
                 } catch (err) {
@@ -221,11 +241,18 @@ class HiddenTopic {
                     postId = parseInt(btn.dataset.postUnpin);
                 }
 
-                const state = await getState();
-                const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/${postId}`;
-                const { success } = await network.postRequest(url, { pinned }, state.user.jwt);
-                if (success) {
-                    location.reload();
+                try {
+                    const state = await getState();
+                    const url = `${Hidden.API_HIDDEN_TOPICS}/${this.topic.Topic.Id}/${postId}`;
+                    const { error } = await network.postRequest(url, { pinned }, state.user.jwt);
+                    if (error) {
+                        createModal(error);
+                    } else {
+                        location.reload();
+                    }
+                } catch (err) {
+                    console.error(err);
+                    createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
                 }
             });
         }

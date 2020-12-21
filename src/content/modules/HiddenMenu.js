@@ -4,8 +4,7 @@ import hiddenJVC from '../HiddenJVC.js';
 import menuTemplate from '../views/menu.handlebars';
 
 const { getState, setState } = hiddenJVC.storage;
-const { postRequest } = hiddenJVC.helpers.network;
-const { ErrorModal, MessageModal } = hiddenJVC.modals;
+const { network, createModal } = hiddenJVC.helpers;
 const { Runtime, Static: { JVC, Hidden } } = hiddenJVC.constants;
 
 class HiddenMenu {
@@ -53,8 +52,10 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, userId, isAdmin, moderators, error } = await postRequest(Hidden.API_LOGIN, { name, password });
-                if (jwt) {
+                const { jwt, userId, isAdmin, moderators, error } = await network.postRequest(Hidden.API_LOGIN, { name, password });
+                if (error) {
+                    createModal(error);
+                } else {
                     const state = await getState();
                     state.user.jwt = jwt;
                     state.user.userId = userId;
@@ -63,12 +64,10 @@ class HiddenMenu {
                     state.user.registeredName = name;
                     await setState(state);
                     location.reload();
-                } else if (error) {
-                    MessageModal.create('Informations', 'Vos identifiants sont incorrects');
                 }
             } catch (err) {
                 console.error(err);
-                ErrorModal(err.message);
+                createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
             }
         });
 
@@ -77,20 +76,20 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, userId, error } = await postRequest(Hidden.API_REGISTER, { name, password });
-                if (jwt) {
+                const { jwt, userId, error } = await network.postRequest(Hidden.API_REGISTER, { name, password });
+                if (error) {
+                    createModal(error);
+                } else {
                     const state = await getState();
                     state.user.jwt = jwt;
                     state.user.userId = userId;
                     state.user.registeredName = name;
                     await setState(state);
                     location.reload();
-                } else if (error) {
-                    MessageModal.create('Informations', error);
                 }
             } catch (err) {
                 console.error(err);
-                ErrorModal(err.message);
+                createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
             }
         });
 

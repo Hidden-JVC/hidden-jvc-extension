@@ -6,7 +6,7 @@ import loadingTemplate from '../views/hidden/forum/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { network, createPagination, initForm, sendMessage } = hiddenJVC.helpers;
+const { network, createPagination, initForm, sendMessage, createModal } = hiddenJVC.helpers;
 
 class HiddenForum {
     constructor() {
@@ -16,13 +16,20 @@ class HiddenForum {
     async init(state) {
         document.querySelector('#forum-main-col').outerHTML = loadingTemplate();
 
-        const { topics, count } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, {
-            forumId: Runtime.forumId,
-            page: state.hidden.list.page,
-        });
-
-        this.render(topics, count, state.hidden.list.page, state.user);
-        this.initDomEvents();
+        try {
+            const { topics, count, error } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, {
+                forumId: Runtime.forumId,
+                page: state.hidden.list.page,
+            });
+            if (error) {
+                createModal(error);
+            } else {
+                this.render(topics, count, state.hidden.list.page, state.user);
+                this.initDomEvents();
+            }
+        } catch (err) {
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+        }
     }
 
     render(topics, count, page, user) {
@@ -64,6 +71,7 @@ class HiddenForum {
 
                 const data = {
                     title,
+                    tags: [],
                     content,
                     forumId: Runtime.forumId,
                     forumName: Runtime.forumName
@@ -74,12 +82,16 @@ class HiddenForum {
                     data.username = state.user.name || 'Anonymous';
                 }
 
-                const { topicId } = await network.postRequest(Hidden.API_HIDDEN_TOPICS, data, state.user.jwt);
-                if (topicId) {
-                    const url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
-                    location.replace(url);
-                } else {
-                    throw new Error('fail to create topic');
+                try {
+                    const { error, topicId } = await network.postRequest(Hidden.API_HIDDEN_TOPICS, data, state.user.jwt);
+                    if (error) {
+                        createModal(error);
+                    } else {
+                        const url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=1&view=topic&topicPage=1&topicId=${topicId}`;
+                        location.replace(url);
+                    }
+                } catch (err) {
+                    createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
                 }
             } catch (err) {
                 console.error(err);

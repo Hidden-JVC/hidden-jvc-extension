@@ -5,7 +5,7 @@ import hiddenJVC from '../HiddenJVC.js';
 import rowTemplate from '../views/jvc/forum/row.handlebars';
 
 const { Runtime } = hiddenJVC.constants;
-const { getRequest } = hiddenJVC.helpers.network;
+const { network, createModal } = hiddenJVC.helpers;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
 
 class JVCForum {
@@ -23,21 +23,32 @@ class JVCForum {
      * Checks if any of the current jvc topics contains at least one hidden post
      */
     async initJVCTopics() {
-        const topicIds = Runtime.forumTopics.map((t) => t.id);
+        try {
+            const topicIds = Runtime.forumTopics.map((t) => t.id);
 
-        const { topics } = await getRequest(Hidden.API_JVC_TOPICS, { topicIds });
+            const { topics, error } = await network.getRequest(Hidden.API_JVC_TOPICS, { topicIds });
 
-        for (const jvcTopic of Runtime.forumTopics) {
-            for (const hiddenTopic of topics) {
-                if (hiddenTopic.Topic.Id === jvcTopic.id) {
-                    jvcTopic.li.classList.add('jvc-topic-contains-hidden-post');
-                    jvcTopic.li.querySelector('.topic-count').innerHTML = `<span style="color: green"> ${hiddenTopic.PostsCount} </span> / ${jvcTopic.postCount}`;
+            if (error) {
+                createModal(error);
+                return;
+            }
+
+            for (const jvcTopic of Runtime.forumTopics) {
+                for (const hiddenTopic of topics) {
+                    if (hiddenTopic.Topic.Id === jvcTopic.id) {
+                        jvcTopic.li.classList.add('jvc-topic-contains-hidden-post');
+                        jvcTopic.li.querySelector('.topic-count').innerHTML = `<span style="color: green"> ${hiddenTopic.PostsCount} </span> / ${jvcTopic.postCount}`;
+                    }
                 }
             }
+        } catch (err) {
+            console.error(err);
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
         }
     }
 
     async initHiddenTopicsPinned() {
+        // only on first page
         if (Runtime.forumOffset !== 1) {
             return;
         }
@@ -96,9 +107,19 @@ class JVCForum {
     }
 
     async getHiddenTopicsPinned() {
-        const query = { forumId: Runtime.forumId, pinned: 1 };
-        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
-        return topics;
+        try {
+            const query = { forumId: Runtime.forumId, pinned: 1 };
+            const { topics, error } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, query);
+            if (error) {
+                createModal(error);
+                return [];
+            }
+            return topics;
+        }
+        catch (err) {
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+            return [];
+        }
     }
 
     async getHiddenTopics() {
@@ -113,10 +134,17 @@ class JVCForum {
         if (endDate !== null) {
             query.endDate = formatISO9075(endDate);
         }
-
-        const { topics } = await getRequest(Hidden.API_HIDDEN_TOPICS, query);
-
-        return topics;
+        try {
+            const { topics, error } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, query);
+            if (error) {
+                createModal(error);
+                return [];
+            }
+            return topics;
+        } catch (err) {
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+            return [];
+        }
     }
 
     getDateRange(topics) {
