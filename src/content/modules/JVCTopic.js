@@ -7,10 +7,10 @@ import replyFormTemplate from '../views/jvc/topic/replyForm.handlebars';
 import editFormTemplate from '../views/jvc/topic/editForm.handlebars';
 import postTemplate from '../views/jvc/topic/post.handlebars';
 
-const { initForm, network, getForumName, getJVCTopicInfo } = hiddenJVC.helpers;
 const { getState } = hiddenJVC.storage;
 const Runtime = hiddenJVC.constants.Runtime;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
+const { initForm, network, getForumName, getJVCTopicInfo, createModal } = hiddenJVC.helpers;
 
 class JVCTopic {
     constructor() {
@@ -32,19 +32,23 @@ class JVCTopic {
             query.endDate = formatISO9075(endDate);
         }
 
-        const result = await network.getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
-        if (result === null) {
-            console.error('api error');
-            return;
-        }
-        const { topic } = result;
-        this.topic = topic;
+        try {
+            const { error, topic } = await network.getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
+            if (error) {
+                createModal(error);
+                return;
+            }
+            this.topic = topic;
 
-        if (topic !== null) {
-            this.insertJVCTopic(topic, state);
-            this.highlightPagination(topic);
-            this.initPostEdition(topic);
-            this.initPostDeletion();
+            if (topic !== null) {
+                this.insertJVCTopic(topic, state);
+                this.highlightPagination(topic);
+                this.initPostEdition(topic);
+                this.initPostDeletion();
+            }
+        } catch (err) {
+            console.error(err);
+            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
         }
     }
 
@@ -97,12 +101,17 @@ class JVCTopic {
                 if (!state.user.jwt) {
                     body.username = state.user.name || 'Anonymous';
                 }
-
-                const { postId } = await network.postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
-                if (typeof postId !== 'number') {
-                    throw new Error('fail to create post');
-                } else {
-                    location.replace(Runtime.generateTopicUrl(Runtime.topicLastPage));
+                try {
+                    const { error } = await network.postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
+                    if (error) {
+                        createModal(error);
+                        return;
+                    } else {
+                        location.replace(Runtime.generateTopicUrl(Runtime.topicLastPage));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
                 }
             } catch (err) {
                 console.error(err);
@@ -180,11 +189,17 @@ class JVCTopic {
                             content: textarea.value.trim()
                         };
                         const state = await getState();
-
-                        const url = `${Hidden.API_JVC_TOPICS}/${topic.Topic.Id}/${postId}`;
-                        const { success } = await network.postRequest(url, data, state.user.jwt);
-                        if (success) {
-                            location.reload();
+                        try {
+                            const url = `${Hidden.API_JVC_TOPICS}/${topic.Topic.Id}/${postId}`;
+                            const { error } = await network.postRequest(url, data, state.user.jwt);
+                            if (error) {
+                                createModal(error);
+                            } else {
+                                location.reload();
+                            }
+                        } catch (err) {
+                            console.log(err);
+                            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
                         }
                     });
                 } catch (err) {

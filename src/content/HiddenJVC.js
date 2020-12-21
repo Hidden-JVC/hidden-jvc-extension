@@ -2,8 +2,6 @@ import helpers from './helpers';
 import constants from './constants';
 import * as storage from '../helpers/storage';
 
-import modals from './modals';
-
 import './scss/main.scss';
 
 class HiddenJVC {
@@ -13,7 +11,6 @@ class HiddenJVC {
         this.helpers = helpers;
         this.storage = storage;
         this.constants = constants;
-        this.modals = modals;
     }
 
     registerModule(newModule) {

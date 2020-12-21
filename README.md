@@ -25,7 +25,7 @@ Extension | Site Web
 
 ### Firefox
 
-Aller sur https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.12.0
+Aller sur https://github.com/Hidden-JVC/hidden-jvc-extension/releases/tag/0.12.2
 
 Cliquer sur le fichier `hidden-jvc-extension-[version].xpi`
 

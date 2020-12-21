@@ -2,7 +2,7 @@ import modalTemplate from '../views/modal.handlebars';
 
 let id = 0;
 
-export default class HiddenModal {
+class HiddenModal {
     constructor(options = {}) {
         id++;
 
@@ -34,9 +34,9 @@ export default class HiddenModal {
         this.modal.remove();
         this.overlay.remove();
     }
+}
 
-    static create(options = {}) {
-        const modal = new HiddenModal(options);
-        return modal;
-    }
+export default function create(message) {
+    const modal = new HiddenModal({ title: 'Hidden JVC', message });
+    return modal;
 }
