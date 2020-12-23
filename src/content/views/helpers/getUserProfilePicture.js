@@ -1,5 +1,4 @@
 export default function (post) {
-    console.log(post);
     if (post.User !== null && post.User.ProfilePicture !== null) {
         return post.User.ProfilePicture;
     } else {

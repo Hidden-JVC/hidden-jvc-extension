@@ -99,7 +99,7 @@ class JVCTopic {
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    body.username = state.user.name || 'Anonymous';
+                    body.username = state.user.anonymousName || 'Anonymous';
                 }
                 try {
                     const { error } = await network.postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);

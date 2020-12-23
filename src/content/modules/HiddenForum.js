@@ -79,7 +79,7 @@ class HiddenForum {
 
                 const state = await getState();
                 if (!state.user.jwt) {
-                    data.username = state.user.name || 'Anonymous';
+                    data.username = state.user.anonymousName || 'Anonymous';
                 }
 
                 try {
