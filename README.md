@@ -33,7 +33,7 @@ Cliquer sur le fichier `hidden-jvc-extension-[version].xpi`
 
 https://chrome.google.com/webstore/detail/hidden-jvc/mdghlmpglafocnnpohgfeckaickmkapc
 
-### Opera (maintenue par [@borrougagnou](https://github.com/borrougagnou))
+### Opera Next / Developpeur (maintenue par [@borrougagnou](https://github.com/borrougagnou))
 
 https://addons.opera.com/fr/extensions/details/e5d1a89073216349f761e454b6209efd5d219e6e/
 
