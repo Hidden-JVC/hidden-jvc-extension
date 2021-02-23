@@ -5,7 +5,7 @@ import hiddenJVC from '../HiddenJVC.js';
 import rowTemplate from '../views/jvc/forum/row.handlebars';
 
 const { Runtime } = hiddenJVC.constants;
-const { network, createModal } = hiddenJVC.helpers;
+const { network, createModal, processHiddenUrl } = hiddenJVC.helpers;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
 
 class JVCForum {
@@ -13,7 +13,7 @@ class JVCForum {
         this.pages = JVC.Pages.JVC_FORUM;
     }
 
-    init() {
+    async init() {
         this.initJVCTopics();
         this.initHiddenTopicsPinned();
         this.initHiddenTopics();
@@ -78,6 +78,21 @@ class JVCForum {
                     }
                 }
             }
+        }
+
+        /* eslint-disable-next-line no-undef */
+        if (process.env.HIDDEN_ENV === 'userscript') {
+            document.querySelectorAll('a.hidden-link').forEach((anchor) => {
+                anchor.addEventListener('click', async (e) => {
+                    await processHiddenUrl(anchor.href);
+                    // e.preventDefault();
+                    // console.log(anchor.href);
+                    // location.href = anchor.href;
+                    // window.open(anchor.href, '_self');
+                    // history.pushState({}, '', anchor.href);
+                    // location.reload();
+                });
+            });
         }
     }
 

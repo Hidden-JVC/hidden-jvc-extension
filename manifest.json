@@ -12,13 +12,15 @@
     },
 
     "permissions": [
-        "cookies",
         "storage",
         "webRequest",
         "webRequestBlocking",
         "https://www.jeuxvideo.com/*",
         "https://api.hiddenjvc.com/*",
-        "https://socket.hiddenjvc.com/*"
+        "https://socket.hiddenjvc.com/*",
+
+        "https://sdk.privacy-center.org/*",
+        "https://static.jvc.gg/*"
     ],
 
     "background": {
@@ -30,7 +32,7 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.jeuxvideo.com/*"
+                "https://www.jeuxvideo.com/forums/*"
             ],
             "js": [
                 "content.js"

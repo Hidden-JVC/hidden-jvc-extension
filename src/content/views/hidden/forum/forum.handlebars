@@ -30,7 +30,9 @@
 
         <div class="bloc-pre-right">
             <button class="btn btn-actu-new-list-forum btn-actualiser-forum"> Actualiser </button>
-            <span id="open-website" class="btn btn-actu-new-list-forum"> Ouvrir dans Hidden JVC </span>
+            {{#if [../isExtension]}}
+                <span id="open-website" class="btn btn-actu-new-list-forum"> Ouvrir dans Hidden JVC </span>
+            {{/if}}
         </div>
     </div>
 

@@ -9,7 +9,7 @@ import loadingTemplate from '../views/hidden/topic/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { createPagination, network, postDateFormat, initForm, sendMessage, createModal } = hiddenJVC.helpers;
+const { createPagination, network, postDateFormat, initForm, createModal, processHiddenUrl } = hiddenJVC.helpers;
 
 class HiddenTopic {
     constructor() {
@@ -48,9 +48,31 @@ class HiddenTopic {
             const openWebsiteBtn = document.querySelector('#open-website');
             if (openWebsiteBtn !== null) {
                 openWebsiteBtn.addEventListener('click', () => {
-                    sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden/${this.topic.Topic.Id}` });
+                    chrome.runtime.sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden/${this.topic.Topic.Id}` });
                 });
             }
+
+            /* eslint-disable-next-line no-undef */
+            if (process.env.HIDDEN_ENV === 'userscript') {
+                document.querySelectorAll('a.hidden-link').forEach((anchor) => {
+                    anchor.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await processHiddenUrl(anchor.href);
+                        location.reload();
+                    });
+                });
+            }
+
+            // window.addEventListener('popstate', () => {
+            //     alert('aze');
+            //     console.log(arguments);
+            // });
+
+            // window.onpopstate = () => {
+            //     alert('qsd');
+            //     console.log(arguments);
+            // };
+            // console.log('ok');
 
             this.initQuotes();
             this.initReloadButtons();

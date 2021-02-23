@@ -6,7 +6,7 @@ import loadingTemplate from '../views/hidden/forum/loading.handlebars';
 const { getState } = hiddenJVC.storage;
 const { Runtime } = hiddenJVC.constants;
 const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { network, createPagination, initForm, sendMessage, createModal } = hiddenJVC.helpers;
+const { network, createPagination, initForm, createModal, processHiddenUrl } = hiddenJVC.helpers;
 
 class HiddenForum {
     constructor() {
@@ -17,6 +17,7 @@ class HiddenForum {
         document.querySelector('#forum-main-col').outerHTML = loadingTemplate();
 
         try {
+            console.log(Hidden.API_HIDDEN_TOPICS);
             const { topics, count, error } = await network.getRequest(Hidden.API_HIDDEN_TOPICS, {
                 forumId: Runtime.forumId,
                 page: state.hidden.list.page,
@@ -28,6 +29,7 @@ class HiddenForum {
                 this.initDomEvents();
             }
         } catch (err) {
+            console.error(err);
             createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
         }
     }
@@ -63,6 +65,17 @@ class HiddenForum {
 
         const form = document.querySelector('#hidden-form');
         initForm(form);
+
+        /* eslint-disable-next-line no-undef */
+        if (process.env.HIDDEN_ENV === 'userscript') {
+            document.querySelectorAll('a.hidden-link').forEach((anchor) => {
+                anchor.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    await processHiddenUrl(anchor.href);
+                    location.reload();
+                });
+            });
+        }
 
         form.querySelector('#hidden-submit').addEventListener('click', async () => {
             try {
@@ -119,9 +132,12 @@ class HiddenForum {
             });
         }
 
-        document.querySelector('#open-website').addEventListener('click', () => {
-            sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden` });
-        });
+        const openWebsiteBtn = document.querySelector('#open-website');
+        if (openWebsiteBtn !== null) {
+            openWebsiteBtn.addEventListener('click', () => {
+                chrome.runtime.sendMessage({ action: 'open-website', path: `forums/${Runtime.forumId}/hidden` });
+            });
+        }
     }
 }
 

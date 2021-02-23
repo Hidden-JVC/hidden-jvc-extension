@@ -15,10 +15,10 @@
             </div>
 
             <div class="group-two">
-                <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form" class="hidden-link">
                     <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
                 </a>
-                <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
+                <a href="{{ forumUrl }}?hidden=1&view=list&page=1" class="hidden-link">
                     <span id="list-topics" class="btn btn-actu-new-list-forum"> Liste des sujets </span>
                 </a>
             </div>
@@ -27,7 +27,7 @@
         <div class="bloc-pre-right">
             <div class="group-one">
                 {{#if opPostOnlyUrl}}
-                <a href="{{ opPostOnlyUrl }}">
+                <a href="{{ opPostOnlyUrl }}" class="hidden-link">
                     <button class="btn btn-actu-new-list-forum"> Mode fic </button>
                 </a>
                 {{/if}}
@@ -37,7 +37,9 @@
                 <button class="btn btn-actu-new-list-forum" data-reload style="min-width: 6.375rem;">
                     Actualiser
                 </button>
+                {{#if [../isExtension]}}
                 <span id="open-website" class="btn btn-actu-new-list-forum"> Ouvrir dans Hidden JVC </span>
+                {{/if}}
             </div>
         </div>
     </div>
@@ -80,10 +82,10 @@
         <div class="bloc-pre-pagi-forum bloc-outils-bottom">
             <div class="bloc-pre-left">
                 <div class="group-two">
-                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form">
+                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1#hidden-form" class="hidden-link">
                         <span class="btn btn-actu-new-list-forum"> Nouveau sujet </span>
                     </a>
-                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1">
+                    <a href="{{ forumUrl }}?hidden=1&view=list&page=1" class="hidden-link">
                         <span class="btn btn-actu-new-list-forum"> Liste des sujets </span>
                     </a>
                 </div>

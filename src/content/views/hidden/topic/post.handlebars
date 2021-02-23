@@ -5,7 +5,7 @@
                 <div>
                     <a {{#if User}} href="{{ post.ProfileUrl }}" {{/if}} class="xXx">
                         <img src="{{ [../helpers/getUserProfilePicture] post }}" class="user-avatar-msg"
-                            alt="cisla">
+                            alt="lien mort">
                     </a>
                 </div>
             </div>
@@ -28,8 +28,7 @@
                         </a>
                     {{/if}}
                 {{else}}
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                        class="xXx bloc-pseudo-msg text-user">
+                    <a class="xXx bloc-pseudo-msg text-user">
                         {{ post.Post.Username }}
                     </a>
                 {{/if}}

@@ -18,7 +18,7 @@
             {{/if}}
         {{/if}}
 
-        <a class="lien-jv topic-title"
+        <a class="lien-jv topic-title hidden-link"
             href="{{ topic.Url }}"
             title="{{ topic.Topic.Title }}">
             {{ topic.Topic.Title }}
@@ -33,13 +33,17 @@
         </span>
     </span> --}}
 
-    {{#if Author}}
-        {{#if Author.IsModerator}}
+    {{#if topic.Author}}
+        {{#if topic.Author.IsAdmin}}
             <a class="xXx text-user topic-author" style="color: red">
                 {{ topic.Author.Name }}
             </a>
-        {{else}}
+        {{else if topic.Author.IsModerator}}
             <a class="xXx text-user topic-author" style="color: #20bbdf">
+                {{ topic.Author.Name }}
+            </a>
+        {{else}}
+            <a class="xXx text-user topic-author">
                 {{ topic.Author.Name }}
             </a>
         {{/if}}

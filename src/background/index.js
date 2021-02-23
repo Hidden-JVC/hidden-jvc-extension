@@ -1,8 +1,49 @@
-import browser from 'webextension-polyfill';
-
 import { setState, getState } from '../helpers/storage.js';
 
 import './messages.js';
+
+// domains from which to block scripts
+const blacklistDomains = [
+    'https://www.jeuxvideo.com/*',
+    'https://sdk.privacy-center.org/*',
+    'https://static.jvc.gg/*'
+];
+
+// block all scripts from jvc
+chrome.webRequest.onBeforeRequest.addListener(
+    blockScripts,
+    { urls: blacklistDomains, types: ['script'] },
+    ['blocking']
+);
+
+// read hidden jvc query parameters before redirect
+chrome.webRequest.onBeforeRequest.addListener(
+    listener,
+    { urls: ['https://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
+    ['blocking']
+);
+
+// external url to redirect to integrated website
+chrome.webRequest.onBeforeRequest.addListener(
+    redirectListener,
+    { urls: ['https://www.jeuxvideo.com/hidden-redirect/*'], types: ['main_frame'] },
+    ['blocking']
+);
+
+// open integrated website when clicking in then extension icon
+chrome.browserAction.onClicked.addListener(() => {
+    chrome.tabs.create({ url: 'hidden-jvc-website/index.html#/forums/51/hidden' });
+});
+
+function blockScripts(details) {
+    console.log(details);
+    if (
+        details.originUrl.startsWith('https://www.jeuxvideo.com/forums') ||
+        details.originUrl.startsWith('https://www.jeuxvideo.com/recherche/forums')
+    ) {
+        // return { cancel: true };
+    }
+}
 
 async function listener(details) {
     const index = details.url.indexOf('?');
@@ -44,24 +85,8 @@ async function listener(details) {
     }
 }
 
-browser.webRequest.onBeforeRequest.addListener(
-    listener,
-    { urls: ['https://www.jeuxvideo.com/forums/*'], types: ['main_frame'] },
-    ['blocking']
-);
-
 function redirectListener(details) {
     const hash = details.url.replace('https://www.jeuxvideo.com/hidden-redirect/', '');
-    const path = browser.runtime.getURL('hidden-jvc-website/index.html');
-    browser.tabs.update(details.tabId, { url: `${path}#/${hash}` });
+    const path = chrome.runtime.getURL('hidden-jvc-website/index.html');
+    chrome.tabs.update(details.tabId, { url: `${path}#/${hash}` });
 }
-
-browser.webRequest.onBeforeRequest.addListener(
-    redirectListener,
-    { urls: ['https://www.jeuxvideo.com/hidden-redirect/*'], types: ['main_frame'] },
-    ['blocking']
-);
-
-browser.browserAction.onClicked.addListener(() => {
-    browser.tabs.create({ url: 'hidden-jvc-website/index.html#/forums/51/hidden' });
-});

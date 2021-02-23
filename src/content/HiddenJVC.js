@@ -23,7 +23,7 @@ class HiddenJVC {
             this.constants.Runtime.init(state);
         } catch (err) {
             console.error(err);
-            this.Modal.create({ title: 'Hidden JVC - Erreur de parsing', message: err.message });
+            this.helpers.createModal(err.message);
             return;
         }
 
@@ -32,11 +32,13 @@ class HiddenJVC {
             return;
         }
 
+        console.log(location.href);
+
         for (const m of this.modules) {
             if (m.pages === 0 || m.pages & this.constants.Runtime.currentPage) {
                 m.init(state).catch((err) => {
                     console.error(err);
-                    this.Modal.create({ title: 'Hidden JVC - Erreur inattendue', message: err.message });
+                    this.helpers.createModal(err.message);
                 });
             }
         }

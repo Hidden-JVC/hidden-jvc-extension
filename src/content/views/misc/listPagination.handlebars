@@ -2,14 +2,14 @@
     <div class="pagi-before">
         {{#if ([../helpers/pagination/begin] page)}}
         <span>
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage==1" class="xXx pagi-debut-actif">
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage==1" class="xXx pagi-debut-actif hidden-link">
                 <span> Début </span>
             </a>
         </span>
         {{/if}}
         {{#if ([../helpers/pagination/previous] page)}}
         <span>
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/previous] page }}" class="xXx pagi-precedent-actif">
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/previous] page }}" class="xXx pagi-precedent-actif hidden-link">
                 <span> Page précedente </span>
             </a>
         </span>
@@ -22,7 +22,7 @@
                 <span class="page-active hidden-primary-color-bg"> {{ page }} </span>
             {{else}}
                 {{#if page}}
-                    <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ page }}" class="lien-jv"> {{ page }} </a>
+                    <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ page }}" class="lien-jv hidden-link"> {{ page }} </a>
                 {{else}}
                     ...
                 {{/if}}
@@ -32,13 +32,13 @@
 
     <div class="pagi-after">
         {{#if ([../helpers/pagination/next] page lastPage)}}
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/next] page lastPage}}" class="xXx pagi-suivant-actif">
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/next] page lastPage}}" class="xXx pagi-suivant-actif hidden-link">
                 <span> Page suivante </span>
             </a>
         {{/if}}
         {{#if ([../helpers/pagination/next] page lastPage)}}
         <span>
-            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/last] page lastPage}}" class="xXx pagi-fin-actif">
+            <a href="/forums/0-51-0-1-0-1-0-blabla-18-25-ans.htm?hidden=1&view=list&listPage={{ [../helpers/pagination/last] page lastPage}}" class="xXx pagi-fin-actif hidden-link">
                 <span> Fin </span>
             </a>
         </span>

@@ -1,9 +1,36 @@
-import browser from 'webextension-polyfill';
+function getExtension(data) {
+    return new Promise((resolve) => {
+        chrome.storage.local.get(data, resolve);
+    });
+}
+
+function setExtension(data) {
+    return new Promise((resolve) => {
+        chrome.storage.local.set(data, resolve);
+    });
+}
+
+function getUserscript() {
+    /* eslint-disable-next-line no-undef */
+    return GM_getValue('hidden-state', null);
+}
+
+function setUserscript(value) {
+    /* eslint-disable-next-line no-undef */
+    return GM_setValue('hidden-state', value);
+}
 
 export async function getState() {
-    const result = await browser.storage.local.get({ state: null });
+    let state = null;
+    /* eslint-disable-next-line no-undef */
+    if (process.env.HIDDEN_ENV === 'userscript') {
+        state = getUserscript();
+    } else {
+        const result = await getExtension({ state: null });
+        state = result.state;
+    }
 
-    if (result.state === null) {
+    if (state === null) {
         const state = {
             user: {
                 jwt: null,
@@ -32,9 +59,14 @@ export async function getState() {
         return state;
     }
 
-    return result.state;
+    return state;
 }
 
 export async function setState(state) {
-    await browser.storage.local.set({ state });
+    /* eslint-disable-next-line no-undef */
+    if (process.env.HIDDEN_ENV === 'userscript') {
+        state = setUserscript(state);
+    } else {
+        await setExtension({ state });
+    }
 }

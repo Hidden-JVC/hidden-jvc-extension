@@ -1,17 +1,20 @@
 {
     "name": "hidden-jvc-extension",
-    "version": "0.10.0",
+    "version": "1.1.0",
     "scripts": {
-        "build": "webpack --config webpack.config.js --mode=production --env.NODE_ENV=production",
-        "watch": "webpack --config webpack.config.js --watch --mode=development --env.NODE_ENV=development",
-        "web-ext": "web-ext run --source-dir=build --firefox-profile=hidden-jvc-user --keep-profile-changes"
+        "build:prod:extension": "webpack --config config/extension.webpack.config.js --mode=production --env.NODE_ENV=production",
+        "build:dev:extension": "webpack --config config/extension.webpack.config.js --mode=development --env.NODE_ENV=development",
+        "watch:extension": "webpack --config config/extension.webpack.config.js --mode=development --env.NODE_ENV=development --watch",
+        "build:prod:userscript": "webpack --config config/userscript.webpack.config.js --mode=production --env.NODE_ENV=production --env.HIDDEN_ENV=userscript",
+        "build:dev:userscript": "webpack --config config/userscript.webpack.config.js --mode=development --env.NODE_ENV=development --env.HIDDEN_ENV=userscript",
+        "watch:userscript": "webpack --config config/userscript.webpack.config.js --mode=development --env.NODE_ENV=development --env.HIDDEN_ENV=userscript --watch",
+        "web-ext": "web-ext run --source-dir=build/extension --firefox-profile=hidden-jvc-user --keep-profile-changes"
     },
     "dependencies": {
         "date-fns": "^2.13.0",
         "handlebars": "^4.7.6",
         "open-jvcode": "file:hidden-jvc-jvcode",
-        "socket.io-client": "^2.3.0",
-        "webextension-polyfill": "^0.6.0"
+        "socket.io-client": "^2.3.0"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^6.1.0",
@@ -22,8 +25,10 @@
         "sass": "^1.26.8",
         "sass-loader": "^8.0.2",
         "style-loader": "^1.2.1",
+        "terser-webpack-plugin": "^4.2.3",
         "web-ext": "^5.0.0",
         "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.11"
+        "webpack-cli": "^3.3.11",
+        "wrapper-webpack-plugin": "^2.1.0"
     }
 }

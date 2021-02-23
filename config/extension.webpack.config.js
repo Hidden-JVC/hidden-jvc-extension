@@ -14,14 +14,11 @@ module.exports = (env) => {
         },
         devtool: 'source-map',
         output: {
-            path: path.join(__dirname, 'build'),
+            path: path.join(__dirname, '../build/extension'),
             filename: '[name].js'
         },
         plugins: [
-            new Dotenv({
-                path: envPath,
-                secure: isProduction
-            })
+            new Dotenv({ path: envPath })
         ],
         module: {
             rules: [
@@ -29,7 +26,7 @@ module.exports = (env) => {
                     test: /\.handlebars$/i,
                     loader: 'handlebars-loader',
                     options: {
-                        helperDirs: path.join(__dirname, 'src/content/views/helpers')
+                        helperDirs: path.join(__dirname, '../src/content/views/helpers')
                     }
                 },
                 {

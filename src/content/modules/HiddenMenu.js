@@ -4,7 +4,7 @@ import hiddenJVC from '../HiddenJVC.js';
 import menuTemplate from '../views/menu.handlebars';
 
 const { getState, setState } = hiddenJVC.storage;
-const { network, createModal } = hiddenJVC.helpers;
+const { network, createModal, processHiddenUrl } = hiddenJVC.helpers;
 const { Runtime, Static: { JVC, Hidden } } = hiddenJVC.constants;
 
 class HiddenMenu {
@@ -40,6 +40,15 @@ class HiddenMenu {
         } else {
             toggleButton.classList.remove('hidden-primary-color-bg');
             toggleButton.textContent = 'Vers Hidden JVC';
+        }
+
+        /* eslint-disable-next-line no-undef */
+        if (process.env.HIDDEN_ENV === 'userscript') {
+            toggleLink.addEventListener('click', async (e) => {
+                e.preventDefault();
+                await processHiddenUrl(toggleLink.href);
+                location.reload();
+            });
         }
     }
 
