@@ -22,3 +22,13 @@ export async function postRequest(url, body, jwt) {
     });
     return await response.json();
 }
+
+export async function deleteRequest(url, jwt) {
+    const response = await fetch(url, {
+        method: 'DELETE',
+        headers: {
+            authorization: `Bearer ${jwt}`
+        }
+    });
+    return await response.json();
+}

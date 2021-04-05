@@ -13,6 +13,7 @@
     "dependencies": {
         "date-fns": "^2.13.0",
         "handlebars": "^4.7.6",
+        "nanoevents": "^5.1.13",
         "open-jvcode": "file:hidden-jvc-jvcode",
         "socket.io-client": "^2.3.0"
     },

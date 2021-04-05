@@ -3,58 +3,110 @@ import { formatISO9075, isBefore } from 'date-fns';
 import { parse } from 'open-jvcode';
 
 import hiddenJVC from '../HiddenJVC.js';
-import replyFormTemplate from '../views/jvc/topic/replyForm.handlebars';
-import editFormTemplate from '../views/jvc/topic/editForm.handlebars';
-import postTemplate from '../views/jvc/topic/post.handlebars';
 
-const { getState } = hiddenJVC.storage;
-const Runtime = hiddenJVC.constants.Runtime;
-const { JVC, Hidden } = hiddenJVC.constants.Static;
-const { initForm, network, getForumName, getJVCTopicInfo, createModal } = hiddenJVC.helpers;
+import events from '../events.js';
+import runtime from '../runtime.js';
+import * as network from '../network.js';
+import * as storage from '../storage.js';
+import { JVC, Hidden } from '../constants';
+import { decodeJvCare, getForumName, getJVCTopicInfo } from '../helpers';
+
+import postTemplate from '../views/jvc/topic/post.handlebars';
+import editFormTemplate from '../views/jvc/topic/editForm.handlebars';
+import replyFormTemplate from '../views/jvc/topic/replyForm.handlebars';
 
 class JVCTopic {
     constructor() {
         this.pages = JVC.Pages.JVC_TOPIC;
         this.topic = null;
+        this.postPages = [];
+        this.posts = [];
     }
 
     async init(state) {
-        this.setupForm();
-        const query = {
-            startDate: formatISO9075(Runtime.topicMessages[0].creationDate)
-        };
-
-        if (
-            Runtime.topicPage !== Runtime.topicLastPage &&
-            Runtime.topicMessages.length > 1
-        ) {
-            const endDate = await Runtime.getNextPageFirstPostDate();
-            query.endDate = formatISO9075(endDate);
-        }
-
         try {
-            const { error, topic } = await network.getRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, query);
-            if (error) {
-                createModal(error);
-                return;
-            }
-            this.topic = topic;
+            this.initJVCEvents();
+            await this.getHiddenTopic();
 
-            if (topic !== null) {
-                this.insertJVCTopic(topic, state);
-                this.highlightPagination(topic);
-                this.initPostEdition(topic);
-                this.initPostDeletion();
+            this.initForm();
+            if (this.topic !== null) {
+                this.highlightPagination();
+                this.insertJVCPosts(state);
             }
         } catch (err) {
             console.error(err);
-            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
         }
     }
 
-    setupForm() {
+    async getHiddenTopic() {
+        const start = performance.now();
+        const query = {
+            startDate: formatISO9075(runtime.topic.messages[0].creationDate)
+        };
+
+        let endDate = null;
+
+        if (runtime.topic.page !== runtime.topic.lastPage) {
+            const date = await runtime.getNextPageFirstPostDate();
+            endDate = formatISO9075(date);
+        }
+
+        if (endDate !== null) {
+            query.endDate = endDate;
+        }
+
+        const url = `${Hidden.API_URL}/jvc/topics/${runtime.topic.id}`;
+        const { error, topic, posts, pages } = await network.getRequest(url, query);
+
+        if (error) {
+            throw new Error(error);
+        }
+
+        this.topic = topic;
+        this.posts = posts;
+        this.postPages = pages;
+        const end = performance.now();
+        events.emit('add-log', 'info', `Messages récupéré en ${((end - start) / 1000).toFixed(2)} secondes`);
+    }
+
+    initJVCEvents() {
+        const refreshBtns = document.querySelectorAll('.btn-actualiser-forum');
+        refreshBtns.forEach((btn) => btn.addEventListener('click', () => location.reload()));
+
+        const connectBtn = document.querySelector('.jv-nav-account-connect');
+        if (connectBtn !== null) {
+            connectBtn.addEventListener('click', () => {
+                location.href = `https://www.jeuxvideo.com/login?url=${location.href}`;
+            });
+        }
+
+        const profileBtn = document.querySelector('.jv-nav-account-user');
+        if (profileBtn !== null) {
+            profileBtn.addEventListener('click', () => profileBtn.classList.add('open'));
+        }
+
+        const spans = document.querySelectorAll('span.JvCare');
+        for (const span of spans) {
+            const jvCare = span.classList[1];
+            const classes = Array.prototype.slice.call(span.classList, 2, span.classList.length);
+            const url = decodeJvCare(jvCare);
+
+            const a = document.createElement('a');
+            a.href = url;
+            if (classes.length > 0) {
+                a.classList.add(...classes);
+            }
+            if (span.target) {
+                a.target = span.target;
+            }
+            a.append(...span.childNodes);
+            span.replaceWith(a);
+        }
+    }
+
+    initForm() {
         const form = document.querySelector('#bloc-formulaire-forum');
-        if (Runtime.isLocked) {
+        if (runtime.topic.isLocked) {
             const html = replyFormTemplate();
             form.insertAdjacentHTML('afterend', html);
             form.remove();
@@ -62,7 +114,7 @@ class JVCTopic {
             const submitBtn = hiddenForm.querySelector('#form-submit');
             submitBtn.insertAdjacentElement('afterend', this.createPostButton());
             submitBtn.remove();
-            initForm(hiddenForm);
+            // initForm(hiddenForm);
         } else {
             const jvcPostButton = form.querySelector('.btn.btn-poster-msg.js-post-message');
             jvcPostButton.insertAdjacentElement('afterend', this.createPostButton());
@@ -80,15 +132,15 @@ class JVCTopic {
                 const content = document.querySelector('textarea#message_topic').value;
 
                 const body = {
-                    forumId: Runtime.forumId,
-                    viewId: Runtime.viewId,
                     content,
-                    page: Runtime.topicLastPage
+                    forumId: runtime.forum.id,
+                    viewId: runtime.forum.viewId,
+                    page: runtime.topic.lastPage
                 };
 
                 if (this.topic === null) {
-                    const forumName = await getForumName(Runtime.forumId);
-                    const topicInfo = await getJVCTopicInfo(Runtime.viewId, Runtime.forumId, Runtime.topicId);
+                    const forumName = await getForumName(runtime.forum.id);
+                    const topicInfo = await getJVCTopicInfo(runtime.forum.viewId, runtime.forum.id, runtime.topic.id);
 
                     body.forumName = forumName;
                     body.topicTitle = topicInfo.title;
@@ -97,37 +149,35 @@ class JVCTopic {
                     body.topicAuthor = topicInfo.author;
                 }
 
-                const state = await getState();
+                const state = await storage.getState();
                 if (!state.user.jwt) {
                     body.username = state.user.anonymousName || 'Anonymous';
                 }
                 try {
-                    const { error } = await network.postRequest(`${Hidden.API_JVC_TOPICS}/${Runtime.topicId}`, body, state.user.jwt);
+                    const url = `${Hidden.API_URL}/jvc/topics/${runtime.topic.id}`;
+                    const { error } = await network.postRequest(url, body, state.user.jwt);
                     if (error) {
-                        createModal(error);
+                        events.emit('add-log', 'error', error);
                         return;
                     } else {
-                        location.replace(Runtime.generateTopicUrl(Runtime.topicLastPage));
+                        location.reload();
                     }
                 } catch (err) {
-                    console.error(err);
-                    createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+                    events.emit('add-log', 'error', err.message);
                 }
             } catch (err) {
-                console.error(err);
+                events.emit('add-log', 'error', err.message);
             }
         });
         return button;
     }
 
-    insertJVCTopic(topic, state) {
-        const jvcMessages = Runtime.topicMessages;
-
+    insertJVCPosts(state) {
         const bottomPagination = document.querySelectorAll('.bloc-pagi-default')[1];
-        const isModerator = state.user.isAdmin || state.user.moderators.filter((m) => m.ForumId === Runtime.forumId).length === 1;
-
-        for (const hiddenPost of topic.Posts) {
-            const hiddenDate = new Date(hiddenPost.Post.CreationDate);
+        const isModerator = state.user.isAdmin || state.user.moderators.filter((m) => m.ForumId === runtime.forum.id).length === 1;
+        const jvcMessages = runtime.topic.messages;
+        for (const post of this.posts) {
+            const hiddenDate = new Date(post.CreationDate);
             let previousPost = null;
 
             for (let i = 0; i < jvcMessages.length; i++) {
@@ -138,89 +188,100 @@ class JVCTopic {
                 }
             }
 
-            const data = { post: hiddenPost, connectedUser: state.user, isModerator };
+            const html = postTemplate({ post, connectedUser: state.user, isModerator });
             if (previousPost !== null) {
-                previousPost.element.insertAdjacentHTML('beforebegin', postTemplate(data));
+                previousPost.element.insertAdjacentHTML('beforebegin', html);
             } else {
-                bottomPagination.insertAdjacentHTML('beforebegin', postTemplate(data));
+                bottomPagination.insertAdjacentHTML('beforebegin', html);
             }
+            const postElement = document.querySelector(`[data-hidden-post-id="${post.Id}"]`);
+            this.initPostEdition(post, postElement);
+            this.initPostDeletion(post, postElement);
         }
     }
 
-    highlightPagination(topic) {
+    initPostDeletion(post, postElement) {
+        const deleteBtn = postElement.querySelector('[data-post-delete]');
+        if (deleteBtn !== null) {
+            deleteBtn.addEventListener('click', async (e) => {
+                try {
+                    e.stopPropagation();
+                    const state = await storage.getState();
+                    const url = `${Hidden.API_URL}/jvc/posts/${post.Id}`;
+                    const { error } = await network.deleteRequest(url, state.user.jwt);
+                    if (error) {
+                        events.emit('add-log', 'error', error);
+                    } else {
+                        location.reload();
+                    }
+                } catch (err) {
+                    events.emit('add-log', 'error', err.message);
+                }
+            });
+        }
+    }
+
+    initPostEdition(post, postElement) {
+        const editBtn = postElement.querySelector('[data-post-edit]');
+        if (editBtn === null) {
+            return;
+        }
+        editBtn.addEventListener('click', async (e) => {
+            try {
+                e.stopPropagation();
+                const display = document.querySelector(`[data-post-display="${post.Id}"]`);
+                display.innerHTML = editFormTemplate({ postId: post.Id, content: post.Content });
+
+                const form = document.querySelector(`[data-post-id="${post.Id}"]`);
+
+                const cancelBtn = form.querySelector('[data-cancel');
+                cancelBtn.addEventListener('click', () => {
+                    display.innerHTML = parse(post.Content);
+                });
+
+                const submitBtn = form.querySelector('[data-submit');
+                submitBtn.addEventListener('click', async () => {
+                    const textarea = form.querySelector('textarea#message_topic');
+
+                    const data = { content: textarea.value.trim() };
+                    const state = await storage.getState();
+                    try {
+                        const url = `${Hidden.API_URL}/jvc/posts/${post.Id}`;
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json',
+                                'authorization': `Bearer ${state.user.jwt}`
+                            },
+                            body: JSON.stringify(data)
+                        });
+                        const { error } = await response.json();
+                        if (error) {
+                            events.emit('add-log', 'error', error);
+                        } else {
+                            location.reload();
+                        }
+                    } catch (err) {
+                        events.emit('add-log', 'error', err.message);
+                    }
+                });
+            } catch (err) {
+                events.emit('add-log', 'error', err.message);
+            }
+        });
+    }
+
+    highlightPagination() {
         const paginationItems = document.querySelectorAll('.bloc-pagi-default .bloc-liste-num-page span');
         for (const item of paginationItems) {
             const paginationPage = parseInt(item.textContent.trim());
-            for (const page of topic.Pages) {
+            for (const page of this.postPages) {
                 if (paginationPage === page) {
                     const span = document.createElement('span');
                     span.classList.add('hidden-pagination-highlight');
                     item.insertAdjacentElement('afterbegin', span);
                 }
             }
-        }
-    }
-
-    initPostEdition(topic) {
-        const buttons = document.querySelectorAll('[data-post-edit]');
-        for (const btn of buttons) {
-            btn.addEventListener('click', async (e) => {
-                try {
-                    e.stopPropagation();
-                    const postId = parseInt(btn.dataset.postEdit);
-                    const post = topic.Posts.find((p) => p.Post.Id === postId);
-
-                    const display = document.querySelector(`[data-post-display="${postId}"]`);
-                    display.innerHTML = editFormTemplate({ postId, content: post.Post.Content });
-
-                    const form = document.querySelector(`[data-post-id="${postId}"]`);
-                    initForm(form);
-
-                    const cancelBtn = form.querySelector('[data-cancel');
-                    cancelBtn.addEventListener('click', () => {
-                        display.innerHTML = parse(post.Post.Content);
-                    });
-
-                    const submitBtn = form.querySelector('[data-submit');
-                    submitBtn.addEventListener('click', async () => {
-                        const textarea = form.querySelector('textarea#message_topic');
-
-                        const data = {
-                            content: textarea.value.trim()
-                        };
-                        const state = await getState();
-                        try {
-                            const url = `${Hidden.API_JVC_TOPICS}/${topic.Topic.Id}/${postId}`;
-                            const { error } = await network.postRequest(url, data, state.user.jwt);
-                            if (error) {
-                                createModal(error);
-                            } else {
-                                location.reload();
-                            }
-                        } catch (err) {
-                            console.log(err);
-                            createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
-                        }
-                    });
-                } catch (err) {
-                    console.error(err);
-                }
-            });
-        }
-    }
-
-    initPostDeletion() {
-        const buttons = document.querySelectorAll('[data-post-delete]');
-        for (const btn of buttons) {
-            btn.addEventListener('click', async (e) => {
-                e.stopPropagation();
-                const postId = btn.dataset.postDelete;
-                const state = await getState();
-                const { success } = await network.postRequest(Hidden.API_JVC_POSTS_MODERATION, { action: 'Delete', ids: [postId] }, state.user.jwt);
-                if (success) {
-                    location.reload();
-                }
-            });
         }
     }
 }

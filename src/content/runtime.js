@@ -1,31 +1,44 @@
 import { parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-import { JVC } from './static';
+import { decodeJvCare } from './helpers';
 
-class RuntimeConstants {
+class Runtime {
     constructor() {
         this.currentPage = null;
-        this.viewId = null;
-        this.forumId = null;
-        this.topicId = null;
-        this.topicPage = null;
-        this.forumOffset = null;
 
-        this.is410 = null;
-        this.isLocked = null;
-        this.forumName = null;
-        this.forumTopics = [];
-        this.topicLastPage = null;
-        this.topicMessages = [];
+        this.forum = {
+            id: 0,
+            viewId: 0,
+            offset: 0,
+            name: null,
+            topics: []
+        };
+
+        this.topic = {
+            id: 0,
+            page: 1,
+            lastPage: 1,
+            is410: false,
+            isLocked: false,
+            messages: []
+        };
+
+        this.pages = {
+            JVC_FORUM: 1,
+            JVC_TOPIC: 2,
+            HIDDEN_FORUM: 4,
+            HIDDEN_TOPIC: 8,
+            OTHER: 16
+        };
     }
 
     init(state) {
         this.parseUrl();
         this.computeCurrentPage(state);
-        if (this.currentPage & (JVC.Pages.JVC_FORUM | JVC.Pages.HIDDEN_FORUM | JVC.Pages.HIDDEN_TOPIC)) {
+        if (this.currentPage & (this.pages.JVC_FORUM | this.pages.HIDDEN_FORUM | this.pages.HIDDEN_TOPIC)) {
             this.parseForum();
-        } else if (this.currentPage === JVC.Pages.JVC_TOPIC) {
+        } else if (this.currentPage === this.pages.JVC_TOPIC) {
             this.parseTopic();
         }
     }
@@ -36,29 +49,29 @@ class RuntimeConstants {
             throw new Error('Url mismatch');
         }
 
-        this.viewId = parseInt(matches[1]);
-        this.forumId = parseInt(matches[2]);
-        this.topicId = parseInt(matches[3]);
-        this.topicPage = parseInt(matches[4]);
-        this.forumOffset = parseInt(matches[6]);
+        this.forum.viewId = parseInt(matches[1]);
+        this.forum.id = parseInt(matches[2]);
+        this.topic.id = parseInt(matches[3]);
+        this.topic.page = parseInt(matches[4]);
+        this.forum.offset = parseInt(matches[6]);
     }
 
     computeCurrentPage(state) {
         if (state.hidden.enabled && state.hidden.view === 'list') {
-            this.currentPage = JVC.Pages.HIDDEN_FORUM;
+            this.currentPage = this.pages.HIDDEN_FORUM;
         } else if (state.hidden.enabled && state.hidden.view === 'topic') {
-            this.currentPage = JVC.Pages.HIDDEN_TOPIC;
-        } else if (this.viewId === 42 || this.viewId === 1) {
-            this.currentPage = JVC.Pages.JVC_TOPIC;
-        } else if (this.viewId === 0) {
-            this.currentPage = JVC.Pages.JVC_FORUM;
+            this.currentPage = this.pages.HIDDEN_TOPIC;
+        } else if (this.forum.viewId === 42 || this.forum.viewId === 1) {
+            this.currentPage = this.pages.JVC_TOPIC;
+        } else if (this.forum.viewId === 0) {
+            this.currentPage = this.pages.JVC_FORUM;
         } else {
-            this.currentPage = JVC.Pages.OTHER;
+            this.currentPage = this.pages.OTHER;
         }
     }
 
     parseForum() {
-        this.forumName = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim().replace(/^Forum/, '').trim();
+        this.forum.name = document.querySelector('h2.titre-bloc.titre-bloc-forum').textContent.trim().replace(/^Forum/, '').trim();
         const topics = document.querySelectorAll('.topic-list.topic-list-admin li[data-id]');
         for (const topic of topics) {
             let lastPostDate = null;
@@ -78,7 +91,7 @@ class RuntimeConstants {
             const matches = href.match(/\/forums\/\d+-\d+-(\d+)-1-0-1-0-.*?.htm/);
             const id = parseInt(matches[1]);
 
-            this.forumTopics.push({
+            this.forum.topics.push({
                 li: topic,
                 id,
                 title: topic.querySelector('a.topic-title').title,
@@ -92,26 +105,27 @@ class RuntimeConstants {
     }
 
     parseTopic() {
-        this.is410 = document.querySelector('img.img-erreur') !== null;
+        this.topic.is410 = document.querySelector('img.img-erreur') !== null;
         if (this.is410) {
             return;
         }
 
-        this.isLocked = document.querySelector('.message-lock-topic') !== null;
+        this.topic.isLocked = document.querySelector('.message-lock-topic') !== null;
 
         this.parseTopicLastPage();
         this.parseTopicMessages();
     }
 
     parseTopicLastPage() {
-        this.topicLastPage = this.topicPage;
+        this.topic.lastPage = this.topic.page;
         const lastPageButton = document.querySelector('.pagi-fin-actif');
 
         if (lastPageButton !== null) {
-            const url = lastPageButton.href;
-            const matches = url.match(/^https:\/\/www\.jeuxvideo\.com\/forums\/\d+?-\d+?-\d+?-(\d+?)-.*$/);
+            const jvCare = lastPageButton.className.split(' ')[1];
+            const url = decodeJvCare(jvCare);
+            const matches = url.match(/\/forums\/\d+?-\d+?-\d+?-(\d+?)-.*$/);
             if (matches !== null) {
-                this.topicLastPage = parseInt(matches[1]);
+                this.topic.lastPage = parseInt(matches[1]);
             }
         }
     }
@@ -120,7 +134,7 @@ class RuntimeConstants {
         const elements = document.querySelectorAll('.conteneur-messages-pagi .bloc-message-forum[data-id]');
         for (const element of elements) {
             const dateStr = element.querySelector('.bloc-date-msg').textContent.trim();
-            this.topicMessages.push({
+            this.topic.messages.push({
                 id: element.dataset.id,
                 username: element.querySelector('.bloc-pseudo-msg').textContent.trim(),
                 htmlContent: element.querySelector('.txt-msg.text-enrichi-forum').innerHTML,
@@ -131,7 +145,7 @@ class RuntimeConstants {
     }
 
     async getNextPageFirstPostDate() {
-        const nextPageurl = this.generateTopicUrl(this.topicPage + 1);
+        const nextPageurl = this.generateTopicUrl(this.topic.page + 1);
         const response = await fetch(nextPageurl);
         const html = await response.text();
         const parser = new DOMParser();
@@ -142,8 +156,8 @@ class RuntimeConstants {
     }
 
     generateTopicUrl(page) {
-        return `https://www.jeuxvideo.com/forums/${this.viewId}-${this.forumId}-${this.topicId}-${page}-0-1-0-0.htm`;
+        return `https://www.jeuxvideo.com/forums/${this.forum.viewId}-${this.forum.id}-${this.topic.id}-${page}-0-1-0-0.htm`;
     }
 }
 
-export default new RuntimeConstants();
+export default new Runtime();

@@ -1,16 +1,16 @@
 <li class="hidden-topic-row">
     <span class="topic-subject">
-        {{#if topic.Topic.Pinned}}
-            {{#if topic.Topic.Locked}}
+        {{#if topic.Pinned}}
+            {{#if topic.Locked}}
                 <img src="/img/forums/topic-marque-off.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
             {{else}}
                 <img src="/img/forums/topic-marque-on.png" alt="Topic épinglé" title="Topic épinglé" class="topic-img">
             {{/if}}            
         {{else}}
-            {{#if topic.Topic.Locked}}
+            {{#if topic.Locked}}
                 <img src="/img/forums/topic-lock.png" alt="Topic fermé" title="Topic fermé" class="topic-img">
             {{else}}
-                {{#if ([../helpers/hotTopic] PostsCount)}}
+                {{#if ([../helpers/hotTopic] PostCount)}}
                     <img src="/img/forums/topic-dossier2.png" alt="Topic hot" title="Topic hot" class="topic-img">
                 {{else}}
                     <img src="/img/forums/topic-dossier1.png" alt="Topic" title="Topic" class="topic-img">
@@ -20,8 +20,8 @@
 
         <a class="lien-jv topic-title hidden-link"
             href="{{ topic.Url }}"
-            title="{{ topic.Topic.Title }}">
-            {{ topic.Topic.Title }}
+            title="{{ topic.Title }}">
+            {{ topic.Title }}
         </a>
     </span>
 
@@ -33,39 +33,33 @@
         </span>
     </span> --}}
 
-    {{#if topic.Author}}
-        {{#if topic.Author.IsAdmin}}
-            <a class="xXx text-user topic-author" style="color: red">
-                {{ topic.Author.Name }}
-            </a>
-        {{else if topic.Author.IsModerator}}
-            <a class="xXx text-user topic-author" style="color: #20bbdf">
-                {{ topic.Author.Name }}
-            </a>
-        {{else}}
-            <a class="xXx text-user topic-author">
-                {{ topic.Author.Name }}
-            </a>
-        {{/if}}
+    {{#if topic.Author.IsAdmin}}
+        <a class="xXx text-user topic-author" style="color: red">
+            {{ topic.Author.Name }}
+        </a>
+    {{else if topic.Author.IsModerator}}
+        <a class="xXx text-user topic-author" style="color: #20bbdf">
+            {{ topic.Author.Name }}
+        </a>
     {{else}}
-    <a class="xXx text-user topic-author">
-        {{ topic.Topic.Username }}
-    </a>
+        <a class="xXx text-user topic-author">
+            {{ topic.Author.Name }}
+        </a>
     {{/if}}
 
     <span class="topic-count">
-        {{ topic.PostsCount }}
+        {{ topic.PostCount }}
     </span>
 
     <span class="topic-date">
         <a href="{{ topic.lastPageUrl }}" class="xXx lien-jv">
-            {{ [../helpers/topicDate] topic.LastPostDate }}
+            {{ [../helpers/topicDate] topic.LastPostCreationDate }}
         </a>
     </span>
 
     {{#if isModerator}}
-        <label for="hidden-select-{{ topic.Topic.Id }}" class="topic-select" style="padding: 0 .125rem">
-            <input id="hidden-select-{{ topic.Topic.Id }}" value="{{ topic.Topic.Id }}" type="checkbox">
+        <label for="hidden-select-{{ topic.Id }}" class="topic-select" style="padding: 0 .125rem">
+            <input id="hidden-select-{{ topic.Id }}" value="{{ topic.Id }}" type="checkbox">
         </label>
     {{/if}}
 </li>

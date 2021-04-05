@@ -1,4 +1,4 @@
-import { getState, setState } from '../../helpers/storage.js';
+import { getState, setState } from '../storage.js';
 
 export default async function (url) {
     const index = url.indexOf('?');

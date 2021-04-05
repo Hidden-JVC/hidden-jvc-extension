@@ -15,12 +15,8 @@
         "storage",
         "webRequest",
         "webRequestBlocking",
-        "https://www.jeuxvideo.com/*",
-        "https://api.hiddenjvc.com/*",
-        "https://socket.hiddenjvc.com/*",
 
-        "https://sdk.privacy-center.org/*",
-        "https://static.jvc.gg/*"
+        "<all_urls>"
     ],
 
     "background": {

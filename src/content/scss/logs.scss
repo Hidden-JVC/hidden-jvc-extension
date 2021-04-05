@@ -1,0 +1,29 @@
+#hidden-logs td:nth-child(1) {
+    text-align: center;
+}
+
+#hidden-logs {
+    max-height: 100px;
+    display: block;
+}
+
+#hidden-logs td:nth-child(2) {
+    padding: 0 6px;
+}
+
+.hidden-log {
+    height: 24px;
+    font-size: 12px;
+    color: #fff;
+    border-radius: 4px !important;
+    padding: 0 5px;
+    margin-right: 5px;
+}
+
+.hidden-log-info {
+    background-color: #1772d2;
+}
+
+.hidden-log-error {
+    background-color: #d50d0d;
+}

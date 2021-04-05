@@ -1,7 +1,7 @@
-import * as Static from './static';
-import Runtime from './runtime.js';
+import * as JVC from './JVC.js';
+import * as Hidden from './Hidden.js';
 
-export default {
-    Static,
-    Runtime
+export {
+    JVC,
+    Hidden
 };

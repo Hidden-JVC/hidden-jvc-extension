@@ -1,4 +1,4 @@
-<div class="bloc-message-forum hidden-post">
+<div data-hidden-post-id="{{ post.Id }}" class="bloc-message-forum hidden-post">
     <div class="conteneur-message">
         <div class="bloc-avatar-msg">
             <div class="back-img-msg">
@@ -14,9 +14,14 @@
         <div class="inner-head-content">
             <div class="bloc-header">
                 {{#if post.User}}
-                    {{#if post.User.IsModerator}}
+                    {{#if post.User.IsAdmin}}
                     <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
                         class="xXx bloc-pseudo-msg text-user" style="color: red">
+                        {{ post.User.Name }}
+                    </a>
+                    {{else if topic.Author.IsModerator}}
+                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
+                        class="xXx bloc-pseudo-msg text-user" style="color: green">
                         {{ post.User.Name }}
                     </a>
                     {{else}}
@@ -25,26 +30,21 @@
                         {{ post.User.Name }}
                     </a>
                     {{/if}}
-                {{else}}
-                    <a href="https://www.jeuxvideo.com/profil/cisla?mode=infos" target="_blank"
-                        class="xXx bloc-pseudo-msg text-user">
-                        {{ post.Post.Username }}
-                    </a>
                 {{/if}}
 
                 <div class="bloc-options-msg">
-                    <span class="picto-msg-quote" title="Citer" data-quote="{{ post.Post.Id }}">
+                    <span class="picto-msg-quote" title="Citer" data-quote="{{ post.Id }}">
                         <span> Citer </span>
                     </span>
                     
                     {{#if ([../helpers/isFromConnectedUser] connectedUser post.User) }}
-                        <span class="picto-msg-crayon" title="Editer" data-post-edit="{{ post.Post.Id }}">
+                        <span class="picto-msg-crayon" title="Editer" data-post-edit="{{ post.Id }}">
                             <span> Editer </span>
                         </span>
                     {{/if}}
 
-                    {{#if isModerator}}
-                        <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ post.Post.Id }}">
+                    {{#if ([../helpers/isFromConnectedUser] connectedUser post.User) }}
+                        <span class="picto-msg-croix" title="Supprimer" data-post-delete="{{ post.Id }}">
                             <span> Supprimer </span>
                         </span>
                     {{/if}}
@@ -52,19 +52,19 @@
 
                 <div class="bloc-date-msg">
                     <a href="/cisla/forums/message/1036520623" target="_blank" class="xXx lien-jv">
-                        {{ [../helpers/postDate] post.Post.CreationDate }}
+                        {{ [../helpers/postDate] post.CreationDate }}
                     </a>
                 </div>
             </div>
 
             <div class="bloc-contenu">
-                <div class="txt-msg  text-enrichi-forum" data-post-display="{{ post.Post.Id }}">
-                    {{{ [../helpers/jvcode] post.Post.Content }}}
+                <div class="txt-msg  text-enrichi-forum" data-post-display="{{ post.Id }}">
+                    {{{ [../helpers/jvcode] post.Content }}}
                 </div>
 
-                {{#if post.Post.ModificationDate}}
+                {{#if post.ModificationDate}}
                     <div class="info-edition-msg">
-                        Message édité le {{ [../helpers/postDate] post.Post.ModificationDate }}
+                        Message édité le {{ [../helpers/postDate] post.ModificationDate }}
                     </div>
                 {{/if}}
             </div>

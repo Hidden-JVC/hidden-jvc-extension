@@ -3,9 +3,11 @@ import io from 'socket.io-client/dist/socket.io.slim.js';
 import hiddenJVC from '../HiddenJVC.js';
 import menuTemplate from '../views/menu.handlebars';
 
-const { getState, setState } = hiddenJVC.storage;
-const { network, createModal, processHiddenUrl } = hiddenJVC.helpers;
-const { Runtime, Static: { JVC, Hidden } } = hiddenJVC.constants;
+import events from '../events.js';
+import runtime from '../runtime.js';
+import * as network from '../network.js';
+import { JVC, Hidden } from '../constants';
+import { getState, setState } from '../storage.js';
 
 class HiddenMenu {
     constructor() {
@@ -13,7 +15,7 @@ class HiddenMenu {
     }
 
     async init(state) {
-        const toggleButtonEnbaled = Runtime.currentPage === JVC.Pages.JVC_FORUM || Runtime.currentPage === JVC.Pages.HIDDEN_FORUM;
+        const toggleButtonEnbaled = runtime.currentPage === JVC.Pages.JVC_FORUM || runtime.currentPage === JVC.Pages.HIDDEN_FORUM;
 
         const html = menuTemplate({ state, toggleButtonEnbaled });
         document.querySelector('#forum-right-col .panel.panel-jv-forum').insertAdjacentHTML('afterend', html);
@@ -32,7 +34,7 @@ class HiddenMenu {
     initToggle(state) {
         const toggleLink = document.querySelector('a#hidden-toggle');
         const toggleButton = toggleLink.querySelector('button');
-        const url = `https://www.jeuxvideo.com/forums/0-${Runtime.forumId}-0-1-0-1-0-0.htm?hidden=${state.hidden.enabled ? 0 : 1}`;
+        const url = `https://www.jeuxvideo.com/forums/0-${runtime.forumId}-0-1-0-1-0-0.htm?hidden=${state.hidden.enabled ? 0 : 1}`;
         toggleLink.href = url;
         if (state.hidden.enabled) {
             toggleButton.classList.add('hidden-primary-color-bg');
@@ -42,14 +44,14 @@ class HiddenMenu {
             toggleButton.textContent = 'Vers Hidden JVC';
         }
 
-        /* eslint-disable-next-line no-undef */
-        if (process.env.HIDDEN_ENV === 'userscript') {
-            toggleLink.addEventListener('click', async (e) => {
-                e.preventDefault();
-                await processHiddenUrl(toggleLink.href);
-                location.reload();
-            });
-        }
+        // /* eslint-disable-next-line no-undef */
+        // if (process.env.HIDDEN_ENV === 'userscript') {
+        //     toggleLink.addEventListener('click', async (e) => {
+        //         e.preventDefault();
+        //         await processHiddenUrl(toggleLink.href);
+        //         location.reload();
+        //     });
+        // }
     }
 
     initLogin() {
@@ -61,22 +63,22 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, userId, isAdmin, moderators, error } = await network.postRequest(Hidden.API_LOGIN, { name, password });
+                const url = `${Hidden.API_URL}/users/login`;
+                const { jwt, userId, isAdmin, moderators, error } = await network.postRequest(url, { name, password });
                 if (error) {
-                    createModal(error);
+                    events.emit('add-log', 'error', error);
                 } else {
                     const state = await getState();
                     state.user.jwt = jwt;
                     state.user.userId = userId;
                     state.user.isAdmin = isAdmin;
                     state.user.moderators = moderators;
-                    state.user.registeredName = name;
+                    state.user.name = name;
                     await setState(state);
                     location.reload();
                 }
             } catch (err) {
-                console.error(err);
-                createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+                events.emit('add-log', 'error', err.message);
             }
         });
 
@@ -85,48 +87,21 @@ class HiddenMenu {
             const password = document.querySelector('input#hidden-password').value;
 
             try {
-                const { jwt, userId, error } = await network.postRequest(Hidden.API_REGISTER, { name, password });
+                const url = `${Hidden.API_URL}/users/register`;
+                const { jwt, userId, error } = await network.postRequest(url, { name, password });
                 if (error) {
-                    createModal(error);
+                    events.emit('add-log', 'error', error);
                 } else {
                     const state = await getState();
                     state.user.jwt = jwt;
                     state.user.userId = userId;
-                    state.user.registeredName = name;
+                    state.user.name = name;
                     await setState(state);
                     location.reload();
                 }
             } catch (err) {
-                console.error(err);
-                createModal('Une erreur est survenue lors de la connexion au serveur d\'Hidden JVC');
+                events.emit('add-log', 'error', err.message);
             }
-        });
-
-        const editNameBtn = document.querySelector('#hidden-edit-name');
-        const displayName = document.querySelector('#hidden-display-name');
-        const saveNameBtn = document.querySelector('#hidden-save-name');
-        const nameInput = document.querySelector('#hidden-anonymous-name');
-
-        editNameBtn.addEventListener('click', () => {
-            displayName.style.display = 'none';
-            editNameBtn.style.display = 'none';
-
-            nameInput.style.display = 'block';
-            saveNameBtn.style.display = 'block';
-        });
-
-        saveNameBtn.addEventListener('click', async () => {
-            displayName.style.display = 'block';
-            editNameBtn.style.display = 'block';
-
-            nameInput.style.display = 'none';
-            saveNameBtn.style.display = 'none';
-
-            const name = nameInput.value;
-            displayName.textContent = name;
-            const state = await getState();
-            state.user.anonymousName = name;
-            await setState(state);
         });
     }
 
@@ -146,14 +121,14 @@ class HiddenMenu {
 
     initUsersCount(state) {
         const data = {
-            forumId: Runtime.forumId,
+            forumId: runtime.forum.id,
             hidden: state.hidden.enabled
         };
 
         if (state.hidden.enabled && state.hidden.view === 'topic') {
             data.topicId = state.hidden.topic.id;
-        } else if (Runtime.topicId !== 0) {
-            data.topicId = Runtime.topicId;
+        } else if (runtime.topicId !== 0) {
+            data.topicId = runtime.topic.id;
         }
 
         const socket = io.connect(Hidden.SOCKET_URL, { transports: ['websocket'] });
@@ -168,7 +143,7 @@ class HiddenMenu {
         });
 
         socket.on('connect_error', function (err) {
-            console.error(err);
+            events.emit('add-log', 'error', err);
         });
     }
 }

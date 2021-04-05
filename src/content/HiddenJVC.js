@@ -1,16 +1,9 @@
-import helpers from './helpers';
-import constants from './constants';
-import * as storage from '../helpers/storage';
-
-import './scss/main.scss';
+import runtime from './runtime.js';
+import { getState } from './storage.js';
 
 class HiddenJVC {
     constructor() {
         this.modules = [];
-
-        this.helpers = helpers;
-        this.storage = storage;
-        this.constants = constants;
     }
 
     registerModule(newModule) {
@@ -18,29 +11,25 @@ class HiddenJVC {
     }
 
     async init() {
-        const state = await this.storage.getState();
         try {
-            this.constants.Runtime.init(state);
+            const state = await getState();
+            runtime.init(state);
+
+            if (runtime.is410) {
+                console.log('410 !');
+                return;
+            }
+
+            for (const m of this.modules) {
+                if (m.pages === 0 || m.pages & runtime.currentPage) {
+                    m.init(state).catch((err) => {
+                        console.error(err);
+                        this.helpers.createModal(err.message);
+                    });
+                }
+            }
         } catch (err) {
             console.error(err);
-            this.helpers.createModal(err.message);
-            return;
-        }
-
-        if (this.constants.Runtime.is410) {
-            console.log('410 !');
-            return;
-        }
-
-        console.log(location.href);
-
-        for (const m of this.modules) {
-            if (m.pages === 0 || m.pages & this.constants.Runtime.currentPage) {
-                m.init(state).catch((err) => {
-                    console.error(err);
-                    this.helpers.createModal(err.message);
-                });
-            }
         }
     }
 }
